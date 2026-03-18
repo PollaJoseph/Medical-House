@@ -1,0 +1,93 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:medical_house/Model/SplashScreenModel.dart';
+import 'package:medical_house/View/OnboardingView.dart';
+import 'package:medical_house/ViewModel/SplashScreenViewModel.dart';
+
+class SplashView extends StatefulWidget {
+  const SplashView({Key? key}) : super(key: key);
+
+  @override
+  State<SplashView> createState() => _SplashViewState();
+}
+
+class _SplashViewState extends State<SplashView> {
+  late SplashViewModel _viewModel;
+  late SplashModel _model;
+  bool _navigated = false;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // UPDATE THIS to match the exact name of your logo file!
+    _model = SplashModel(logoAssetPath: 'lib/Assets/Images/logo.png');
+    _viewModel = SplashViewModel();
+
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        systemNavigationBarColor: Colors.transparent,
+      ),
+    );
+
+    _viewModel.loadAppDependencies();
+    _viewModel.addListener(_checkNavigationConditions);
+  }
+
+  void _checkNavigationConditions() {
+    // We now only care if the ViewModel is ready
+    if (_viewModel.isReadyToNavigate && !_navigated) {
+      _navigated = true;
+      _navigateToHome();
+    }
+  }
+
+  void _navigateToHome() {
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Navigator.of(context).pushReplacement(
+        PageRouteBuilder(
+          transitionDuration: const Duration(milliseconds: 800),
+          pageBuilder: (context, animation, secondaryAnimation) =>
+              const OnboardingView(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return FadeTransition(opacity: animation, child: child);
+          },
+        ),
+      );
+    });
+  }
+
+  @override
+  void dispose() {
+    _viewModel.removeListener(_checkNavigationConditions);
+    _viewModel.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: TweenAnimationBuilder(
+          tween: Tween<double>(begin: 0.0, end: 1.0),
+          duration: const Duration(milliseconds: 1500),
+          builder: (context, opacity, child) {
+            return Opacity(
+              opacity: opacity,
+              child: Image.asset(
+                _model.logoAssetPath,
+                width: 200.w,
+                fit: BoxFit.contain,
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+}

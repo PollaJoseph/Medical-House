@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
-        android:label="medical_house"
+        android:label="Medical House"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
