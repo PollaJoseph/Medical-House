@@ -492,6 +492,7 @@ class _OnboardingViewState extends State<OnboardingView> {
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:medical_house/Constants.dart';
 import 'package:medical_house/View/SignUpView.dart';
 import 'package:medical_house/ViewModel/OnboardingViewModel.dart';
 
@@ -506,8 +507,6 @@ class _OnboardingViewState extends State<OnboardingView> {
   late OnboardingViewModel _viewModel;
   final PageController _pageController = PageController();
 
-  final Color navyMedical = const Color(0xFF0D1B34);
-  final Color wellnessTeal = const Color(0xFF0CACBB);
   final Color surfaceWhite = const Color(0xFFFDFDFD);
 
   @override
@@ -559,7 +558,7 @@ class _OnboardingViewState extends State<OnboardingView> {
               height: 400.r,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: wellnessTeal.withOpacity(0.08),
+                color: Constants.SeconadryColor.withOpacity(0.08),
               ),
             ),
           ),
@@ -580,7 +579,7 @@ class _OnboardingViewState extends State<OnboardingView> {
                 child: TextButton(
                   onPressed: _jumpToLastPage,
                   style: TextButton.styleFrom(
-                    foregroundColor: navyMedical.withOpacity(0.5),
+                    foregroundColor: Constants.midnightNavy.withOpacity(0.5),
                   ),
                   child: Text(
                     "Skip",
@@ -598,7 +597,6 @@ class _OnboardingViewState extends State<OnboardingView> {
           // 3. Main Content Layer
           Column(
             children: [
-              // Top Section: Images
               Expanded(
                 flex: 11,
                 child: PageView.builder(
@@ -632,7 +630,7 @@ class _OnboardingViewState extends State<OnboardingView> {
                 child: Container(
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    color: navyMedical,
+                    color: Constants.midnightNavy,
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(50.r),
                       topRight: Radius.circular(50.r),
@@ -698,7 +696,7 @@ class _OnboardingViewState extends State<OnboardingView> {
               width: _viewModel.currentIndex == index ? 22.w : 8.w,
               decoration: BoxDecoration(
                 color: _viewModel.currentIndex == index
-                    ? wellnessTeal
+                    ? Constants.SeconadryColor
                     : Colors.white.withOpacity(0.2),
                 borderRadius: BorderRadius.circular(10),
               ),
@@ -722,11 +720,11 @@ class _OnboardingViewState extends State<OnboardingView> {
             height: 64.h,
             width: 64.w,
             decoration: BoxDecoration(
-              color: wellnessTeal,
+              color: Constants.SeconadryColor,
               shape: BoxShape.circle,
               boxShadow: [
                 BoxShadow(
-                  color: wellnessTeal.withOpacity(0.4),
+                  color: Constants.SeconadryColor.withOpacity(0.4),
                   blurRadius: 15,
                   offset: const Offset(0, 8),
                 ),
@@ -736,7 +734,7 @@ class _OnboardingViewState extends State<OnboardingView> {
               isLastPage
                   ? Icons.check_rounded
                   : Icons.arrow_forward_ios_rounded,
-              color: navyMedical,
+              color: Constants.midnightNavy,
               size: 22.sp,
             ),
           ),

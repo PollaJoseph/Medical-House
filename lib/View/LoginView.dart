@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:medical_house/Components/SocialButton.dart';
+import 'package:medical_house/Constants.dart';
 import 'package:provider/provider.dart';
 import 'package:medical_house/ViewModel/LoginViewModel.dart';
-import 'package:medical_house/View/SignUpView.dart'; // Ensure this points to your file
+import 'package:medical_house/View/SignUpView.dart';
 
 class LoginView extends StatelessWidget {
   const LoginView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    // High-End Medical Palette
-    const Color midnightNavy = Color(0xFF0D1B34);
-    const Color surgicalTeal = Color(0xFF0CACBB);
     const Color sterileWhite = Color(0xFFF8FAFC);
 
     return ChangeNotifierProvider(
@@ -22,8 +21,7 @@ class LoginView extends StatelessWidget {
           builder: (context, model, _) {
             return Stack(
               children: [
-                // 1. Background Organic Shapes (Matching Sign Up)
-                _buildBackgroundDecor(surgicalTeal),
+                _buildBackgroundDecor(Constants.SeconadryColor),
 
                 SafeArea(
                   child: SingleChildScrollView(
@@ -35,7 +33,10 @@ class LoginView extends StatelessWidget {
                         SizedBox(height: 40.h),
 
                         // 2. Medical Security Header
-                        _buildHeaderIcon(surgicalTeal, midnightNavy),
+                        _buildHeaderIcon(
+                          Constants.SeconadryColor,
+                          Constants.midnightNavy,
+                        ),
                         SizedBox(height: 30.h),
 
                         // 3. Welcome Text
@@ -44,7 +45,7 @@ class LoginView extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 28.sp,
                             fontWeight: FontWeight.w900,
-                            color: midnightNavy,
+                            color: Constants.midnightNavy,
                             letterSpacing: -0.5,
                           ),
                         ),
@@ -64,21 +65,22 @@ class LoginView extends StatelessWidget {
                           "Email Address",
                           Icons.alternate_email_rounded,
                           model.emailController,
-                          surgicalTeal,
+                          Constants.SeconadryColor,
                         ),
-                        _buildPasswordGlassField(model, surgicalTeal),
+                        _buildPasswordGlassField(
+                          model,
+                          Constants.SeconadryColor,
+                        ),
 
                         // Forgot Password Link
                         Align(
                           alignment: Alignment.centerRight,
                           child: TextButton(
-                            onPressed: () {
-                              // TODO: Navigate to Forgot Password
-                            },
+                            onPressed: () {},
                             child: Text(
                               "Forgot Password?",
                               style: TextStyle(
-                                color: surgicalTeal,
+                                color: Constants.SeconadryColor,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 13.sp,
                               ),
@@ -87,16 +89,17 @@ class LoginView extends StatelessWidget {
                         ),
                         SizedBox(height: 20.h),
 
-                        // 5. Main Login Button
-                        _buildLoginButton(model, midnightNavy, context),
+                        _buildLoginButton(
+                          model,
+                          Constants.midnightNavy,
+                          context,
+                        ),
 
-                        // 6. Social Logins
                         _buildSocialDivider(),
                         _buildSocialLogins(model),
 
                         SizedBox(height: 40.h),
 
-                        // 7. Footer: Navigate to Sign Up
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -109,17 +112,17 @@ class LoginView extends StatelessWidget {
                             ),
                             GestureDetector(
                               onTap: () {
-                                Navigator.push(
+                                Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (_) => const SignUpView(),
+                                    builder: (context) => const SignUpView(),
                                   ),
                                 );
                               },
                               child: Text(
                                 "Create Account",
                                 style: TextStyle(
-                                  color: midnightNavy,
+                                  color: Constants.midnightNavy,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 14.sp,
                                 ),
@@ -139,8 +142,6 @@ class LoginView extends StatelessWidget {
       ),
     );
   }
-
-  // --- UI COMPONENTS ---
 
   Widget _buildBackgroundDecor(Color teal) {
     return Positioned.fill(
@@ -181,11 +182,7 @@ class LoginView extends StatelessWidget {
           ),
         ],
       ),
-      child: Image.asset(
-        "lib/Assets/Images/logo.png",
-        width: 120.w,
-        height: 120.h,
-      ),
+      child: Image.asset(Constants.LogoImagePath, width: 120.w, height: 120.h),
     );
   }
 
@@ -242,7 +239,13 @@ class LoginView extends StatelessWidget {
       child: TextField(
         controller: model.passwordController,
         obscureText: !model.isPasswordVisible,
+        style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w600),
         decoration: InputDecoration(
+          hintStyle: TextStyle(
+            color: Colors.blueGrey[200],
+            fontSize: 14.sp,
+            fontWeight: FontWeight.w600,
+          ),
           hintText: "Security Password",
           prefixIcon: Icon(Icons.lock_person_rounded, color: teal, size: 20.sp),
           suffixIcon: IconButton(
@@ -340,67 +343,29 @@ class LoginView extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        _socialButton(
-          icon: Text(
-            "G",
-            style: TextStyle(
-              fontSize: 22.sp,
-              fontWeight: FontWeight.w900,
-              color: const Color(0xFFDB4437),
-            ),
+        SocialButton(
+          icon: Image.asset(
+            Constants.GoogleIconPath,
+            width: 26.w,
+            height: 26.h,
           ),
-          label: "Google",
           onTap: () => debugPrint("Google Login Tapped"),
         ),
-        SizedBox(width: 20.w),
-        _socialButton(
-          icon: Icon(Icons.apple, size: 26.sp, color: Colors.black),
-          label: "Apple",
+        SizedBox(width: 15.w),
+        SocialButton(
+          icon: Image.asset(Constants.AppleIconPath, width: 26.w, height: 26.h),
           onTap: () => debugPrint("Apple Login Tapped"),
         ),
-      ],
-    );
-  }
-
-  Widget _socialButton({
-    required Widget icon,
-    required String label,
-    required VoidCallback onTap,
-  }) {
-    return Expanded(
-      child: GestureDetector(
-        onTap: onTap,
-        child: Container(
-          height: 55.h,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(16.r),
-            border: Border.all(color: Colors.blueGrey.shade50, width: 2),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.02),
-                blurRadius: 10,
-                offset: const Offset(0, 4),
-              ),
-            ],
+        SizedBox(width: 15.w),
+        SocialButton(
+          icon: Image.asset(
+            Constants.FacebookIconPath,
+            width: 26.w,
+            height: 26.h,
           ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              icon,
-              SizedBox(width: 8.w),
-              Text(
-                label,
-                style: TextStyle(
-                  color: const Color(0xFF0D1B34),
-                  fontSize: 15.sp,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
-          ),
+          onTap: () => debugPrint("Facebook Login Tapped"),
         ),
-      ),
+      ],
     );
   }
 }

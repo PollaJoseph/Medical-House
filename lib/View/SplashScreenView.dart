@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:medical_house/Constants.dart';
 import 'package:medical_house/Model/SplashScreenModel.dart';
 import 'package:medical_house/View/OnboardingView.dart';
 import 'package:medical_house/ViewModel/SplashScreenViewModel.dart';
@@ -21,8 +22,7 @@ class _SplashViewState extends State<SplashView> {
   void initState() {
     super.initState();
 
-    // UPDATE THIS to match the exact name of your logo file!
-    _model = SplashModel(logoAssetPath: 'lib/Assets/Images/logo.png');
+    _model = SplashModel(logoAssetPath: Constants.LogoImagePath);
     _viewModel = SplashViewModel();
 
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
@@ -38,7 +38,6 @@ class _SplashViewState extends State<SplashView> {
   }
 
   void _checkNavigationConditions() {
-    // We now only care if the ViewModel is ready
     if (_viewModel.isReadyToNavigate && !_navigated) {
       _navigated = true;
       _navigateToHome();

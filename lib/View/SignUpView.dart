@@ -2,8 +2,9 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:medical_house/Components/CustomMapPicker.dart';
-// FIXED: Added specific imports for the map picker
-import 'package:open_street_map_search_and_pick/open_street_map_search_and_pick.dart';
+import 'package:medical_house/Components/SocialButton.dart';
+import 'package:medical_house/Constants.dart';
+import 'package:medical_house/View/LoginView.dart';
 import 'package:provider/provider.dart';
 import 'package:medical_house/ViewModel/SignUpViewModel.dart';
 
@@ -12,8 +13,6 @@ class SignUpView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const Color midnightNavy = Color(0xFF0D1B34);
-    const Color surgicalTeal = Color(0xFF0CACBB);
     const Color sterileWhite = Color(0xFFF8FAFC);
 
     return ChangeNotifierProvider(
@@ -24,29 +23,66 @@ class SignUpView extends StatelessWidget {
           builder: (context, model, _) {
             return Stack(
               children: [
-                _buildBackgroundDecor(surgicalTeal),
+                _buildBackgroundDecor(Constants.SeconadryColor),
                 SafeArea(
                   child: SingleChildScrollView(
                     physics: const BouncingScrollPhysics(),
                     padding: EdgeInsets.symmetric(horizontal: 24.w),
                     child: Column(
                       children: [
-                        _buildCustomAppBar(context, midnightNavy),
                         SizedBox(height: 20.h),
-                        _buildBiometricImagePicker(model, surgicalTeal),
+                        _buildBiometricImagePicker(
+                          model,
+                          Constants.SeconadryColor,
+                        ),
                         SizedBox(height: 35.h),
                         _buildModernForm(
                           model,
-                          surgicalTeal,
-                          midnightNavy,
+                          Constants.SeconadryColor,
+                          Constants.midnightNavy,
                           context,
                         ), // FIXED: Added context
                         SizedBox(height: 30.h),
-                        _buildConfirmButton(model, midnightNavy, context),
+                        _buildConfirmButton(
+                          model,
+                          Constants.midnightNavy,
+                          context,
+                        ),
                         _buildSocialDivider(),
                         _buildSocialLogins(model),
 
                         SizedBox(height: 40.h),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "New to Medical House? ",
+                              style: TextStyle(
+                                color: Colors.blueGrey[400],
+                                fontSize: 14.sp,
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const LoginView(),
+                                  ),
+                                );
+                              },
+                              child: Text(
+                                "Create Account",
+                                style: TextStyle(
+                                  color: Constants.midnightNavy,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14.sp,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 20.h),
                       ],
                     ),
                   ),
@@ -58,8 +94,6 @@ class SignUpView extends StatelessWidget {
       ),
     );
   }
-
-  // --- MODERN UI BUILDERS ---
 
   Widget _buildBackgroundDecor(Color teal) {
     return Positioned.fill(
@@ -81,44 +115,6 @@ class SignUpView extends StatelessWidget {
               backgroundColor: teal.withOpacity(0.03),
             ),
           ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildCustomAppBar(BuildContext context, Color color) {
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: 10.h),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          GestureDetector(
-            onTap: () => Navigator.pop(context),
-            child: Container(
-              padding: EdgeInsets.all(10.w),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(12.r),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
-                    blurRadius: 10,
-                  ),
-                ],
-              ),
-              child: Icon(Icons.arrow_back_ios_new, color: color, size: 18.sp),
-            ),
-          ),
-          Text(
-            "Registration",
-            style: TextStyle(
-              color: color,
-              fontWeight: FontWeight.w900,
-              fontSize: 18.sp,
-              letterSpacing: -0.5,
-            ),
-          ),
-          SizedBox(width: 40.w),
         ],
       ),
     );
@@ -179,7 +175,6 @@ class SignUpView extends StatelessWidget {
     );
   }
 
-  // FIXED: Added BuildContext to the parameters
   Widget _buildModernForm(
     SignUpViewModel model,
     Color teal,
@@ -244,6 +239,7 @@ class SignUpView extends StatelessWidget {
             teal,
           ),
           _buildPasswordGlassField(model, teal),
+          SizedBox(height: 20.h),
         ]),
       ],
     );
@@ -374,7 +370,13 @@ class SignUpView extends StatelessWidget {
       child: TextField(
         controller: model.passwordController,
         obscureText: !model.isPasswordVisible,
+        style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w600),
         decoration: InputDecoration(
+          hintStyle: TextStyle(
+            color: Colors.blueGrey[200],
+            fontSize: 14.sp,
+            fontWeight: FontWeight.w600,
+          ),
           hintText: "Security Password",
           prefixIcon: Icon(Icons.lock_person_rounded, color: teal, size: 20.sp),
           suffixIcon: IconButton(
@@ -525,77 +527,29 @@ class SignUpView extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        // Google Button
-        _socialButton(
-          icon: Text(
-            "G",
-            style: TextStyle(
-              fontSize: 22.sp,
-              fontWeight: FontWeight.w900,
-              color: const Color(0xFFDB4437), // Google Red
-            ),
+        SocialButton(
+          icon: Image.asset(
+            Constants.GoogleIconPath,
+            width: 26.w,
+            height: 26.h,
           ),
-          label: "Google",
-          onTap: () {
-            // TODO: Call Google Sign In logic from ViewModel
-            debugPrint("Google Sign In Tapped");
-          },
+          onTap: () => debugPrint("Google Login Tapped"),
         ),
-
-        SizedBox(width: 20.w),
-
-        // Apple Button
-        _socialButton(
-          icon: Icon(Icons.apple, size: 26.sp, color: Colors.black),
-          label: "Apple",
-          onTap: () {
-            // TODO: Call Apple Sign In logic from ViewModel
-            debugPrint("Apple Sign In Tapped");
-          },
+        SizedBox(width: 15.w), // Slightly reduced spacing for better balance
+        SocialButton(
+          icon: Image.asset(Constants.AppleIconPath, width: 26.w, height: 26.h),
+          onTap: () => debugPrint("Apple Login Tapped"),
+        ),
+        SizedBox(width: 15.w),
+        SocialButton(
+          icon: Image.asset(
+            Constants.FacebookIconPath,
+            width: 26.w,
+            height: 26.h,
+          ),
+          onTap: () => debugPrint("Facebook Login Tapped"),
         ),
       ],
-    );
-  }
-
-  Widget _socialButton({
-    required Widget icon,
-    required String label,
-    required VoidCallback onTap,
-  }) {
-    return Expanded(
-      child: GestureDetector(
-        onTap: onTap,
-        child: Container(
-          height: 55.h,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(16.r),
-            border: Border.all(color: Colors.blueGrey.shade50, width: 2),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.02),
-                blurRadius: 10,
-                offset: const Offset(0, 4),
-              ),
-            ],
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              icon,
-              SizedBox(width: 8.w),
-              Text(
-                label,
-                style: TextStyle(
-                  color: const Color(0xFF0D1B34),
-                  fontSize: 15.sp,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
     );
   }
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:medical_house/View/HomeView.dart';
 
 class LoginViewModel extends ChangeNotifier {
   final emailController = TextEditingController();
@@ -13,20 +14,21 @@ class LoginViewModel extends ChangeNotifier {
   }
 
   Future<void> loginUser(BuildContext context) async {
-    // Start loading animation
     isLoading = true;
     notifyListeners();
 
-    // TODO: Add your Firebase/API login logic here
-    debugPrint("Logging in with: ${emailController.text}");
-
-    // Simulate network delay
     await Future.delayed(const Duration(seconds: 2));
 
     isLoading = false;
     notifyListeners();
 
-    // TODO: Navigate to HomeView
+    if (context.mounted) {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => const HomeView()),
+        (route) => false,
+      );
+    }
   }
 
   @override

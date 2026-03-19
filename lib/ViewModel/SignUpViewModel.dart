@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:location/location.dart' as loc;
 import 'package:geocoding/geocoding.dart';
+import 'package:medical_house/View/HomeView.dart';
 
 class SignUpViewModel extends ChangeNotifier {
   // Form Controllers
@@ -43,10 +44,9 @@ class SignUpViewModel extends ChangeNotifier {
     }
   }
 
-  // UPDATED: Modern GPS Logic with Error Handling & Loading State
   Future<void> getCurrentLocation() async {
     isFetchingLocation = true;
-    locationController.text = "Locating..."; // Visual cue for the user
+    locationController.text = "Locating...";
     notifyListeners();
 
     loc.Location location = loc.Location();
@@ -111,6 +111,13 @@ class SignUpViewModel extends ChangeNotifier {
 
   void registerUser(BuildContext context) {
     debugPrint("Registering: ${firstNameController.text}");
+    if (context.mounted) {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => const HomeView()),
+        (route) => false,
+      );
+    }
   }
 
   @override
