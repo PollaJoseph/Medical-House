@@ -39,13 +39,13 @@ class SignUpView extends StatelessWidget {
                         _buildModernForm(
                           model,
                           Constants.SeconadryColor,
-                          Constants.midnightNavy,
+                          Constants.MidnightNavy,
                           context,
                         ), // FIXED: Added context
                         SizedBox(height: 30.h),
                         _buildConfirmButton(
                           model,
-                          Constants.midnightNavy,
+                          Constants.MidnightNavy,
                           context,
                         ),
                         _buildSocialDivider(),
@@ -74,7 +74,7 @@ class SignUpView extends StatelessWidget {
                               child: Text(
                                 "Create Account",
                                 style: TextStyle(
-                                  color: Constants.midnightNavy,
+                                  color: Constants.MidnightNavy,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 14.sp,
                                 ),
@@ -535,12 +535,12 @@ class SignUpView extends StatelessWidget {
           ),
           onTap: () => debugPrint("Google Login Tapped"),
         ),
-        SizedBox(width: 15.w), // Slightly reduced spacing for better balance
+        SizedBox(width: 30.w), // Slightly reduced spacing for better balance
         SocialButton(
           icon: Image.asset(Constants.AppleIconPath, width: 26.w, height: 26.h),
           onTap: () => debugPrint("Apple Login Tapped"),
         ),
-        SizedBox(width: 15.w),
+        SizedBox(width: 30.w),
         SocialButton(
           icon: Image.asset(
             Constants.FacebookIconPath,

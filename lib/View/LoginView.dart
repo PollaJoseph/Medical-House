@@ -35,7 +35,7 @@ class LoginView extends StatelessWidget {
                         // 2. Medical Security Header
                         _buildHeaderIcon(
                           Constants.SeconadryColor,
-                          Constants.midnightNavy,
+                          Constants.MidnightNavy,
                         ),
                         SizedBox(height: 30.h),
 
@@ -45,7 +45,7 @@ class LoginView extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 28.sp,
                             fontWeight: FontWeight.w900,
-                            color: Constants.midnightNavy,
+                            color: Constants.MidnightNavy,
                             letterSpacing: -0.5,
                           ),
                         ),
@@ -91,7 +91,7 @@ class LoginView extends StatelessWidget {
 
                         _buildLoginButton(
                           model,
-                          Constants.midnightNavy,
+                          Constants.MidnightNavy,
                           context,
                         ),
 
@@ -122,7 +122,7 @@ class LoginView extends StatelessWidget {
                               child: Text(
                                 "Create Account",
                                 style: TextStyle(
-                                  color: Constants.midnightNavy,
+                                  color: Constants.MidnightNavy,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 14.sp,
                                 ),
@@ -351,12 +351,12 @@ class LoginView extends StatelessWidget {
           ),
           onTap: () => debugPrint("Google Login Tapped"),
         ),
-        SizedBox(width: 15.w),
+        SizedBox(width: 30.w),
         SocialButton(
           icon: Image.asset(Constants.AppleIconPath, width: 26.w, height: 26.h),
           onTap: () => debugPrint("Apple Login Tapped"),
         ),
-        SizedBox(width: 15.w),
+        SizedBox(width: 30.w),
         SocialButton(
           icon: Image.asset(
             Constants.FacebookIconPath,

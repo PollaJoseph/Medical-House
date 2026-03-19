@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:medical_house/View/LoginView.dart';
+import 'package:medical_house/Components/MainWrapper.dart';
 import 'package:medical_house/View/SplashScreenView.dart';
 
 void main() {
@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
       builder: (context, child) {
         return const MaterialApp(
           debugShowCheckedModeBanner: false,
-          home: LoginView(),
+          home: MainWrapper(),
         );
       },
     );

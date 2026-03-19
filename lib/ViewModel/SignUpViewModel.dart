@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:location/location.dart' as loc;
 import 'package:geocoding/geocoding.dart';
-import 'package:medical_house/View/HomeView.dart';
+import 'package:medical_house/Components/MainWrapper.dart';
 
 class SignUpViewModel extends ChangeNotifier {
   // Form Controllers
@@ -114,7 +114,7 @@ class SignUpViewModel extends ChangeNotifier {
     if (context.mounted) {
       Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (context) => const HomeView()),
+        MaterialPageRoute(builder: (context) => const MainWrapper()),
         (route) => false,
       );
     }

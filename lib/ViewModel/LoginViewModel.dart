@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:medical_house/View/HomeView.dart';
+import 'package:medical_house/Components/MainWrapper.dart';
 
 class LoginViewModel extends ChangeNotifier {
   final emailController = TextEditingController();
@@ -25,7 +25,7 @@ class LoginViewModel extends ChangeNotifier {
     if (context.mounted) {
       Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (context) => const HomeView()),
+        MaterialPageRoute(builder: (context) => const MainWrapper()),
         (route) => false,
       );
     }

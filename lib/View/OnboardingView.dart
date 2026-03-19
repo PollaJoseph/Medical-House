@@ -579,7 +579,7 @@ class _OnboardingViewState extends State<OnboardingView> {
                 child: TextButton(
                   onPressed: _jumpToLastPage,
                   style: TextButton.styleFrom(
-                    foregroundColor: Constants.midnightNavy.withOpacity(0.5),
+                    foregroundColor: Constants.MidnightNavy.withOpacity(0.5),
                   ),
                   child: Text(
                     "Skip",
@@ -630,7 +630,7 @@ class _OnboardingViewState extends State<OnboardingView> {
                 child: Container(
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    color: Constants.midnightNavy,
+                    color: Constants.MidnightNavy,
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(50.r),
                       topRight: Radius.circular(50.r),
@@ -734,7 +734,7 @@ class _OnboardingViewState extends State<OnboardingView> {
               isLastPage
                   ? Icons.check_rounded
                   : Icons.arrow_forward_ios_rounded,
-              color: Constants.midnightNavy,
+              color: Constants.MidnightNavy,
               size: 22.sp,
             ),
           ),
