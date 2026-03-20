@@ -20,10 +20,11 @@ class SectionDetailView extends StatelessWidget {
       body: CustomScrollView(
         physics: const BouncingScrollPhysics(),
         slivers: [
-          // 2. Cinematic Hero Header
+          // 2. Cinematic Hero Header with Dynamic App Bar
           SliverAppBar(
             expandedHeight: 350.h,
-            pinned: true,
+            pinned:
+                true, // This is crucial: keeps the AppBar visible when scrolled
             backgroundColor: midnightNavy,
             elevation: 0,
             stretch: true,
@@ -57,70 +58,104 @@ class SectionDetailView extends StatelessWidget {
               ),
             ),
 
-            flexibleSpace: FlexibleSpaceBar(
-              stretchModes: const [StretchMode.zoomBackground],
-              background: Stack(
-                fit: StackFit.expand,
-                children: [
-                  Image.asset(section.imageUrl, fit: BoxFit.cover),
-                  // Gradient to make the white text pop perfectly
-                  Container(
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [
-                          midnightNavy.withOpacity(0.4),
-                          Colors.transparent,
-                          midnightNavy.withOpacity(0.8),
-                        ],
-                        stops: const [0.0, 0.4, 1.0],
+            flexibleSpace: LayoutBuilder(
+              builder: (BuildContext context, BoxConstraints constraints) {
+                // Determine if the SliverAppBar has collapsed into a standard AppBar
+                final double collapsedHeight =
+                    kToolbarHeight + MediaQuery.of(context).padding.top;
+                // Add a small buffer (40) so it fades in just before hitting the top
+                final bool isCollapsed =
+                    constraints.biggest.height <= collapsedHeight + 40;
+
+                return FlexibleSpaceBar(
+                  stretchModes: const [StretchMode.zoomBackground],
+                  centerTitle: true,
+                  expandedTitleScale:
+                      1.0, // Prevents the text from flying/scaling during scroll
+                  // The title that appears ONLY when collapsed
+                  title: AnimatedOpacity(
+                    duration: const Duration(milliseconds: 300),
+                    opacity: isCollapsed ? 1.0 : 0.0,
+                    child: Text(
+                      section.mainTitle.replaceAll('\n', ' '),
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18.sp,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: -0.5,
                       ),
                     ),
                   ),
-                  // Title overlay at the bottom of the image
-                  Positioned(
-                    bottom: 24.h,
-                    left: 24.w,
-                    right: 24.w,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 10.w,
-                            vertical: 4.h,
-                          ),
-                          decoration: BoxDecoration(
-                            color: surgicalTeal.withOpacity(0.9),
-                            borderRadius: BorderRadius.circular(8.r),
-                          ),
-                          child: Text(
-                            "VIP CLINIC",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 10.sp,
-                              fontWeight: FontWeight.w900,
-                              letterSpacing: 1,
-                            ),
+
+                  background: Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      Image.asset(section.imageUrl, fit: BoxFit.cover),
+                      // Gradient to make the white text pop perfectly
+                      Container(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [
+                              midnightNavy.withOpacity(0.4),
+                              Colors.transparent,
+                              midnightNavy.withOpacity(0.8),
+                            ],
+                            stops: const [0.0, 0.4, 1.0],
                           ),
                         ),
-                        SizedBox(height: 12.h),
-                        Text(
-                          section.mainTitle.replaceAll('\n', ' '),
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 32.sp,
-                            fontWeight: FontWeight.w900,
-                            height: 1.1,
-                            letterSpacing: -1,
+                      ),
+                      // Title overlay at the bottom of the image
+                      Positioned(
+                        bottom: 24.h,
+                        left: 24.w,
+                        right: 24.w,
+                        // Fades OUT the big title as you scroll up
+                        child: AnimatedOpacity(
+                          duration: const Duration(milliseconds: 300),
+                          opacity: isCollapsed ? 0.0 : 1.0,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 10.w,
+                                  vertical: 4.h,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: surgicalTeal.withOpacity(0.9),
+                                  borderRadius: BorderRadius.circular(8.r),
+                                ),
+                                child: Text(
+                                  "VIP CLINIC",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 10.sp,
+                                    fontWeight: FontWeight.w900,
+                                    letterSpacing: 1,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 12.h),
+                              Text(
+                                section.mainTitle.replaceAll('\n', ' '),
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 32.sp,
+                                  fontWeight: FontWeight.w900,
+                                  height: 1.1,
+                                  letterSpacing: -1,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                );
+              },
             ),
           ),
 
@@ -188,8 +223,7 @@ class SectionDetailView extends StatelessWidget {
                         ),
                         child: Image.asset(
                           service.imageUrl,
-                          height: 160
-                              .h, // Large height to show off the clinic/results
+                          height: 160.h,
                           width: double.infinity,
                           fit: BoxFit.cover,
                         ),
@@ -238,7 +272,6 @@ class SectionDetailView extends StatelessWidget {
                                 ],
                               ),
                             ),
-
                             SizedBox(width: 15.w),
 
                             // Highly explicit "Book" button
@@ -286,7 +319,7 @@ class SectionDetailView extends StatelessWidget {
             ),
           ),
 
-          // Extra bottom padding so the floating "Book Consultation" bar doesn't cover the last card
+          // Extra bottom padding
           SliverToBoxAdapter(child: SizedBox(height: 120.h)),
         ],
       ),
