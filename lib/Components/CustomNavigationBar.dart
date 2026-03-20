@@ -56,8 +56,8 @@ class CustomNavigationBar extends StatelessWidget {
                   padding: EdgeInsets.all(10.w),
                   child: Image.asset(
                     isSelected ? item.selectedImage : item.unselectedImage,
-                    width: 30.w,
-                    height: 30.h,
+                    width: 26.w,
+                    height: 26.h,
                     color: isSelected ? Constants.PrimaryColor : Colors.white70,
                   ),
                 ),

@@ -41,7 +41,7 @@ class _MainWrapperState extends State<MainWrapper> {
           Align(
             alignment: Alignment.bottomCenter,
             child: Padding(
-              padding: EdgeInsets.only(bottom: 20.h, left: 20.w, right: 20.w),
+              padding: EdgeInsets.only(bottom: 20.h, left: 26.w, right: 26.w),
               child: CustomNavigationBar(
                 currentIndex: _SelectedTab.values.indexOf(_selectedTab),
                 onTap: _handleIndexChanged,
