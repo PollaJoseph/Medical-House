@@ -47,20 +47,20 @@ class _MainWrapperState extends State<MainWrapper> {
                 onTap: _handleIndexChanged,
                 items: [
                   CustomNavItem(
-                    selectedImage: Constants.HomeSelectedIconPath,
-                    unselectedImage: Constants.HomeUnSelectedIconPath,
+                    selectedImage: Constants.HomeIconPath,
+                    unselectedImage: Constants.HomeIconPath,
                   ),
                   CustomNavItem(
-                    selectedImage: Constants.OfferSelectedIconPath,
-                    unselectedImage: Constants.OfferUnSelectedIconPath,
+                    selectedImage: Constants.OfferIconPath,
+                    unselectedImage: Constants.OfferIconPath,
                   ),
                   CustomNavItem(
-                    selectedImage: Constants.ArticleSelectedIconPath,
-                    unselectedImage: Constants.ArticleUnSelectedIconPath,
+                    selectedImage: Constants.ArticleIconPath,
+                    unselectedImage: Constants.ArticleIconPath,
                   ),
                   CustomNavItem(
-                    selectedImage: Constants.ProfileSelectedIconPath,
-                    unselectedImage: Constants.ProfileUnSelectedIconPath,
+                    selectedImage: Constants.ProfileIconPath,
+                    unselectedImage: Constants.ProfileIconPath,
                   ),
                 ],
               ),

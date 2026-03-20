@@ -57,7 +57,6 @@ class HomeView extends StatelessWidget {
                     ),
                   ),
                   // 4. The 2-Column Portrait Grid
-                  // 4. The 1-Column Vertical List (Wide Banners)
                   SliverPadding(
                     padding: EdgeInsets.symmetric(horizontal: 12.w),
                     sliver: SliverList(

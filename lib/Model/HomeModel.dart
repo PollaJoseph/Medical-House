@@ -10,10 +10,17 @@ class PatientProfile {
   });
 }
 
+class HospitalService {
+  final String title;
+  final String imageUrl;
+
+  HospitalService({required this.title, required this.imageUrl});
+}
+
 class HospitalSection {
   final String mainTitle;
   final String imageUrl;
-  final List<String> subSections;
+  final List<HospitalService> subSections;
 
   HospitalSection({
     required this.mainTitle,
