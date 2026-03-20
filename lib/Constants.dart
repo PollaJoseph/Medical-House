@@ -27,7 +27,6 @@ class Constants {
       'lib/Assets/Icons/Offer-Selected.png';
   static const String OfferUnSelectedIconPath =
       'lib/Assets/Icons/Offer-Unselected.png';
-
   static const String ArticleSelectedIconPath =
       'lib/Assets/Icons/Artical-Selected.png';
   static const String ArticleUnSelectedIconPath =
