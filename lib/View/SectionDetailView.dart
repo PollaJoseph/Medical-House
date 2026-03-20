@@ -62,7 +62,7 @@ class SectionDetailView extends StatelessWidget {
               background: Stack(
                 fit: StackFit.expand,
                 children: [
-                  Image.network(section.imageUrl, fit: BoxFit.cover),
+                  Image.asset(section.imageUrl, fit: BoxFit.cover),
                   // Gradient to make the white text pop perfectly
                   Container(
                     decoration: BoxDecoration(

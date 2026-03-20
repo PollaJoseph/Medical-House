@@ -8,12 +8,19 @@ class Constants {
   static const WhiteColor = Colors.white;
 
   static const String LogoImagePath = 'lib/Assets/Images/logo.png';
+  static const String MaleAvatarImagePath = "lib/Assets/Images/MaleAvatar.png";
+  static const String FemaleAvatarImagePath =
+      "lib/Assets/Images/FemaleAvatar.png";
   static const String Onboarding1ImagePath =
       'lib/Assets/Images/Onboarding-1.png';
   static const String Onboarding2ImagePath =
       'lib/Assets/Images/Onboarding-2.png';
   static const String Onboarding3ImagePath =
       'lib/Assets/Images/Onboarding-3.png';
+  static const String DentalSectionImagePath =
+      "lib/Assets/Images/Dental-Section.png";
+  static const String DermatologySectionImagePath =
+      "lib/Assets/Images/Dermatology-Section.png";
   static const String DentalDepartment1ImagePath =
       'lib/Assets/Images/teeth-cleaning.png';
   static const String DentalDepartment2ImagePath =

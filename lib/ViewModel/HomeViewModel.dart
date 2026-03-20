@@ -7,16 +7,14 @@ class HomeViewModel extends ChangeNotifier {
   // User Data with Points
   final PatientProfile currentUser = PatientProfile(
     name: "Ahmed Hassan",
-    imageUrl:
-        "https://ui-avatars.com/api/?name=Ahmed+Hassan&background=0D1B34&color=fff",
+    imageUrl: Constants.MaleAvatarImagePath,
     points: 1250,
   );
 
   final List<HospitalSection> hospitalSections = [
     HospitalSection(
       mainTitle: "Dermatology & Cosmetology",
-      imageUrl:
-          "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?q=80&w=800&auto=format&fit=crop",
+      imageUrl: Constants.DermatologySectionImagePath,
       subSections: [
         HospitalService(
           title: "Laser Hair Removal",
@@ -51,8 +49,7 @@ class HomeViewModel extends ChangeNotifier {
 
     HospitalSection(
       mainTitle: "Dental Department",
-      imageUrl:
-          "https://images.unsplash.com/photo-1606811841689-23dfddce3e95?q=80&w=800&auto=format&fit=crop",
+      imageUrl: Constants.DentalSectionImagePath,
       subSections: [
         HospitalService(
           title: "Dental Fillings",

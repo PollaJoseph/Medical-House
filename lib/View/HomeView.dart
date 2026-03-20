@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:medical_house/ViewModel/HomeViewModel.dart';
 
 class HomeView extends StatelessWidget {
-  const HomeView({Key? key}) : super(key: key);
+  const HomeView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -89,7 +89,7 @@ class HomeView extends StatelessWidget {
           children: [
             CircleAvatar(
               radius: 26.r,
-              backgroundImage: NetworkImage(model.currentUser.imageUrl),
+              backgroundImage: AssetImage(model.currentUser.imageUrl),
             ),
             SizedBox(width: 12.w),
             Column(
@@ -231,7 +231,7 @@ class HomeView extends StatelessWidget {
           child: Stack(
             fit: StackFit.expand,
             children: [
-              Image.network(section.imageUrl, fit: BoxFit.cover),
+              Image.asset(section.imageUrl, fit: BoxFit.cover),
 
               Container(
                 decoration: BoxDecoration(
