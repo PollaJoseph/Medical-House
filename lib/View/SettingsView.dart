@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:medical_house/Components/SettingsButton.dart';
 import 'package:medical_house/Constants.dart';
+import 'package:medical_house/View/ContactUsView.dart';
 
 class SettingsView extends StatelessWidget {
   const SettingsView({super.key});
@@ -114,6 +115,19 @@ class SettingsView extends StatelessWidget {
                 icon: Icons.person_rounded,
                 onClick: () {
                   debugPrint("Navigate to Profile");
+                },
+                iconColor: Constants.SeconadryColor,
+                textColor: Constants.MidnightNavy,
+              ),
+
+              SettingsButton(
+                text: "Contact Us",
+                icon: Icons.info_outline_rounded,
+                onClick: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ContactUsView()),
+                  );
                 },
                 iconColor: Constants.SeconadryColor,
                 textColor: Constants.MidnightNavy,
