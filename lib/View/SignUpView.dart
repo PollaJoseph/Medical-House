@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:medical_house/Components/CustomMapPicker.dart';
 import 'package:medical_house/Components/SocialButton.dart';
 import 'package:medical_house/Constants.dart';
@@ -32,6 +33,7 @@ class SignUpView extends StatelessWidget {
                       children: [
                         SizedBox(height: 20.h),
                         _buildBiometricImagePicker(
+                          context,
                           model,
                           Constants.SeconadryColor,
                         ),
@@ -120,7 +122,11 @@ class SignUpView extends StatelessWidget {
     );
   }
 
-  Widget _buildBiometricImagePicker(SignUpViewModel model, Color teal) {
+  Widget _buildBiometricImagePicker(
+    BuildContext context,
+    SignUpViewModel model,
+    Color teal,
+  ) {
     return Center(
       child: Stack(
         alignment: Alignment.center,
@@ -134,7 +140,8 @@ class SignUpView extends StatelessWidget {
             ),
           ),
           GestureDetector(
-            onTap: model.pickImage,
+            // OPEN THE NEW BOTTOM SHEET HERE
+            onTap: () => _showImageSourceActionSheet(context, model, teal),
             child: Container(
               padding: EdgeInsets.all(4.w),
               decoration: const BoxDecoration(
@@ -148,7 +155,7 @@ class SignUpView extends StatelessWidget {
                     ? FileImage(model.profileImage!)
                     : null,
                 child: model.profileImage == null
-                    ? Icon(Icons.fingerprint_rounded, size: 45.sp, color: teal)
+                    ? Icon(Icons.person_rounded, size: 45.sp, color: teal)
                     : null,
               ),
             ),
@@ -156,21 +163,109 @@ class SignUpView extends StatelessWidget {
           Positioned(
             bottom: 5,
             right: 5,
-            child: Container(
-              padding: EdgeInsets.all(6.w),
-              decoration: BoxDecoration(
-                color: teal,
-                shape: BoxShape.circle,
-                border: Border.all(color: Colors.white, width: 2),
-              ),
-              child: Icon(
-                Icons.add_a_photo_rounded,
-                size: 14.sp,
-                color: Colors.white,
+            child: GestureDetector(
+              onTap: () => _showImageSourceActionSheet(context, model, teal),
+              child: Container(
+                padding: EdgeInsets.all(8.w),
+                decoration: BoxDecoration(
+                  color: teal,
+                  shape: BoxShape.circle,
+                  border: Border.all(color: Colors.white, width: 2),
+                ),
+                child: Icon(
+                  Icons.camera_alt_rounded, // Changed icon to match the action
+                  size: 16.sp,
+                  color: Colors.white,
+                ),
               ),
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  void _showImageSourceActionSheet(
+    BuildContext context,
+    SignUpViewModel model,
+    Color teal,
+  ) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(25.r)),
+      ),
+      builder: (context) => Container(
+        padding: EdgeInsets.all(24.w),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              "Profile Photo",
+              style: TextStyle(
+                fontSize: 18.sp,
+                fontWeight: FontWeight.w900,
+                color: const Color(0xFF0D1B34),
+              ),
+            ),
+            SizedBox(height: 20.h),
+            ListTile(
+              leading: CircleAvatar(
+                backgroundColor: teal.withOpacity(0.1),
+                child: Icon(Icons.camera_alt_rounded, color: teal),
+              ),
+              title: const Text(
+                "Take a Photo",
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              onTap: () {
+                Navigator.pop(context); // Close sheet first
+                model.pickImage(ImageSource.camera); // Open Camera
+              },
+            ),
+            ListTile(
+              leading: CircleAvatar(
+                backgroundColor: teal.withOpacity(0.1),
+                child: Icon(Icons.photo_library_rounded, color: teal),
+              ),
+              title: const Text(
+                "Choose from Gallery",
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              onTap: () {
+                Navigator.pop(context); // Close sheet first
+                model.pickImage(ImageSource.gallery); // Open Gallery
+              },
+            ),
+            // Optional: Add a remove button if an image is already selected
+            if (model.profileImage != null) ...[
+              Divider(color: Colors.blueGrey.shade50, height: 20.h),
+              ListTile(
+                leading: CircleAvatar(
+                  backgroundColor: Colors.redAccent.withOpacity(0.1),
+                  child: const Icon(
+                    Icons.delete_rounded,
+                    color: Colors.redAccent,
+                  ),
+                ),
+                title: const Text(
+                  "Remove Photo",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.redAccent,
+                  ),
+                ),
+                onTap: () {
+                  Navigator.pop(context);
+                  model.profileImage = null; // Clear image
+                  model.notifyListeners();
+                },
+              ),
+            ],
+            SizedBox(height: 10.h),
+          ],
+        ),
       ),
     );
   }
@@ -186,12 +281,14 @@ class SignUpView extends StatelessWidget {
         _buildInputGroup("Identity", [
           _buildGlassField(
             "First Name",
+            keyboard: TextInputType.name,
             Icons.badge_outlined,
             model.firstNameController,
             teal,
           ),
           _buildGlassField(
             "Last Name",
+            keyboard: TextInputType.name,
             Icons.badge_outlined,
             model.lastNameController,
             teal,
@@ -234,6 +331,7 @@ class SignUpView extends StatelessWidget {
           ), // FIXED: Correctly passing context
           _buildGlassField(
             "Email",
+            keyboard: TextInputType.emailAddress,
             Icons.alternate_email_rounded,
             model.emailController,
             teal,
@@ -417,7 +515,8 @@ class SignUpView extends StatelessWidget {
         ],
       ),
       child: ElevatedButton(
-        onPressed: () => model.registerUser(context),
+        // Disable the button if it is currently loading
+        onPressed: model.isLoading ? null : () => model.registerUser(context),
         style: ElevatedButton.styleFrom(
           backgroundColor: navy,
           shape: RoundedRectangleBorder(
@@ -425,15 +524,25 @@ class SignUpView extends StatelessWidget {
           ),
           elevation: 0,
         ),
-        child: Text(
-          "Finalize Registration",
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 16.sp,
-            fontWeight: FontWeight.bold,
-            letterSpacing: 0.5,
-          ),
-        ),
+        // Show the spinner if loading, otherwise show the text
+        child: model.isLoading
+            ? SizedBox(
+                height: 24.h,
+                width: 24.h,
+                child: const CircularProgressIndicator(
+                  color: Colors.white,
+                  strokeWidth: 2,
+                ),
+              )
+            : Text(
+                "Finalize Registration",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 0.5,
+                ),
+              ),
       ),
     );
   }
@@ -618,8 +727,14 @@ class SignUpView extends StatelessWidget {
       context,
       MaterialPageRoute(
         builder: (context) => CustomMapPicker(
-          onLocationPicked: (address) {
-            model.updateLocationString(address);
+          // 3. THE FIX: Catch the lat and lng variables coming from the map
+          onLocationPicked: (address, lat, lng) {
+            // Pass the coordinates into the ViewModel's update function
+            model.updateLocationString(
+              address,
+              lat: lat.toString(),
+              lng: lng.toString(),
+            );
             Navigator.pop(context); // Close the map picker
           },
         ),

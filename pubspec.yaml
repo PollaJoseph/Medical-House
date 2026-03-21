@@ -64,3 +64,4 @@ flutter:
     - lib/Assets/Images/
     - lib/Assets/Icons/
     - lib/Assets/
+    - keys.env

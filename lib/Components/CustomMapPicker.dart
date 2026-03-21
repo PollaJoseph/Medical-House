@@ -5,7 +5,7 @@ import 'package:geocoding/geocoding.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CustomMapPicker extends StatefulWidget {
-  final Function(String address) onLocationPicked;
+  final void Function(String address, double lat, double lng) onLocationPicked;
 
   const CustomMapPicker({Key? key, required this.onLocationPicked})
     : super(key: key);
@@ -16,42 +16,57 @@ class CustomMapPicker extends StatefulWidget {
 
 class _CustomMapPickerState extends State<CustomMapPicker> {
   final MapController _mapController = MapController();
-  final LatLng _initialCenter = LatLng(
-    24.7136,
-    46.6753,
-  ); // Centered on Riyadh, KSA // Centered on Cairo
+
+  // 1. We manually track the center to prevent null crashes
+  LatLng _currentCenter = const LatLng(24.7136, 46.6753);
   bool _isLoading = false;
 
   Future<void> _confirmLocation() async {
     setState(() => _isLoading = true);
 
     try {
-      // Get the exact coordinates from the center of the map
-      final center = _mapController.center;
-
-      // Convert coordinates to a readable address
+      // Use the tracked center, NOT _mapController
       List<Placemark> placemarks = await placemarkFromCoordinates(
-        center.latitude,
-        center.longitude,
+        _currentCenter.latitude,
+        _currentCenter.longitude,
       );
 
       if (placemarks.isNotEmpty) {
         Placemark place = placemarks[0];
-        String formattedAddress =
-            "${place.street}, ${place.subLocality}, ${place.administrativeArea}";
-        // Remove empty segments if any
-        formattedAddress = formattedAddress
-            .replaceAll(RegExp(r'^, |, $'), '')
-            .replaceAll(', ,', ',');
 
-        widget.onLocationPicked(formattedAddress);
+        List<String> addressParts = [];
+        if (place.street != null && place.street!.isNotEmpty)
+          addressParts.add(place.street!);
+        if (place.subLocality != null && place.subLocality!.isNotEmpty)
+          addressParts.add(place.subLocality!);
+        if (place.locality != null && place.locality!.isNotEmpty)
+          addressParts.add(place.locality!);
+        if (place.administrativeArea != null &&
+            place.administrativeArea!.isNotEmpty)
+          addressParts.add(place.administrativeArea!);
+
+        String formattedAddress = addressParts.join(", ");
+        if (formattedAddress.isEmpty) formattedAddress = "Selected Location";
+
+        widget.onLocationPicked(
+          formattedAddress,
+          _currentCenter.latitude,
+          _currentCenter.longitude,
+        );
       } else {
-        widget.onLocationPicked("${center.latitude}, ${center.longitude}");
+        widget.onLocationPicked(
+          "${_currentCenter.latitude}, ${_currentCenter.longitude}",
+          _currentCenter.latitude,
+          _currentCenter.longitude,
+        );
       }
     } catch (e) {
       debugPrint("Geocoding Error: $e");
+      // Safe Fallback: Even if it fails, send the coordinates so the backend doesn't get 0.0
       widget.onLocationPicked(
-        "${_mapController.center.latitude}, ${_mapController.center.longitude}",
+        "${_currentCenter.latitude}, ${_currentCenter.longitude}",
+        _currentCenter.latitude,
+        _currentCenter.longitude,
       );
     } finally {
       setState(() => _isLoading = false);
@@ -61,19 +76,23 @@ class _CustomMapPickerState extends State<CustomMapPicker> {
   @override
   Widget build(BuildContext context) {
     const Color midnightNavy = Color(0xFF0D1B34);
-    const Color surgicalTeal = Color(0xFF0CACBB);
 
     return Scaffold(
       body: Stack(
         children: [
-          // 1. The Raw OSM Map
           FlutterMap(
             mapController: _mapController,
             options: MapOptions(
-              center: _initialCenter,
+              center: _currentCenter,
               zoom: 15.0,
               maxZoom: 18.0,
               interactiveFlags: InteractiveFlag.all & ~InteractiveFlag.rotate,
+              // 2. THIS IS THE FIX: Update coordinates instantly when the user drags the map
+              onPositionChanged: (MapPosition position, bool hasGesture) {
+                if (position.center != null) {
+                  _currentCenter = position.center!;
+                }
+              },
             ),
             children: [
               TileLayer(
@@ -83,17 +102,14 @@ class _CustomMapPickerState extends State<CustomMapPicker> {
             ],
           ),
 
-          // 2. The Fixed Center Pin
           Center(
             child: Padding(
-              padding: EdgeInsets.only(
-                bottom: 40.h,
-              ), // Offset to align pin tip with center
+              padding: EdgeInsets.only(bottom: 40.h),
               child: Icon(
                 Icons.location_on,
                 color: midnightNavy,
                 size: 50.sp,
-                shadows: [
+                shadows: const [
                   Shadow(
                     color: Colors.black26,
                     blurRadius: 10,
@@ -104,7 +120,6 @@ class _CustomMapPickerState extends State<CustomMapPicker> {
             ),
           ),
 
-          // 3. Floating Action UI
           Positioned(
             bottom: 30.h,
             left: 20.w,
@@ -150,7 +165,6 @@ class _CustomMapPickerState extends State<CustomMapPicker> {
             ),
           ),
 
-          // Custom Back Button
           Positioned(
             top: 50.h,
             left: 20.w,
@@ -158,7 +172,7 @@ class _CustomMapPickerState extends State<CustomMapPicker> {
               onTap: () => Navigator.pop(context),
               child: Container(
                 padding: EdgeInsets.all(10.w),
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   color: Colors.white,
                   shape: BoxShape.circle,
                   boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 10)],

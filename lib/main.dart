@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:medical_house/Components/MainWrapper.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:medical_house/View/SplashScreenView.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: "keys.env");
   runApp(const MyApp());
 }
 
@@ -19,7 +21,7 @@ class MyApp extends StatelessWidget {
       builder: (context, child) {
         return const MaterialApp(
           debugShowCheckedModeBanner: false,
-          home: MainWrapper(),
+          home: SplashView(),
         );
       },
     );

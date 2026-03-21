@@ -45,5 +45,11 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>Medical House needs access to your camera so you can take a profile photo.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Medical House needs access to your photo library to select a profile photo.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Medical House needs your location to help you find the nearest clinic and set your address.</string>
 </dict>
 </plist>
