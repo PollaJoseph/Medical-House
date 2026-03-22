@@ -8,7 +8,10 @@ import 'package:medical_house/View/OffersView.dart';
 import 'package:medical_house/View/SettingsView.dart';
 
 class MainWrapper extends StatefulWidget {
-  const MainWrapper({super.key});
+  final String? Username;
+  final String? UserImage;
+  final int? Points;
+  const MainWrapper({super.key, this.Username, this.UserImage, this.Points});
 
   @override
   State<MainWrapper> createState() => _MainWrapperState();
@@ -17,12 +20,18 @@ class MainWrapper extends StatefulWidget {
 class _MainWrapperState extends State<MainWrapper> {
   var _selectedTab = _SelectedTab.home;
 
-  final List<Widget> _pages = [
-    const HomeView(),
-    const OffersView(),
-    const ArticleView(),
-    const SettingsView(),
-  ];
+  List<Widget> _getPages() {
+    return [
+      HomeView(
+        Username: widget.Username,
+        UserImage: widget.UserImage,
+        Points: widget.Points,
+      ),
+      const OffersView(),
+      const ArticleView(),
+      const SettingsView(),
+    ];
+  }
 
   void _handleIndexChanged(int i) {
     setState(() {
@@ -32,11 +41,15 @@ class _MainWrapperState extends State<MainWrapper> {
 
   @override
   Widget build(BuildContext context) {
+    // Generate the pages list during build to ensure data is current
+    final pages = _getPages();
+
     return Scaffold(
       extendBody: true,
       body: Stack(
         children: [
-          _pages[_SelectedTab.values.indexOf(_selectedTab)],
+          // Use the dynamic pages list
+          pages[_SelectedTab.values.indexOf(_selectedTab)],
 
           Align(
             alignment: Alignment.bottomCenter,

@@ -51,7 +51,7 @@ class SignUpView extends StatelessWidget {
                           context,
                         ),
                         _buildSocialDivider(),
-                        _buildSocialLogins(model),
+                        _buildSocialLogins(model, context),
 
                         SizedBox(height: 40.h),
                         Row(
@@ -632,24 +632,33 @@ class SignUpView extends StatelessWidget {
     );
   }
 
-  Widget _buildSocialLogins(SignUpViewModel model) {
+  Widget _buildSocialLogins(SignUpViewModel model, BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        SocialButton(
-          icon: Image.asset(
-            Constants.GoogleIconPath,
-            width: 26.w,
-            height: 26.h,
-          ),
-          onTap: () => debugPrint("Google Login Tapped"),
-        ),
-        SizedBox(width: 30.w), // Slightly reduced spacing for better balance
+        // GOOGLE BUTTON
+        model.isGoogleLoading
+            ? const CircularProgressIndicator(color: Color(0xFF0CACBB))
+            : SocialButton(
+                icon: Image.asset(
+                  Constants.GoogleIconPath,
+                  width: 26.w,
+                  height: 26.h,
+                ),
+                onTap: () => model.signInWithGoogle(context),
+              ),
+
+        SizedBox(width: 30.w),
+
+        // APPLE BUTTON
         SocialButton(
           icon: Image.asset(Constants.AppleIconPath, width: 26.w, height: 26.h),
           onTap: () => debugPrint("Apple Login Tapped"),
         ),
+
         SizedBox(width: 30.w),
+
+        // FACEBOOK BUTTON
         SocialButton(
           icon: Image.asset(
             Constants.FacebookIconPath,

@@ -1,11 +1,14 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:location/location.dart' as loc;
 import 'package:geocoding/geocoding.dart';
 import 'package:medical_house/Components/MainWrapper.dart';
 import 'package:medical_house/Model/SignUpAPIModel.dart';
 import 'package:medical_house/Services/ApiService.dart';
+import 'package:medical_house/Services/StorageService.dart';
+import 'package:medical_house/View/OTPView.dart';
 
 class SignUpViewModel extends ChangeNotifier {
   final firstNameController = TextEditingController();
@@ -22,12 +25,15 @@ class SignUpViewModel extends ChangeNotifier {
 
   bool isFetchingLocation = false;
   bool isLoading = false;
+  bool isGoogleLoading = false;
 
   String latitude = "0.0";
   String longitude = "0.0";
 
   final ImagePicker _picker = ImagePicker();
   final ApiService _apiService = ApiService();
+
+  final GoogleSignIn _googleSignIn = GoogleSignIn.instance;
 
   void setGender(String gender) {
     selectedGender = gender;
@@ -164,18 +170,19 @@ class SignUpViewModel extends ChangeNotifier {
               backgroundColor: Colors.green,
             ),
           );
-
-          /* Navigator.pushAndRemoveUntil(
+          StorageService.saveUserClientId(response.data['ClientID'].toString());
+          Navigator.pushAndRemoveUntil(
             context,
-            MaterialPageRoute(builder: (context) => const MainWrapper()),
+            MaterialPageRoute(
+              builder: (context) => OTPView(email: emailController.text.trim()),
+            ),
             (route) => false,
-          );*/
+          );
         }
       } else {
         throw Exception("Server returned ${response.statusCode}");
       }
     } catch (e) {
-      // Handle Failure
       debugPrint("Registration Error: $e");
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -188,8 +195,85 @@ class SignUpViewModel extends ChangeNotifier {
         );
       }
     } finally {
-      // 7. Stop Loading
       isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> signInWithGoogle(BuildContext context) async {
+    isGoogleLoading = true;
+    notifyListeners();
+
+    try {
+      await _googleSignIn.initialize(
+        serverClientId:
+            "501409575553-lcqkolshqackgc1cpb70sbc8436sbbr1.apps.googleusercontent.com",
+      );
+      final GoogleSignInAccount? googleUser = await _googleSignIn.authenticate(
+        scopeHint: ['email', 'profile'],
+      );
+
+      if (googleUser == null) {
+        isGoogleLoading = false;
+        notifyListeners();
+        return;
+      }
+
+      final GoogleSignInAuthentication googleAuth = googleUser.authentication;
+      final String? idToken = googleAuth.idToken;
+      String? accessToken;
+      try {
+        final authorization = await googleUser.authorizationClient
+            .authorizeScopes(['email', 'profile']);
+        accessToken = authorization.accessToken;
+      } catch (e) {
+        debugPrint("Explicit authorization failed: $e");
+      }
+
+      final String tokenToSend = accessToken ?? idToken ?? "";
+
+      if (tokenToSend.isEmpty) {
+        throw Exception("Could not retrieve tokens from Google.");
+      }
+
+      final response = await _apiService.googleLogin(tokenToSend);
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        final String djangoToken = response.data['key'];
+        debugPrint('Success! Django Token: $djangoToken');
+
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text("Google Login Successful!"),
+              backgroundColor: Colors.green,
+            ),
+          );
+
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => const MainWrapper()),
+            (route) => false,
+          );
+        }
+      } else {
+        throw Exception("Django rejected the token.");
+      }
+    } catch (e) {
+      debugPrint("Google Auth Error: $e");
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              "Google Login Failed: ${e.toString().replaceAll('Exception: ', '')}",
+            ),
+            backgroundColor: Colors.redAccent,
+          ),
+        );
+      }
+      await _googleSignIn.signOut();
+    } finally {
+      isGoogleLoading = false;
       notifyListeners();
     }
   }

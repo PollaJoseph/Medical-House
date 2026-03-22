@@ -1,19 +1,25 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:medical_house/Model/LoginAPIModel.dart';
+import 'package:medical_house/Model/OTPVerificationModel.dart';
+import 'package:medical_house/Model/ResendOTP.dart';
 import 'package:medical_house/Model/SignUpAPIModel.dart';
 import 'package:medical_house/Services/StorageService.dart';
 
 class ApiService {
   final Dio _dio = Dio();
 
-  //URL
-  /*static String globalBaseUrl = "https://1281-41-43-175-104.ngrok-free.app/";
-  String get baseUrl => globalBaseUrl;*/
-
   final String baseUrl = "https://d511-156-196-10-228.ngrok-free.app/";
   //dotenv.env['BASE_URL'] ?? '';
   final String apiKey = dotenv.env['API_KEY'] ?? '';
-
+  final String SignUpEndpoint = dotenv.env['SIGN_UP_ENDPOINT'] ?? '';
+  final String GoogleSignUpEndpoint =
+      dotenv.env['GOOGLE_SIGN_UP_ENDPOINT'] ?? '';
+  final String VerifyOtpEndpoint = dotenv.env['VERIFY_OTP_ENDPOINT'] ?? '';
+  final String ResendOtpEndpoint = dotenv.env['RESEND_OTP_ENDPOINT'] ?? '';
+  final String LoginEndpoint = dotenv.env['LOGIN_ENDPOINT'] ?? '';
   String? _authToken;
 
   ApiService();
@@ -91,7 +97,7 @@ class ApiService {
       requestHeaders.remove('Content-Type');
 
       final response = await _dio.post(
-        '${baseUrl}Users/SignUp/',
+        '$baseUrl$SignUpEndpoint',
         data: formattedData,
         options: Options(headers: requestHeaders),
       );
@@ -99,6 +105,82 @@ class ApiService {
       return response;
     } on DioException catch (e) {
       throw Exception('Sign Up Failed: ${e.response?.data ?? e.message}');
+    } catch (e) {
+      throw Exception('An unexpected error occurred: $e');
+    }
+  }
+
+  Future<Response> googleLogin(String accessToken) async {
+    try {
+      Map<String, String> requestHeaders = getHeaders(includeAuth: false);
+
+      final response = await _dio.post(
+        '$baseUrl$GoogleSignUpEndpoint',
+        data: {'access_token': accessToken},
+        options: Options(headers: requestHeaders),
+      );
+
+      return response;
+    } on DioException catch (e) {
+      throw Exception('Google Login Failed: ${e.response?.data ?? e.message}');
+    } catch (e) {
+      throw Exception('An unexpected error occurred: $e');
+    }
+  }
+
+  Future<Response> verifyEmail(
+    EmailVerificationModel data,
+    String clientId,
+  ) async {
+    try {
+      Map<String, String> requestHeaders = getHeaders(includeAuth: false);
+      final response = await _dio.post(
+        '$baseUrl$VerifyOtpEndpoint$clientId/',
+        data: data.toJson(),
+        options: Options(headers: requestHeaders),
+      );
+
+      return response;
+    } on DioException catch (e) {
+      throw Exception('Verification Failed: ${e.response?.data ?? e.message}');
+    } catch (e) {
+      throw Exception('An unexpected error occurred: $e');
+    }
+  }
+
+  Future<Response> resendOTP(ResendOTPModel data) async {
+    try {
+      Map<String, String> requestHeaders = getHeaders(includeAuth: false);
+
+      final response = await _dio.post(
+        '$baseUrl$ResendOtpEndpoint',
+        data: data.toJson(),
+        options: Options(headers: requestHeaders),
+      );
+
+      return response;
+    } on DioException catch (e) {
+      throw Exception(
+        'Failed to resend code: ${e.response?.data ?? e.message}',
+      );
+    } catch (e) {
+      throw Exception('An unexpected error occurred: $e');
+    }
+  }
+
+  Future<Response> login(LoginRequestModel data) async {
+    try {
+      Map<String, String> requestHeaders = getHeaders(includeAuth: false);
+
+      final response = await _dio.post(
+        '$baseUrl$LoginEndpoint',
+        data: data.toJson(),
+        options: Options(headers: requestHeaders),
+      );
+
+      return response;
+    } on DioException catch (e) {
+      throw Exception('Login Failed: ${e.response?.data ?? e.message}');
     } catch (e) {
       throw Exception('An unexpected error occurred: $e');
     }

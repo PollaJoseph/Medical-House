@@ -6,14 +6,18 @@ import 'package:provider/provider.dart';
 import 'package:medical_house/ViewModel/HomeViewModel.dart';
 
 class HomeView extends StatelessWidget {
-  const HomeView({super.key});
+  final String? Username;
+  final String? UserImage;
+  final int? Points;
+  const HomeView({super.key, this.Username, this.UserImage, this.Points});
 
   @override
   Widget build(BuildContext context) {
     const Color backgroundGrey = Color(0xFFF8FAFC);
 
     return ChangeNotifierProvider(
-      create: (_) => HomeViewModel(),
+      create: (_) =>
+          HomeViewModel(name: Username, imageUrl: UserImage, points: Points),
       child: Scaffold(
         backgroundColor: backgroundGrey,
         body: Consumer<HomeViewModel>(
@@ -79,8 +83,6 @@ class HomeView extends StatelessWidget {
     );
   }
 
-  // --- UI WIDGETS ---
-
   Widget _buildMinimalHeader(HomeViewModel model, Color navy) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -89,7 +91,13 @@ class HomeView extends StatelessWidget {
           children: [
             CircleAvatar(
               radius: 26.r,
-              backgroundImage: AssetImage(model.currentUser.imageUrl),
+              backgroundImage: (model.currentUser.imageUrl.startsWith('http'))
+                  ? NetworkImage(model.currentUser.imageUrl) as ImageProvider
+                  : AssetImage(model.currentUser.imageUrl),
+              onBackgroundImageError: (exception, stackTrace) {
+                debugPrint("Image Load Error: $exception");
+              },
+              backgroundColor: Colors.grey[200],
             ),
             SizedBox(width: 12.w),
             Column(
@@ -231,7 +239,7 @@ class HomeView extends StatelessWidget {
           child: Stack(
             fit: StackFit.expand,
             children: [
-              Image.asset(section.imageUrl, fit: BoxFit.cover),
+              Image?.asset(section.imageUrl, fit: BoxFit.cover),
 
               Container(
                 decoration: BoxDecoration(

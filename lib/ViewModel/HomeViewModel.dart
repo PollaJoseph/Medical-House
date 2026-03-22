@@ -4,12 +4,21 @@ import 'package:medical_house/Model/HomeModel.dart';
 import 'package:medical_house/View/SectionDetailView.dart';
 
 class HomeViewModel extends ChangeNotifier {
-  // User Data with Points
-  final PatientProfile currentUser = PatientProfile(
-    name: "Ahmed Hassan",
-    imageUrl: Constants.MaleAvatarImagePath,
-    points: 1250,
-  );
+  late final PatientProfile currentUser;
+
+  HomeViewModel({String? name, String? imageUrl, int? points}) {
+    print("--- HomeViewModel Data Received ---");
+    print("Name: $name");
+    print("Image: $imageUrl");
+    print("Points: $points");
+    print("----------------------------------");
+
+    currentUser = PatientProfile(
+      name: name ?? "Guest User",
+      imageUrl: imageUrl ?? Constants.MaleAvatarImagePath,
+      points: points ?? 0,
+    );
+  }
 
   final List<HospitalSection> hospitalSections = [
     HospitalSection(

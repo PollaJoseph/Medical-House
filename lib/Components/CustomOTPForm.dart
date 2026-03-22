@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_utils/src/extensions/export.dart';
 import '../Constants.dart';
 
 class OTPForm extends StatefulWidget {
@@ -104,9 +102,6 @@ class _OTPFormState extends State<OTPForm> {
               decoration: InputDecoration(
                 counterText: '',
                 hintStyle: TextStyle(
-                  fontFamily: Get.locale == const Locale('ar', 'EG')
-                      ? 'ar_font'
-                      : 'en_font_bold',
                   fontSize: Constants.screenWidth(context) * 0.06,
                   fontWeight: FontWeight.bold,
                   color: Colors.grey,
@@ -128,9 +123,6 @@ class _OTPFormState extends State<OTPForm> {
                 ),
               ),
               style: TextStyle(
-                fontFamily: Get.locale == const Locale('ar', 'EG')
-                    ? 'ar_font'
-                    : 'en_font_bold',
                 fontSize: Constants.screenWidth(context) * 0.07,
                 fontWeight: FontWeight.bold,
                 color: Constants.PrimaryColor,
