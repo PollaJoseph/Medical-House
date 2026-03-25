@@ -51,7 +51,7 @@ class OfferSection extends StatelessWidget {
         ),
         SizedBox(height: 16.h),
         SizedBox(
-          height: 315.h, // INCREASE THIS: Changed from 220.h to 285.h
+          height: 320.h,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             physics: const BouncingScrollPhysics(),

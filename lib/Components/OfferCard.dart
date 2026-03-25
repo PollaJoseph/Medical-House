@@ -131,28 +131,26 @@ class OfferCard extends StatelessWidget {
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize:
-              MainAxisSize.min, // Added to prevent vertical stretching
+          mainAxisSize: MainAxisSize.min,
           children: [
-            // 1. Image Header
-            Stack(
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.vertical(
-                    top: Radius.circular(32.r),
-                  ),
-                  child: SizedBox(
-                    height: 145.h, // Slightly increased for better ratio
-                    width: double.infinity,
-                    child: _buildImage(),
-                  ),
+            // 1. Image Header - Wrapped in a sized container
+            ClipRRect(
+              borderRadius: BorderRadius.vertical(top: Radius.circular(32.r)),
+              child: SizedBox(
+                height: 160.h, // Fixed height to prevent overflow
+                width: double.infinity,
+                child: Stack(
+                  fit: StackFit.expand, // Ensures children fill the SizedBox
+                  children: [
+                    _buildImage(),
+                    Positioned(
+                      top: 16.h,
+                      left: 16.w,
+                      child: _buildModernTag(offer.discountTag),
+                    ),
+                  ],
                 ),
-                Positioned(
-                  top: 16.h,
-                  left: 16.w,
-                  child: _buildModernTag(offer.discountTag),
-                ),
-              ],
+              ),
             ),
 
             // 2. Content Section
@@ -183,12 +181,11 @@ class OfferCard extends StatelessWidget {
                       fontWeight: FontWeight.w500,
                     ),
                   ),
-                  SizedBox(height: 20.h), // Increased space for a cleaner look
+                  SizedBox(height: 20.h),
                   // 3. Price & Action Row
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      // Modern Price Pill
                       Container(
                         padding: EdgeInsets.symmetric(
                           horizontal: 14.w,
@@ -203,12 +200,10 @@ class OfferCard extends StatelessWidget {
                           style: TextStyle(
                             color: Constants.PrimaryColor,
                             fontWeight: FontWeight.w900,
-                            fontSize:
-                                15.sp, // Reduced slightly to avoid overflow
+                            fontSize: 15.sp,
                           ),
                         ),
                       ),
-                      // Minimal Circle Action
                       Container(
                         padding: EdgeInsets.all(8.w),
                         decoration: BoxDecoration(
@@ -242,11 +237,14 @@ class OfferCard extends StatelessWidget {
         ),
       );
     }
-    // Updated logic to handle ngrok or absolute URLs more safely
+
+    // Using BoxFit.cover ensures the image fits the container without distortion
+    const BoxFit fitType = BoxFit.cover;
+
     return offer.imageUrl.contains('http')
         ? Image.network(
             offer.imageUrl,
-            fit: BoxFit.cover,
+            fit: fitType,
             loadingBuilder: (context, child, loadingProgress) {
               if (loadingProgress == null) return child;
               return Container(
@@ -261,7 +259,7 @@ class OfferCard extends StatelessWidget {
               child: const Icon(Icons.broken_image_outlined),
             ),
           )
-        : Image.asset(offer.imageUrl, fit: BoxFit.cover);
+        : Image.asset(offer.imageUrl, fit: fitType);
   }
 
   Widget _buildModernTag(String tag) {
