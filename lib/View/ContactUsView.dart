@@ -149,14 +149,6 @@ class ContactUsView extends StatelessWidget {
                         ),
                       ),
                     ),
-
-                    // Toll Free Card
-                    SliverToBoxAdapter(
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 24.w),
-                        child: _buildTollFreeCard(),
-                      ),
-                    ),
                     SliverToBoxAdapter(
                       child: Padding(
                         padding: EdgeInsets.only(
@@ -165,6 +157,14 @@ class ContactUsView extends StatelessWidget {
                           top: 20.h,
                         ),
                         child: _buildLocationCard(viewModel),
+                      ),
+                    ),
+
+                    // Toll Free Card
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 24.w),
+                        child: _buildTollFreeCard(),
                       ),
                     ),
 
@@ -329,7 +329,6 @@ class ContactUsView extends StatelessWidget {
     child: Divider(color: Colors.blueGrey[50], thickness: 1.5),
   );
 
-  // --- UPDATED LOCATION MAP CARD ---
   Widget _buildLocationCard(ContactUsViewModel viewModel) {
     return GestureDetector(
       onTap: () => viewModel.openMap(),
