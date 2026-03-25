@@ -372,7 +372,6 @@ class ContactUsView extends StatelessWidget {
                   ),
                 ),
               ),
-
               // 4. Hospital Info and "Open" Button
               Positioned(
                 bottom: 16.h,
