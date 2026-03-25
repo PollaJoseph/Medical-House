@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:medical_house/Constants.dart';
 import 'package:medical_house/Model/OfferModel.dart';
 import 'package:medical_house/Components/OfferCard.dart';
+import 'package:medical_house/View/CategoryOffersView.dart';
 
 class OfferSection extends StatelessWidget {
   final String title;
@@ -36,7 +37,17 @@ class OfferSection extends StatelessWidget {
                 ),
               ),
               TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => CategoryOffersView(
+                        categoryName: title,
+                        offers: offers,
+                      ),
+                    ),
+                  );
+                },
                 child: Text(
                   "See All",
                   style: TextStyle(
