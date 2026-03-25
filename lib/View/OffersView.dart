@@ -62,14 +62,12 @@ class OffersView extends StatelessWidget {
                                 title: sectionName,
                                 offers: sectionOffers,
                                 onOfferTap: (offer) =>
-                                    viewModel.onOfferTap(offer),
+                                    viewModel.onOfferTap(context, offer),
                               ),
                             );
                           }, childCount: viewModel.groupedOffers.length),
                         ),
                       ),
-
-                      // Extra space for the Bottom Navigation Bar
                       SliverToBoxAdapter(child: SizedBox(height: 100.h)),
                     ],
                   ),

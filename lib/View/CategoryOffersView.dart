@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:medical_house/Constants.dart';
 import 'package:medical_house/Model/OfferModel.dart';
 import 'package:medical_house/Components/OfferCard.dart';
+import 'package:medical_house/View/ServiceDetailsView.dart';
 
 class CategoryOffersView extends StatelessWidget {
   final String categoryName;
@@ -49,7 +50,18 @@ class CategoryOffersView extends StatelessWidget {
         ),
         itemCount: offers.length,
         itemBuilder: (context, index) {
-          return OfferCard(offer: offers[index], onTap: () {});
+          return OfferCard(
+            offer: offers[index],
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>
+                      ServiceDetailsView(service: offers[index]),
+                ),
+              );
+            },
+          );
         },
       ),
     );

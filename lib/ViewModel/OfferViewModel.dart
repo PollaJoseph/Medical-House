@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:medical_house/Model/OfferModel.dart';
 import 'package:medical_house/Services/ApiService.dart';
+import 'package:medical_house/View/ServiceDetailsView.dart';
 
 class OffersViewModel extends ChangeNotifier {
   final ApiService _apiService = ApiService();
@@ -27,8 +28,13 @@ class OffersViewModel extends ChangeNotifier {
     }
   }
 
-  void onOfferTap(OfferModel offer) {
-    debugPrint("Selected Offer: ${offer.title}");
-    // TODO: Add navigation to a detailed offer view or booking screen
+  // Inside OfferViewModel.dart
+  void onOfferTap(BuildContext context, OfferModel offer) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ServiceDetailsView(service: offer),
+      ),
+    );
   }
 }

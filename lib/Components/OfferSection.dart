@@ -66,10 +66,7 @@ class OfferSection extends StatelessWidget {
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             physics: const BouncingScrollPhysics(),
-            padding: EdgeInsets.only(
-              left: 24.w,
-              bottom: 10.h,
-            ), // Add bottom padding for shadow
+            padding: EdgeInsets.only(left: 24.w, bottom: 10.h),
             itemCount: offers.length,
             itemBuilder: (context, index) {
               return OfferCard(
