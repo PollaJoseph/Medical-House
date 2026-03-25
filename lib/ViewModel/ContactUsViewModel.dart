@@ -25,4 +25,19 @@ class ContactUsViewModel extends ChangeNotifier {
       debugPrint('Could not launch WhatsApp: $e');
     }
   }
+
+  Future<void> openMap() async {
+    final String query = Uri.encodeComponent(
+      "Medical House Hospital Saudi Arabia",
+    );
+    final Uri mapUri = Uri.parse(
+      "https://www.google.com/maps/search/?api=1&query=$query",
+    );
+
+    try {
+      await launchUrl(mapUri, mode: LaunchMode.externalApplication);
+    } catch (e) {
+      debugPrint('Could not launch map: $e');
+    }
+  }
 }

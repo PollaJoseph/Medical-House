@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:medical_house/Constants.dart';
 import 'package:medical_house/ViewModel/ContactUsViewModel.dart';
 import 'package:provider/provider.dart';
@@ -154,6 +155,16 @@ class ContactUsView extends StatelessWidget {
                       child: Padding(
                         padding: EdgeInsets.symmetric(horizontal: 24.w),
                         child: _buildTollFreeCard(),
+                      ),
+                    ),
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: EdgeInsets.only(
+                          left: 24.w,
+                          right: 24.w,
+                          top: 20.h,
+                        ),
+                        child: _buildLocationCard(viewModel),
                       ),
                     ),
 
@@ -317,4 +328,127 @@ class ContactUsView extends StatelessWidget {
     padding: EdgeInsets.symmetric(vertical: 16.h),
     child: Divider(color: Colors.blueGrey[50], thickness: 1.5),
   );
+
+  // --- UPDATED LOCATION MAP CARD ---
+  Widget _buildLocationCard(ContactUsViewModel viewModel) {
+    return GestureDetector(
+      onTap: () => viewModel.openMap(),
+      child: Container(
+        height: 200.h, // Fixed height to show the map
+        width: double.infinity,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(32.r),
+          border: Border.all(color: Colors.blueGrey.shade50, width: 2),
+          boxShadow: [
+            BoxShadow(
+              color: Constants.MidnightNavy.withOpacity(0.06),
+              blurRadius: 20,
+              offset: const Offset(0, 10),
+            ),
+          ],
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(30.r),
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              // 1. Map Background Image
+              Image.asset(
+                "lib/Assets/Images/MapImage.jpeg",
+                fit: BoxFit.cover,
+                // Subtle tint to match clinical theme
+                colorBlendMode: BlendMode.modulate,
+              ),
+              Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.bottomCenter,
+                    end: Alignment.topCenter,
+                    colors: [
+                      Constants.MidnightNavy.withOpacity(0.9),
+                      Constants.MidnightNavy.withOpacity(0.0),
+                    ],
+                    stops: const [0.0, 0.6],
+                  ),
+                ),
+              ),
+
+              // 4. Hospital Info and "Open" Button
+              Positioned(
+                bottom: 16.h,
+                left: 20.w,
+                right: 20.w,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Medical House Hospital",
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: GoogleFonts.lexend(
+                              color: Colors.white,
+                              fontSize: 16.sp,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(height: 4.h),
+                          Text(
+                            "Riyadh, Saudi Arabia",
+                            style: TextStyle(
+                              color: Colors.white70,
+                              fontSize: 13.sp,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(width: 12.w),
+                    Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 14.w,
+                        vertical: 8.h,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.15),
+                        borderRadius: BorderRadius.circular(100.r),
+                        border: Border.all(
+                          color: Colors.white.withOpacity(0.3),
+                          width: 1,
+                        ),
+                      ),
+                      child: Row(
+                        children: [
+                          Text(
+                            "Open Maps",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 11.sp,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(width: 6.w),
+                          Icon(
+                            Icons.open_in_new_rounded,
+                            color: Colors.white,
+                            size: 14.sp,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 }
