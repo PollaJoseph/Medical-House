@@ -357,7 +357,6 @@ class ContactUsView extends StatelessWidget {
               Image.asset(
                 "lib/Assets/Images/MapImage.jpeg",
                 fit: BoxFit.cover,
-                // Subtle tint to match clinical theme
                 colorBlendMode: BlendMode.modulate,
               ),
               Container(
