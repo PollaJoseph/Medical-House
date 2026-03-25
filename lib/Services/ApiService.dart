@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:medical_house/Model/LoginAPIModel.dart';
 import 'package:medical_house/Model/OTPVerificationModel.dart';
+import 'package:medical_house/Model/OfferModel.dart';
 import 'package:medical_house/Model/ResendOTP.dart';
 import 'package:medical_house/Model/SignUpAPIModel.dart';
 import 'package:medical_house/Services/StorageService.dart';
@@ -11,7 +12,7 @@ import 'package:medical_house/Services/StorageService.dart';
 class ApiService {
   final Dio _dio = Dio();
 
-  final String baseUrl = "https://d511-156-196-10-228.ngrok-free.app/";
+  final String baseUrl = "https://f826-156-196-215-175.ngrok-free.app/";
   //dotenv.env['BASE_URL'] ?? '';
   final String apiKey = dotenv.env['API_KEY'] ?? '';
   final String SignUpEndpoint = dotenv.env['SIGN_UP_ENDPOINT'] ?? '';
@@ -20,6 +21,8 @@ class ApiService {
   final String VerifyOtpEndpoint = dotenv.env['VERIFY_OTP_ENDPOINT'] ?? '';
   final String ResendOtpEndpoint = dotenv.env['RESEND_OTP_ENDPOINT'] ?? '';
   final String LoginEndpoint = dotenv.env['LOGIN_ENDPOINT'] ?? '';
+  final String OfferEndpoint = dotenv.env['OFFER_ENDPOINT'] ?? '';
+
   String? _authToken;
 
   ApiService();
@@ -181,6 +184,42 @@ class ApiService {
       return response;
     } on DioException catch (e) {
       throw Exception('Login Failed: ${e.response?.data ?? e.message}');
+    } catch (e) {
+      throw Exception('An unexpected error occurred: $e');
+    }
+  }
+
+  Future<Map<String, List<OfferModel>>> getOffers() async {
+    try {
+      Map<String, String> requestHeaders = getHeaders(includeAuth: false);
+
+      final response = await _dio.get(
+        '$baseUrl$OfferEndpoint',
+        options: Options(headers: requestHeaders),
+      );
+
+      if (response.statusCode == 200) {
+        Map<String, dynamic> rawData = response.data;
+        Map<String, List<OfferModel>> parsedOffers = {};
+
+        rawData.forEach((sectionName, offersList) {
+          if (offersList is List) {
+            parsedOffers[sectionName] = offersList
+                .map((offerJson) => OfferModel.fromJson(offerJson))
+                .toList();
+          }
+        });
+
+        return parsedOffers;
+      } else {
+        throw Exception(
+          "Failed to load offers. Status: ${response.statusCode}",
+        );
+      }
+    } on DioException catch (e) {
+      throw Exception(
+        'Failed fetching offers: ${e.response?.data ?? e.message}',
+      );
     } catch (e) {
       throw Exception('An unexpected error occurred: $e');
     }

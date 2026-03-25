@@ -51,5 +51,12 @@
 	<string>Medical House needs access to your photo library to select a profile photo.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Medical House needs your location to help you find the nearest clinic and set your address.</string>
+
+	<key>LSApplicationQueriesSchemes</key>
+    <array>
+      <string>tel</string>
+      <string>https</string>
+      <string>whatsapp</string>
+    </array>
 </dict>
 </plist>
