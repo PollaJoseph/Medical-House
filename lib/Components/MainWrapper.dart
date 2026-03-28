@@ -41,7 +41,6 @@ class _MainWrapperState extends State<MainWrapper> {
 
   @override
   Widget build(BuildContext context) {
-    // Generate the pages list during build to ensure data is current
     final pages = _getPages();
 
     return Scaffold(
@@ -68,8 +67,8 @@ class _MainWrapperState extends State<MainWrapper> {
                     unselectedImage: Constants.OfferIconPath,
                   ),
                   CustomNavItem(
-                    selectedImage: Constants.ArticleIconPath,
-                    unselectedImage: Constants.ArticleIconPath,
+                    selectedImage: Constants.PointsIconPath,
+                    unselectedImage: Constants.PointsIconPath,
                   ),
                   CustomNavItem(
                     selectedImage: Constants.ProfileIconPath,

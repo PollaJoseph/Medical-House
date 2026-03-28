@@ -28,3 +28,19 @@ class HospitalSection {
     required this.subSections,
   });
 }
+
+class HealthArticle {
+  final String title;
+  final String author;
+  final String imageUrl;
+  final String readTime;
+  final String category;
+
+  HealthArticle({
+    required this.title,
+    required this.author,
+    required this.imageUrl,
+    required this.readTime,
+    required this.category,
+  });
+}

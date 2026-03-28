@@ -7,12 +7,6 @@ class HomeViewModel extends ChangeNotifier {
   late final PatientProfile currentUser;
 
   HomeViewModel({String? name, String? imageUrl, int? points}) {
-    print("--- HomeViewModel Data Received ---");
-    print("Name: $name");
-    print("Image: $imageUrl");
-    print("Points: $points");
-    print("----------------------------------");
-
     currentUser = PatientProfile(
       name: name ?? "Guest User",
       imageUrl: imageUrl ?? Constants.MaleAvatarImagePath,
@@ -55,7 +49,6 @@ class HomeViewModel extends ChangeNotifier {
         ),
       ],
     ),
-
     HospitalSection(
       mainTitle: "Dental Department",
       imageUrl: Constants.DentalSectionImagePath,

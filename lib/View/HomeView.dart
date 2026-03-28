@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:medical_house/Components/ArticleCard.dart';
 import 'package:medical_house/Constants.dart';
 import 'package:medical_house/Model/HomeModel.dart';
 import 'package:provider/provider.dart';
@@ -27,26 +28,31 @@ class HomeView extends StatelessWidget {
                 physics: const BouncingScrollPhysics(),
                 slivers: [
                   SliverToBoxAdapter(
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 24.w,
-                        vertical: 20.h,
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // 1. Minimal Header
-                          _buildMinimalHeader(model, Constants.MidnightNavy),
-                          SizedBox(height: 30.h),
-                          // 2. NEW: VIP Points Wallet
-                          _buildPointsWallet(
-                            model,
-                            Constants.MidnightNavy,
-                            Constants.SeconadryColor,
-                          ),
-                          SizedBox(height: 35.h),
-                          // 3. Section Title
-                          Text(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(height: 20.h),
+                        // 1. Minimal Header
+                        _buildMinimalHeader(model, Constants.MidnightNavy),
+                        SizedBox(height: 30.h),
+                        // 2. NEW: VIP Points Wallet
+                        _buildPointsWallet(
+                          model,
+                          Constants.MidnightNavy,
+                          Constants.SeconadryColor,
+                        ),
+                        SizedBox(height: 15.h),
+                        ArticleCard(
+                          onTap: () {
+                            // Navigate to Article View
+                          },
+                        ),
+                        SizedBox(height: 35.h),
+
+                        // 3. Section Title
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 12.w),
+                          child: Text(
                             "Our Premium Centers",
                             style: TextStyle(
                               fontSize: 22.sp,
@@ -55,11 +61,12 @@ class HomeView extends StatelessWidget {
                               height: 1.1,
                             ),
                           ),
-                          SizedBox(height: 5.h),
-                        ],
-                      ),
+                        ),
+                        SizedBox(height: 5.h),
+                      ],
                     ),
                   ),
+
                   // 4. The 2-Column Portrait Grid
                   SliverPadding(
                     padding: EdgeInsets.symmetric(horizontal: 12.w),
@@ -84,132 +91,138 @@ class HomeView extends StatelessWidget {
   }
 
   Widget _buildMinimalHeader(HomeViewModel model, Color navy) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Row(
-          children: [
-            CircleAvatar(
-              radius: 26.r,
-              backgroundImage: (model.currentUser.imageUrl.startsWith('http'))
-                  ? NetworkImage(model.currentUser.imageUrl) as ImageProvider
-                  : AssetImage(model.currentUser.imageUrl),
-              onBackgroundImageError: (exception, stackTrace) {
-                debugPrint("Image Load Error: $exception");
-              },
-              backgroundColor: Colors.grey[200],
-            ),
-            SizedBox(width: 12.w),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Welcome back,",
-                  style: TextStyle(
-                    color: Colors.blueGrey[400],
-                    fontSize: 13.sp,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                Text(
-                  model.currentUser.name,
-                  style: TextStyle(
-                    color: navy,
-                    fontSize: 18.sp,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-
-  Widget _buildPointsWallet(HomeViewModel model, Color navy, Color teal) {
-    return Container(
-      width: double.infinity,
-      padding: EdgeInsets.all(24.w),
-      decoration: BoxDecoration(
-        color: Colors.white, // Sterile clinical white
-        borderRadius: BorderRadius.circular(28.r),
-        border: Border.all(
-          color: teal.withOpacity(0.2),
-          width: 1.5,
-        ), // Subtle medical outline
-        boxShadow: [
-          BoxShadow(
-            color: teal.withOpacity(0.08), // Soft teal glow
-            blurRadius: 25,
-            offset: const Offset(0, 10),
-          ),
-        ],
-      ),
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 12.w),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          Row(
             children: [
-              // Health & Wellness Badge
-              Row(
+              CircleAvatar(
+                radius: 26.r,
+                backgroundImage: (model.currentUser.imageUrl.startsWith('http'))
+                    ? NetworkImage(model.currentUser.imageUrl) as ImageProvider
+                    : AssetImage(model.currentUser.imageUrl),
+                onBackgroundImageError: (exception, stackTrace) {
+                  debugPrint("Image Load Error: $exception");
+                },
+                backgroundColor: Colors.grey[200],
+              ),
+              SizedBox(width: 12.w),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Icon(Icons.spa_rounded, color: teal, size: 16.sp),
-                  SizedBox(width: 6.w),
                   Text(
-                    "Wellness Care Points",
+                    "Welcome back,",
                     style: TextStyle(
                       color: Colors.blueGrey[400],
-                      fontSize: 12.sp,
-                      letterSpacing: 0.5,
-                      fontWeight: FontWeight.bold,
+                      fontSize: 13.sp,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
-                ],
-              ),
-              SizedBox(height: 12.h),
-              // Points Value
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.baseline,
-                textBaseline: TextBaseline.alphabetic,
-                children: [
                   Text(
-                    "${model.currentUser.points}",
+                    model.currentUser.name,
                     style: TextStyle(
                       color: navy,
-                      fontSize: 38.sp,
-                      fontWeight: FontWeight.w900,
-                      height: 1.0,
-                    ),
-                  ),
-                  SizedBox(width: 6.w),
-                  Text(
-                    "Pts",
-                    style: TextStyle(
-                      color: teal,
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.w800,
+                      fontSize: 18.sp,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ],
               ),
             ],
           ),
-          // Medical Shield Icon
-          Container(
-            padding: EdgeInsets.all(16.w),
-            decoration: BoxDecoration(
-              color: teal.withOpacity(0.1),
-              shape: BoxShape.circle,
-            ),
-            child: Icon(
-              Icons.health_and_safety_rounded,
-              color: teal,
-              size: 36.sp,
-            ),
-          ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildPointsWallet(HomeViewModel model, Color navy, Color teal) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 12.w),
+      child: Container(
+        width: double.infinity,
+        padding: EdgeInsets.all(24.w),
+        decoration: BoxDecoration(
+          color: Colors.white, // Sterile clinical white
+          borderRadius: BorderRadius.circular(28.r),
+          border: Border.all(
+            color: teal.withOpacity(0.2),
+            width: 1.5,
+          ), // Subtle medical outline
+          boxShadow: [
+            BoxShadow(
+              color: teal.withOpacity(0.08), // Soft teal glow
+              blurRadius: 25,
+              offset: const Offset(0, 10),
+            ),
+          ],
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Health & Wellness Badge
+                Row(
+                  children: [
+                    Icon(Icons.spa_rounded, color: teal, size: 16.sp),
+                    SizedBox(width: 6.w),
+                    Text(
+                      "Wellness Care Points",
+                      style: TextStyle(
+                        color: Colors.blueGrey[400],
+                        fontSize: 12.sp,
+                        letterSpacing: 0.5,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 12.h),
+                // Points Value
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.baseline,
+                  textBaseline: TextBaseline.alphabetic,
+                  children: [
+                    Text(
+                      "${model.currentUser.points}",
+                      style: TextStyle(
+                        color: navy,
+                        fontSize: 38.sp,
+                        fontWeight: FontWeight.w900,
+                        height: 1.0,
+                      ),
+                    ),
+                    SizedBox(width: 6.w),
+                    Text(
+                      "Pts",
+                      style: TextStyle(
+                        color: teal,
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            // Medical Shield Icon
+            Container(
+              padding: EdgeInsets.all(16.w),
+              decoration: BoxDecoration(
+                color: teal.withOpacity(0.1),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                Icons.health_and_safety_rounded,
+                color: teal,
+                size: 36.sp,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

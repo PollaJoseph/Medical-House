@@ -265,10 +265,10 @@ class ContactUsView extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      "+920014897",
+                      "+966 9200 14897",
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 34.sp,
+                        fontSize: 30.sp,
                         fontWeight: FontWeight.w900,
                       ),
                     ),

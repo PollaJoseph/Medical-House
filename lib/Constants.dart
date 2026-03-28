@@ -59,7 +59,7 @@ class Constants {
   static const String GoogleIconPath = 'lib/Assets/Icons/google.png';
   static const String HomeIconPath = 'lib/Assets/Icons/Home.png';
   static const String OfferIconPath = 'lib/Assets/Icons/Offer.png';
-  static const String ArticleIconPath = 'lib/Assets/Icons/Artical.png';
+  static const String PointsIconPath = 'lib/Assets/Icons/coin.png';
   static const String ProfileIconPath = 'lib/Assets/Icons/Profile.png';
 
   static double screenWidth(BuildContext context) {
