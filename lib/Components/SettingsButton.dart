@@ -8,7 +8,8 @@ class SettingsButton extends StatelessWidget {
   final IconData? icon;
   final String? imagePath;
   final void Function() onClick;
-  final bool hideArrow; // NEW: To hide the arrow on buttons like Logout
+  final bool hideArrow;
+  final Widget? trailing; // ADDED: New trailing parameter
 
   const SettingsButton({
     super.key,
@@ -19,6 +20,7 @@ class SettingsButton extends StatelessWidget {
     required this.iconColor,
     required this.textColor,
     this.hideArrow = false,
+    this.trailing, // ADDED: Added to constructor
   }) : assert(
          icon != null || imagePath != null,
          'Either icon or imagePath must be provided',
@@ -31,6 +33,7 @@ class SettingsButton extends StatelessWidget {
       child: GestureDetector(
         onTap: onClick,
         child: Container(
+          // ... (Existing BoxDecoration code remains the same)
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(20.r),
@@ -43,12 +46,10 @@ class SettingsButton extends StatelessWidget {
             ],
           ),
           child: Padding(
-            padding: EdgeInsets.all(
-              16.w,
-            ), // Switched to .w for consistent layout
+            padding: EdgeInsets.all(16.w),
             child: Row(
               children: [
-                // Icon Container
+                // 1. Icon Container
                 Container(
                   padding: EdgeInsets.all(12.w),
                   decoration: BoxDecoration(
@@ -66,7 +67,7 @@ class SettingsButton extends StatelessWidget {
                 ),
                 SizedBox(width: 16.w),
 
-                // Text
+                // 2. Text
                 Expanded(
                   child: Text(
                     text,
@@ -74,12 +75,15 @@ class SettingsButton extends StatelessWidget {
                       color: textColor,
                       fontSize: 16.sp,
                       fontWeight: FontWeight.w700,
-                      letterSpacing: -0.3, // Modern typography
+                      letterSpacing: -0.3,
                     ),
                   ),
                 ),
 
-                // Optional Forward Arrow
+                // 3. ADDED: Custom Trailing Widget
+                if (trailing != null) ...[trailing!, SizedBox(width: 12.w)],
+
+                // 4. Optional Forward Arrow
                 if (!hideArrow)
                   Icon(
                     Icons.arrow_forward_ios_rounded,

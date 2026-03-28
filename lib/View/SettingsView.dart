@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart'; // UPDATED: Changed from get/utils.dart to get/get.dart
 import 'package:medical_house/Components/SettingsButton.dart';
 import 'package:medical_house/Constants.dart';
+import 'package:medical_house/Localization/LocaleController.dart';
 import 'package:medical_house/View/AboutView.dart';
 import 'package:medical_house/View/ChangePasswordView.dart';
 import 'package:medical_house/View/ContactUsView.dart';
@@ -12,9 +14,124 @@ import 'package:medical_house/View/TermsView.dart';
 class SettingsView extends StatelessWidget {
   const SettingsView({super.key});
 
+  void _showLanguageBottomSheet(
+    BuildContext context,
+    LocaleController controller,
+  ) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (context) => Container(
+        padding: EdgeInsets.all(24.w),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(32.r)),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Handle Bar
+            Container(
+              width: 40.w,
+              height: 4.h,
+              margin: EdgeInsets.only(bottom: 24.h),
+              decoration: BoxDecoration(
+                color: Colors.blueGrey[50],
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+            // UPDATED: Dynamic Title wrapped in Obx
+            Obx(
+              () => Text(
+                controller.isArabic.value ? "اختر اللغة" : "Select Language",
+                style: TextStyle(
+                  fontSize: 20.sp,
+                  fontWeight: FontWeight.w800,
+                  color: Constants.MidnightNavy,
+                ),
+              ),
+            ),
+            SizedBox(height: 24.h),
+            // UPDATED: Wrapped options in Obx to update selection state live
+            Obx(
+              () => _buildLanguageOption(
+                context,
+                "English",
+                "en_US",
+                !controller.isArabic.value,
+                () => controller.changeLanguage(const Locale('en', 'US')),
+              ),
+            ),
+            SizedBox(height: 12.h),
+            Obx(
+              () => _buildLanguageOption(
+                context,
+                "العربية",
+                "ar_EG",
+                controller.isArabic.value,
+                () => controller.changeLanguage(const Locale('ar', 'EG')),
+              ),
+            ),
+            SizedBox(height: 24.h),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildLanguageOption(
+    BuildContext context,
+    String title,
+    String code,
+    bool isSelected,
+    VoidCallback onTap,
+  ) {
+    return GestureDetector(
+      onTap: () {
+        onTap(); // Triggers the LocaleController update
+        Navigator.pop(context); // Close bottom sheet
+      },
+      child: Container(
+        padding: EdgeInsets.all(20.w),
+        decoration: BoxDecoration(
+          color: isSelected ? Constants.MidnightNavy : const Color(0xFFF8FAFC),
+          borderRadius: BorderRadius.circular(20.r),
+          border: Border.all(
+            color: isSelected
+                ? Constants.MidnightNavy
+                : Colors.blueGrey.shade50,
+          ),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              title,
+              style: TextStyle(
+                color: isSelected ? Colors.white : Constants.MidnightNavy,
+                fontWeight: FontWeight.bold,
+                fontSize: 16.sp,
+              ),
+            ),
+            if (isSelected)
+              const Icon(Icons.check_circle_rounded, color: Colors.white)
+            else
+              Text(
+                code.split('_')[0].toUpperCase(),
+                style: TextStyle(color: Colors.blueGrey[300]),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     const Color destructiveRed = Color(0xFFFF4B4B);
+
+    // UPDATED: Find the active controller instance instead of creating a new one
+    final LocaleController localeController = Get.find<LocaleController>();
 
     return Scaffold(
       backgroundColor: Constants.WhiteColor,
@@ -32,13 +149,16 @@ class SettingsView extends StatelessWidget {
                   top: 20.h,
                   bottom: 20.h,
                 ),
-                child: Text(
-                  "Settings",
-                  style: TextStyle(
-                    color: Constants.MidnightNavy,
-                    fontSize: 32.sp,
-                    fontWeight: FontWeight.w900,
-                    letterSpacing: -1,
+                child: Obx(
+                  () => Text(
+                    // Fallback string if .tr fails
+                    localeController.isArabic.value ? "الإعدادات" : "Settings",
+                    style: TextStyle(
+                      color: Constants.MidnightNavy,
+                      fontSize: 32.sp,
+                      fontWeight: FontWeight.w900,
+                      letterSpacing: -1,
+                    ),
                   ),
                 ),
               ),
@@ -73,7 +193,6 @@ class SettingsView extends StatelessWidget {
                       CircleAvatar(
                         radius: 35.r,
                         backgroundColor: Colors.white.withOpacity(0.1),
-                        // Replace with real user image network URL
                         backgroundImage: const NetworkImage(
                           "https://ui-avatars.com/api/?name=Ahmed+Hassan&background=0CACBB&color=fff",
                         ),
@@ -121,6 +240,41 @@ class SettingsView extends StatelessWidget {
                   ),
                 ),
               ),
+
+              // UPDATED: Wrapped in Obx to listen to language changes
+              Obx(
+                () => SettingsButton(
+                  text: localeController.isArabic.value
+                      ? "لغة التطبيق"
+                      : "App Language",
+                  icon: Icons.language_rounded,
+                  trailing: Container(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 12.w,
+                      vertical: 6.h,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Constants.SeconadryColor.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(12.r),
+                    ),
+                    child: Text(
+                      localeController.isArabic.value ? "AR" : "EN",
+                      style: TextStyle(
+                        color: Constants.SeconadryColor,
+                        fontWeight: FontWeight.w900,
+                        fontSize: 12.sp,
+                      ),
+                    ),
+                  ),
+                  onClick: () {
+                    // Passed the active controller here
+                    _showLanguageBottomSheet(context, localeController);
+                  },
+                  iconColor: Constants.SeconadryColor,
+                  textColor: Constants.MidnightNavy,
+                ),
+              ),
+
               SettingsButton(
                 text: "Change Password",
                 icon: Icons.password,
@@ -178,7 +332,7 @@ class SettingsView extends StatelessWidget {
                 onClick: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => AboutView()),
+                    MaterialPageRoute(builder: (context) => const AboutView()),
                   );
                 },
                 iconColor: Constants.SeconadryColor,
