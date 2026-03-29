@@ -2,7 +2,8 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:medical_house/Constants.dart';
-import 'package:medical_house/Model/HomeModel.dart'; // Adjust path if needed
+import 'package:medical_house/Model/HomeModel.dart';
+import 'package:medical_house/View/ServiceDetailsView.dart';
 
 class SectionDetailView extends StatelessWidget {
   final HospitalSection section;
@@ -11,25 +12,21 @@ class SectionDetailView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const Color backgroundWhite = Color(0xFFF5F7FA); // Modern, airy off-white
-    const Color midnightNavy = Color(0xFF0A1325); // Deep, luxurious navy
-    const Color surgicalTeal = Color(0xFF0CACBB); // Your primary medical teal
+    const Color backgroundWhite = Color(0xFFF5F7FA);
+    const Color midnightNavy = Color(0xFF0A1325);
+    const Color surgicalTeal = Color(0xFF0CACBB);
 
     return Scaffold(
       backgroundColor: backgroundWhite,
       body: CustomScrollView(
         physics: const BouncingScrollPhysics(),
         slivers: [
-          // 2. Cinematic Hero Header with Dynamic App Bar
           SliverAppBar(
             expandedHeight: 350.h,
-            pinned:
-                true, // This is crucial: keeps the AppBar visible when scrolled
+            pinned: true,
             backgroundColor: midnightNavy,
             elevation: 0,
             stretch: true,
-
-            // Glassmorphic Back Button
             leading: Padding(
               padding: EdgeInsets.all(8.w),
               child: ClipRRect(
@@ -57,22 +54,17 @@ class SectionDetailView extends StatelessWidget {
                 ),
               ),
             ),
-
             flexibleSpace: LayoutBuilder(
               builder: (BuildContext context, BoxConstraints constraints) {
-                // Determine if the SliverAppBar has collapsed into a standard AppBar
                 final double collapsedHeight =
                     kToolbarHeight + MediaQuery.of(context).padding.top;
-                // Add a small buffer (40) so it fades in just before hitting the top
                 final bool isCollapsed =
                     constraints.biggest.height <= collapsedHeight + 40;
 
                 return FlexibleSpaceBar(
                   stretchModes: const [StretchMode.zoomBackground],
                   centerTitle: true,
-                  expandedTitleScale:
-                      1.0, // Prevents the text from flying/scaling during scroll
-                  // The title that appears ONLY when collapsed
+                  expandedTitleScale: 1.0,
                   title: AnimatedOpacity(
                     duration: const Duration(milliseconds: 300),
                     opacity: isCollapsed ? 1.0 : 0.0,
@@ -86,12 +78,10 @@ class SectionDetailView extends StatelessWidget {
                       ),
                     ),
                   ),
-
                   background: Stack(
                     fit: StackFit.expand,
                     children: [
                       Image.asset(section.imageUrl, fit: BoxFit.cover),
-                      // Gradient to make the white text pop perfectly
                       Container(
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
@@ -106,12 +96,10 @@ class SectionDetailView extends StatelessWidget {
                           ),
                         ),
                       ),
-                      // Title overlay at the bottom of the image
                       Positioned(
                         bottom: 24.h,
                         left: 24.w,
                         right: 24.w,
-                        // Fades OUT the big title as you scroll up
                         child: AnimatedOpacity(
                           duration: const Duration(milliseconds: 300),
                           opacity: isCollapsed ? 0.0 : 1.0,
@@ -159,7 +147,7 @@ class SectionDetailView extends StatelessWidget {
             ),
           ),
 
-          // 3. Section Title "Available Services"
+          // 1. Section Title "Our Services"
           SliverToBoxAdapter(
             child: Padding(
               padding: EdgeInsets.only(
@@ -194,125 +182,146 @@ class SectionDetailView extends StatelessWidget {
             ),
           ),
 
-          // 4. Airbnb-Style Magazine Cards
+          // 2. Airbnb-Style Magazine Cards (Duplicates removed & Image handling fixed)
           SliverPadding(
             padding: EdgeInsets.symmetric(horizontal: 24.w),
             sliver: SliverList(
               delegate: SliverChildBuilderDelegate((context, index) {
                 final service = section.subSections[index];
 
-                return Container(
-                  margin: EdgeInsets.only(bottom: 24.h),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(32.r),
-                    boxShadow: [
-                      BoxShadow(
-                        color: midnightNavy.withOpacity(0.06),
-                        blurRadius: 24,
-                        offset: const Offset(0, 12),
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            ServiceDetailsView(service: service),
                       ),
-                    ],
-                  ),
-                  child: Column(
-                    children: [
-                      // Massive, beautiful image block
-                      ClipRRect(
-                        borderRadius: BorderRadius.vertical(
-                          top: Radius.circular(32.r),
+                    );
+                  },
+                  child: Container(
+                    margin: EdgeInsets.only(bottom: 24.h),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(32.r),
+                      boxShadow: [
+                        BoxShadow(
+                          color: midnightNavy.withOpacity(0.06),
+                          blurRadius: 24,
+                          offset: const Offset(0, 12),
                         ),
-                        child: Image.asset(
-                          service.imageUrl,
-                          height: 160.h,
-                          width: double.infinity,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-
-                      // Service Info & Explicit Book Button
-                      Padding(
-                        padding: EdgeInsets.all(20.w),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    service.title,
-                                    style: TextStyle(
-                                      color: midnightNavy,
-                                      fontSize: 18.sp,
-                                      fontWeight: FontWeight.w900,
-                                      letterSpacing: -0.5,
-                                    ),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                  SizedBox(height: 6.h),
-                                  Row(
-                                    children: [
-                                      Icon(
-                                        Icons.health_and_safety_rounded,
-                                        color: surgicalTeal,
-                                        size: 14.sp,
-                                      ),
-                                      SizedBox(width: 4.w),
-                                      Text(
-                                        "Premium Care",
-                                        style: TextStyle(
-                                          color: Colors.blueGrey[400],
-                                          fontSize: 12.sp,
-                                          fontWeight: FontWeight.w700,
+                      ],
+                    ),
+                    child: Column(
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.vertical(
+                            top: Radius.circular(32.r),
+                          ),
+                          // SAFELY HANDLE NETWORK OR ASSET IMAGES
+                          child: service.imageUrl.startsWith('http')
+                              ? Image.network(
+                                  service.imageUrl,
+                                  height: 160.h,
+                                  width: double.infinity,
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (context, error, stackTrace) =>
+                                      Container(
+                                        height: 160.h,
+                                        color: Colors.blueGrey[50],
+                                        child: const Icon(
+                                          Icons.broken_image_outlined,
                                         ),
                                       ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                            SizedBox(width: 15.w),
-
-                            // Highly explicit "Book" button
-                            GestureDetector(
-                              onTap: () {
-                                debugPrint(
-                                  "Booking Specific Service: ${service.title}",
-                                );
-                                // TODO: Navigate to Service Booking
-                              },
-                              child: Container(
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: 24.w,
-                                  vertical: 14.h,
+                                )
+                              : Image.asset(
+                                  service.imageUrl,
+                                  height: 160.h,
+                                  width: double.infinity,
+                                  fit: BoxFit.cover,
                                 ),
-                                decoration: BoxDecoration(
-                                  color: midnightNavy,
-                                  borderRadius: BorderRadius.circular(100.r),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: midnightNavy.withOpacity(0.2),
-                                      blurRadius: 10,
-                                      offset: const Offset(0, 4),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.all(20.w),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      service.title,
+                                      style: TextStyle(
+                                        color: midnightNavy,
+                                        fontSize: 18.sp,
+                                        fontWeight: FontWeight.w900,
+                                        letterSpacing: -0.5,
+                                      ),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    SizedBox(height: 6.h),
+                                    Row(
+                                      children: [
+                                        Icon(
+                                          Icons.health_and_safety_rounded,
+                                          color: surgicalTeal,
+                                          size: 14.sp,
+                                        ),
+                                        SizedBox(width: 4.w),
+                                        Text(
+                                          "Premium Care",
+                                          style: TextStyle(
+                                            color: Colors.blueGrey[400],
+                                            fontSize: 12.sp,
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ],
                                 ),
-                                child: Text(
-                                  "Book",
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 14.sp,
-                                    fontWeight: FontWeight.bold,
-                                    letterSpacing: 0.5,
+                              ),
+                              SizedBox(width: 15.w),
+                              GestureDetector(
+                                onTap: () {
+                                  debugPrint(
+                                    "Booking Specific Service: ${service.title}",
+                                  );
+                                },
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 24.w,
+                                    vertical: 14.h,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: midnightNavy,
+                                    borderRadius: BorderRadius.circular(100.r),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: midnightNavy.withOpacity(0.2),
+                                        blurRadius: 10,
+                                        offset: const Offset(0, 4),
+                                      ),
+                                    ],
+                                  ),
+                                  child: Text(
+                                    "Book",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 14.sp,
+                                      fontWeight: FontWeight.bold,
+                                      letterSpacing: 0.5,
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 );
               }, childCount: section.subSections.length),

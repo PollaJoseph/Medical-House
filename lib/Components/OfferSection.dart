@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:medical_house/Constants.dart';
-import 'package:medical_house/Model/OfferModel.dart';
+import 'package:medical_house/Model/ServiceModel.dart';
 import 'package:medical_house/Components/OfferCard.dart';
 import 'package:medical_house/View/CategoryOffersView.dart';
 
 class OfferSection extends StatelessWidget {
   final String title;
-  final List<OfferModel> offers;
-  final Function(OfferModel) onOfferTap;
+  final List<ServiceModel> offers;
+  final Function(ServiceModel) onOfferTap;
 
   const OfferSection({
     super.key,

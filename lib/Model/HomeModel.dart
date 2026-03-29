@@ -1,3 +1,5 @@
+import 'package:medical_house/Model/ServiceModel.dart'; // MUST IMPORT THIS
+
 class PatientProfile {
   final String name;
   final String imageUrl;
@@ -10,17 +12,13 @@ class PatientProfile {
   });
 }
 
-class HospitalService {
-  final String title;
-  final String imageUrl;
-
-  HospitalService({required this.title, required this.imageUrl});
-}
+// ⚠️ DELETE THE ENTIRE HospitalService CLASS ⚠️
 
 class HospitalSection {
   final String mainTitle;
   final String imageUrl;
-  final List<HospitalService> subSections;
+  // 1. FIXED: Now strictly holds the full ServiceModel from the API
+  final List<ServiceModel> subSections;
 
   HospitalSection({
     required this.mainTitle,

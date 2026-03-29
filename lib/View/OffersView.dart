@@ -55,7 +55,6 @@ class OffersView extends StatelessWidget {
                                 .elementAt(index);
                             var sectionOffers =
                                 viewModel.groupedOffers[sectionName]!;
-
                             return Padding(
                               padding: EdgeInsets.only(bottom: 25.h),
                               child: OfferSection(

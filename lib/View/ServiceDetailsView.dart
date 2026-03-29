@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:medical_house/Constants.dart';
-import 'package:medical_house/Model/OfferModel.dart';
+import 'package:medical_house/Model/ServiceModel.dart';
 
 class ServiceDetailsView extends StatelessWidget {
-  final OfferModel service;
+  final ServiceModel service;
 
   const ServiceDetailsView({super.key, required this.service});
 

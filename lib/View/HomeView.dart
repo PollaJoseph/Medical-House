@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:medical_house/Components/ArticleCard.dart';
@@ -24,63 +26,98 @@ class HomeView extends StatelessWidget {
         body: Consumer<HomeViewModel>(
           builder: (context, model, _) {
             return SafeArea(
-              child: CustomScrollView(
-                physics: const BouncingScrollPhysics(),
-                slivers: [
-                  SliverToBoxAdapter(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(height: 20.h),
-                        // 1. Minimal Header
-                        _buildMinimalHeader(model, Constants.MidnightNavy),
-                        SizedBox(height: 30.h),
-                        // 2. NEW: VIP Points Wallet
-                        _buildPointsWallet(
-                          model,
-                          Constants.MidnightNavy,
-                          Constants.SeconadryColor,
+              // NEW: Wrapped in a Stack to support the Loading Overlay
+              child: Stack(
+                children: [
+                  CustomScrollView(
+                    physics: const BouncingScrollPhysics(),
+                    slivers: [
+                      SliverToBoxAdapter(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(height: 20.h),
+                            // 1. Minimal Header
+                            _buildMinimalHeader(model, Constants.MidnightNavy),
+                            SizedBox(height: 30.h),
+                            // 2. VIP Points Wallet
+                            _buildPointsWallet(
+                              model,
+                              Constants.MidnightNavy,
+                              Constants.SeconadryColor,
+                            ),
+                            SizedBox(height: 15.h),
+                            ArticleCard(onTap: () {}),
+                            SizedBox(height: 35.h),
+                            // 3. Section Title
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 12.w),
+                              child: Text(
+                                "Our Premium Centers",
+                                style: TextStyle(
+                                  fontSize: 22.sp,
+                                  fontWeight: FontWeight.w900,
+                                  color: Constants.MidnightNavy,
+                                  height: 1.1,
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 5.h),
+                          ],
                         ),
-                        SizedBox(height: 15.h),
-                        ArticleCard(
-                          onTap: () {
-                            // Navigate to Article View
-                          },
+                      ),
+                      // 4. The 2-Column Portrait Grid
+                      SliverPadding(
+                        padding: EdgeInsets.symmetric(horizontal: 12.w),
+                        sliver: SliverList(
+                          delegate: SliverChildBuilderDelegate((
+                            context,
+                            index,
+                          ) {
+                            final section = model.hospitalSections[index];
+                            return Padding(
+                              padding: EdgeInsets.only(bottom: 20.h),
+                              child: _buildImageCard(context, model, section),
+                            );
+                          }, childCount: model.hospitalSections.length),
                         ),
-                        SizedBox(height: 35.h),
+                      ),
+                      SliverToBoxAdapter(child: SizedBox(height: 70.h)),
+                    ],
+                  ),
 
-                        // 3. Section Title
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 12.w),
-                          child: Text(
-                            "Our Premium Centers",
-                            style: TextStyle(
-                              fontSize: 22.sp,
-                              fontWeight: FontWeight.w900,
-                              color: Constants.MidnightNavy,
-                              height: 1.1,
+                  // 5. NEW: Loading Overlay while API is fetching
+                  if (model.isLoading)
+                    Positioned.fill(
+                      child: BackdropFilter(
+                        filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                        child: Container(
+                          color: Colors.white.withOpacity(0.5),
+                          child: Center(
+                            child: Container(
+                              padding: EdgeInsets.all(24.w),
+                              decoration: BoxDecoration(
+                                color: Constants.MidnightNavy,
+                                borderRadius: BorderRadius.circular(20.r),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Constants.MidnightNavy.withOpacity(
+                                      0.3,
+                                    ),
+                                    blurRadius: 20,
+                                    offset: const Offset(0, 10),
+                                  ),
+                                ],
+                              ),
+                              child: const CircularProgressIndicator(
+                                color: Colors.white,
+                                strokeWidth: 3,
+                              ),
                             ),
                           ),
                         ),
-                        SizedBox(height: 5.h),
-                      ],
+                      ),
                     ),
-                  ),
-
-                  // 4. The 2-Column Portrait Grid
-                  SliverPadding(
-                    padding: EdgeInsets.symmetric(horizontal: 12.w),
-                    sliver: SliverList(
-                      delegate: SliverChildBuilderDelegate((context, index) {
-                        final section = model.hospitalSections[index];
-                        return Padding(
-                          padding: EdgeInsets.only(bottom: 20.h),
-                          child: _buildImageCard(context, model, section),
-                        );
-                      }, childCount: model.hospitalSections.length),
-                    ),
-                  ),
-                  SliverToBoxAdapter(child: SizedBox(height: 70.h)),
                 ],
               ),
             );

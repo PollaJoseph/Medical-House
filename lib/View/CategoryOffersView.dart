@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:medical_house/Constants.dart';
-import 'package:medical_house/Model/OfferModel.dart';
+import 'package:medical_house/Model/ServiceModel.dart';
 import 'package:medical_house/Components/OfferCard.dart';
 import 'package:medical_house/View/ServiceDetailsView.dart';
 
 class CategoryOffersView extends StatelessWidget {
   final String categoryName;
-  final List<OfferModel> offers;
+  final List<ServiceModel> offers;
 
   const CategoryOffersView({
     super.key,

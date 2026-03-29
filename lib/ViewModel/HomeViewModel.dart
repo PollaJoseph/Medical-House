@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:medical_house/Constants.dart';
 import 'package:medical_house/Model/HomeModel.dart';
+import 'package:medical_house/Model/ServiceModel.dart';
+import 'package:medical_house/Services/ApiService.dart';
 import 'package:medical_house/View/SectionDetailView.dart';
 
 class HomeViewModel extends ChangeNotifier {
   late final PatientProfile currentUser;
+  final ApiService _apiService = ApiService();
+
+  bool isLoading = false;
 
   HomeViewModel({String? name, String? imageUrl, int? points}) {
     currentUser = PatientProfile(
@@ -18,87 +23,56 @@ class HomeViewModel extends ChangeNotifier {
     HospitalSection(
       mainTitle: "Dermatology & Cosmetology",
       imageUrl: Constants.DermatologySectionImagePath,
-      subSections: [
-        HospitalService(
-          title: "Laser Hair Removal",
-          imageUrl: Constants.DermatologyDepartment1ImagePath,
-        ),
-        HospitalService(
-          title: "Bleaching Fine Hair",
-          imageUrl: Constants.DermatologyDepartment2ImagePath,
-        ),
-        HospitalService(
-          title: "Deep Cleansing of The Skin",
-          imageUrl: Constants.DermatologyDepartment3ImagePath,
-        ),
-        HospitalService(
-          title: "Filler for Lips and Cheeks",
-          imageUrl: Constants.DermatologyDepartment4ImagePath,
-        ),
-        HospitalService(
-          title: "Botox for Wrinkle Removal",
-          imageUrl: Constants.DermatologyDepartment5ImagePath,
-        ),
-        HospitalService(
-          title: "Face Lift Threads",
-          imageUrl: Constants.DermatologyDepartment6ImagePath,
-        ),
-        HospitalService(
-          title: "Skin Rejuvenation Injections",
-          imageUrl: Constants.DermatologyDepartment7ImagePath,
-        ),
-      ],
+      subSections: [], // Now expects ServiceModel objects
     ),
     HospitalSection(
       mainTitle: "Dental Department",
       imageUrl: Constants.DentalSectionImagePath,
-      subSections: [
-        HospitalService(
-          title: "Dental Fillings",
-          imageUrl: Constants.DentalDepartment8ImagePath,
-        ),
-        HospitalService(
-          title: "Teeth Whitening",
-          imageUrl: Constants.DentalDepartment2ImagePath,
-        ),
-        HospitalService(
-          title: "Teeth Cleaning",
-          imageUrl: Constants.DentalDepartment1ImagePath,
-        ),
-        HospitalService(
-          title: "Nerve Treatment",
-          imageUrl: Constants.DentalDepartment4ImagePath,
-        ),
-        HospitalService(
-          title: "Dental Implants",
-          imageUrl: Constants.DentalDepartment6ImagePath,
-        ),
-        HospitalService(
-          title: "Dental Crowns",
-          imageUrl: Constants.DentalDepartment9ImagePath,
-        ),
-        HospitalService(
-          title: "Maxillofacial Surgery",
-          imageUrl: Constants.DentalDepartment5ImagePath,
-        ),
-        HospitalService(
-          title: "Orthodontics",
-          imageUrl: Constants.DentalDepartment3ImagePath,
-        ),
-        HospitalService(
-          title: "Cosmetic Lenses and Crowns",
-          imageUrl: Constants.DentalDepartment7ImagePath,
-        ),
-      ],
+      subSections: [], // Now expects ServiceModel objects
     ),
   ];
 
-  void openSection(BuildContext context, HospitalSection section) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => SectionDetailView(section: section),
-      ),
-    );
+  Future<void> openSection(
+    BuildContext context,
+    HospitalSection section,
+  ) async {
+    isLoading = true;
+    notifyListeners();
+
+    try {
+      // 1. Fetch the data
+      List<ServiceModel> fetchedServices = await _apiService
+          .getServicesByCategory(section.mainTitle);
+
+      // 2. Clear the old list
+      section.subSections.clear();
+
+      // 3. FIXED: Just add the fetched services directly! No .map() needed.
+      section.subSections.addAll(fetchedServices);
+
+      if (context.mounted) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => SectionDetailView(section: section),
+          ),
+        );
+      }
+    } catch (e) {
+      debugPrint("API Error: $e");
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text(
+              "Failed to load services. Please check your connection.",
+            ),
+            backgroundColor: Color(0xFFFF4B4B),
+          ),
+        );
+      }
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
   }
 }

@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:medical_house/Constants.dart';
-import 'package:medical_house/Model/OfferModel.dart';
+import 'package:medical_house/Model/ServiceModel.dart';
 
 class OfferCard extends StatelessWidget {
-  final OfferModel offer;
+  final ServiceModel offer;
   final VoidCallback onTap;
 
   const OfferCard({super.key, required this.offer, required this.onTap});

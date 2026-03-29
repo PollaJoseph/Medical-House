@@ -1,4 +1,4 @@
-class OfferModel {
+class ServiceModel {
   final String id;
   final String title;
   final String description;
@@ -6,7 +6,7 @@ class OfferModel {
   final String discountTag;
   final String imageUrl;
 
-  OfferModel({
+  ServiceModel({
     required this.id,
     required this.title,
     required this.description,
@@ -15,8 +15,8 @@ class OfferModel {
     required this.imageUrl,
   });
 
-  factory OfferModel.fromJson(Map<String, dynamic> json) {
-    return OfferModel(
+  factory ServiceModel.fromJson(Map<String, dynamic> json) {
+    return ServiceModel(
       id: json['service_id']?.toString() ?? '',
       title: json['name'] ?? 'Unnamed Service',
       description: json['description'] ?? '',

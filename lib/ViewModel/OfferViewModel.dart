@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:medical_house/Model/OfferModel.dart';
+import 'package:medical_house/Model/ServiceModel.dart';
 import 'package:medical_house/Services/ApiService.dart';
 import 'package:medical_house/View/ServiceDetailsView.dart';
 
@@ -8,7 +8,7 @@ class OffersViewModel extends ChangeNotifier {
 
   bool isLoading = false;
 
-  Map<String, List<OfferModel>> groupedOffers = {};
+  Map<String, List<ServiceModel>> groupedOffers = {};
 
   OffersViewModel() {
     Future.microtask(() => fetchOffers());
@@ -29,7 +29,7 @@ class OffersViewModel extends ChangeNotifier {
   }
 
   // Inside OfferViewModel.dart
-  void onOfferTap(BuildContext context, OfferModel offer) {
+  void onOfferTap(BuildContext context, ServiceModel offer) {
     Navigator.push(
       context,
       MaterialPageRoute(
