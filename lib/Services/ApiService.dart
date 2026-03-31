@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:medical_house/Model/BookingRequestModel.dart';
 import 'package:medical_house/Model/LoginAPIModel.dart';
 import 'package:medical_house/Model/OTPVerificationModel.dart';
 import 'package:medical_house/Model/ServiceModel.dart';
@@ -10,7 +11,7 @@ import 'package:medical_house/Services/StorageService.dart';
 class ApiService {
   final Dio _dio = Dio();
 
-  final String baseUrl = "https://5f58-41-40-36-188.ngrok-free.app/";
+  final String baseUrl = "https://fa2d-156-196-147-112.ngrok-free.app/";
   //dotenv.env['BASE_URL'] ?? '';
   final String apiKey = dotenv.env['API_KEY'] ?? '';
   final String SignUpEndpoint = dotenv.env['SIGN_UP_ENDPOINT'] ?? '';
@@ -22,6 +23,7 @@ class ApiService {
   final String OfferEndpoint = dotenv.env['OFFER_ENDPOINT'] ?? '';
   final String DermatologyServiceEndPoint =
       dotenv.env['DERMATOLOGY_SERVICE-ENDPOINT'] ?? '';
+  final String BookingEndpoint = dotenv.env['BOOKING_ENDPOINT'] ?? '';
 
   String? _authToken;
 
@@ -246,6 +248,24 @@ class ApiService {
       throw Exception(
         'Failed fetching services for $categoryName: ${e.response?.data ?? e.message}',
       );
+    } catch (e) {
+      throw Exception('An unexpected error occurred: $e');
+    }
+  }
+
+  Future<Response> bookService(BookingRequestModel data) async {
+    try {
+      Map<String, String> requestHeaders = getHeaders(includeAuth: false);
+
+      final response = await _dio.post(
+        '$baseUrl$BookingEndpoint',
+        data: data.toJson(),
+        options: Options(headers: requestHeaders),
+      );
+
+      return response;
+    } on DioException catch (e) {
+      throw Exception('Booking Failed: ${e.response?.data ?? e.message}');
     } catch (e) {
       throw Exception('An unexpected error occurred: $e');
     }

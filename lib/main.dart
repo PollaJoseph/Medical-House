@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:medical_house/Components/MainWrapper.dart';
 import 'package:medical_house/View/LoginView.dart';
+import 'package:medical_house/View/SignUpView.dart';
 import 'package:medical_house/View/SplashScreenView.dart';
 import 'package:medical_house/ViewModel/OTPViewModel.dart';
 import 'package:medical_house/ViewModel/SignUpViewModel.dart';
@@ -45,7 +46,8 @@ class MyApp extends StatelessWidget {
           locale: Get.find<LocaleController>().currentLocale,
           fallbackLocale: const Locale('en', 'US'),
 
-          home: const MainWrapper(),
+          home: SignUpView(),
+          //const MainWrapper(),
         );
       },
     );

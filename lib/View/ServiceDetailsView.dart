@@ -3,6 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:medical_house/Constants.dart';
 import 'package:medical_house/Model/ServiceModel.dart';
+import 'package:medical_house/ViewModel/ServiceDetailsViewModel.dart';
+import 'package:provider/provider.dart';
 
 class ServiceDetailsView extends StatelessWidget {
   final ServiceModel service;
@@ -11,35 +13,39 @@ class ServiceDetailsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: Stack(
-        children: [
-          // 1. Scrollable Content
-          CustomScrollView(
-            physics: const BouncingScrollPhysics(),
-            slivers: [
-              _buildHeader(context),
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: EdgeInsets.all(24.w),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _buildTitleSection(),
-                      SizedBox(height: 24.h),
-                      _buildDescriptionSection(),
-                      SizedBox(height: 120.h), // Space for bottom bar
-                    ],
+    return ChangeNotifierProvider(
+      create: (_) => ServiceDetailsViewModel(),
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: Consumer<ServiceDetailsViewModel>(
+          builder: (context, model, _) => Stack(
+            children: [
+              CustomScrollView(
+                physics: const BouncingScrollPhysics(),
+                slivers: [
+                  _buildHeader(context),
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: EdgeInsets.all(24.w),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _buildTitleSection(),
+                          SizedBox(height: 24.h),
+                          _buildSchedulePicker(context, model),
+                          SizedBox(height: 24.h),
+                          _buildDescriptionSection(),
+                          SizedBox(height: 120.h),
+                        ],
+                      ),
+                    ),
                   ),
-                ),
+                ],
               ),
+              _buildBottomBar(context, model),
             ],
           ),
-
-          // 2. Bottom Sticky Booking Bar
-          _buildBottomBar(),
-        ],
+        ),
       ),
     );
   }
@@ -131,7 +137,7 @@ class ServiceDetailsView extends StatelessWidget {
     );
   }
 
-  Widget _buildBottomBar() {
+  Widget _buildBottomBar(BuildContext context, ServiceDetailsViewModel model) {
     return Align(
       alignment: Alignment.bottomCenter,
       child: Container(
@@ -179,20 +185,116 @@ class ServiceDetailsView extends StatelessWidget {
                     borderRadius: BorderRadius.circular(18.r),
                   ),
                 ),
-                onPressed: () {},
-                child: Text(
-                  "Book Now",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+                // Disable button and show spinner via the ViewModel
+                onPressed: model.isBooking
+                    ? null
+                    : () => model.bookNow(context: context, service: service),
+                child: model.isBooking
+                    ? SizedBox(
+                        height: 20.h,
+                        width: 20.h,
+                        child: const CircularProgressIndicator(
+                          color: Colors.white,
+                          strokeWidth: 2,
+                        ),
+                      )
+                    : Text(
+                        "Book Now",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
               ),
             ),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildSchedulePicker(
+    BuildContext context,
+    ServiceDetailsViewModel model,
+  ) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          "Select Schedule",
+          style: GoogleFonts.lexend(
+            fontSize: 18.sp,
+            fontWeight: FontWeight.bold,
+            color: Constants.MidnightNavy,
+          ),
+        ),
+        SizedBox(height: 12.h),
+        InkWell(
+          onTap: () async {
+            // 1. Pick Date
+            DateTime? date = await showDatePicker(
+              context: context,
+              initialDate: DateTime.now(),
+              firstDate: DateTime.now(),
+              lastDate: DateTime.now().add(const Duration(days: 30)),
+            );
+
+            if (date != null && context.mounted) {
+              TimeOfDay? time = await showTimePicker(
+                context: context,
+                initialTime: TimeOfDay.now(),
+              );
+
+              if (time != null) {
+                final finalDateTime = DateTime(
+                  date.year,
+                  date.month,
+                  date.day,
+                  time.hour,
+                  time.minute,
+                );
+                model.updateSelectedDate(finalDateTime);
+              }
+            }
+          },
+          child: Container(
+            padding: EdgeInsets.all(16.w),
+            decoration: BoxDecoration(
+              color: const Color(0xFFF8FAFC),
+              borderRadius: BorderRadius.circular(20.r),
+              border: Border.all(color: Colors.blueGrey.shade50),
+            ),
+            child: Row(
+              children: [
+                Icon(
+                  Icons.calendar_month_rounded,
+                  color: Constants.PrimaryColor,
+                ),
+                SizedBox(width: 12.w),
+                Text(
+                  model.selectedDateTime == null
+                      ? "Choose Date & Time"
+                      : "${model.selectedDateTime!.year}-${model.selectedDateTime!.month}-${model.selectedDateTime!.day} at ${model.selectedDateTime!.hour.toString().padLeft(2, '0')}:${model.selectedDateTime!.minute.toString().padLeft(2, '0')}",
+                  style: TextStyle(
+                    color: model.selectedDateTime == null
+                        ? Colors.blueGrey
+                        : Constants.MidnightNavy,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 14.sp,
+                  ),
+                ),
+                const Spacer(),
+                Icon(
+                  Icons.edit_calendar_rounded,
+                  color: Colors.blueGrey[200],
+                  size: 20.sp,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

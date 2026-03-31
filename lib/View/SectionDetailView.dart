@@ -283,40 +283,6 @@ class SectionDetailView extends StatelessWidget {
                                   ],
                                 ),
                               ),
-                              SizedBox(width: 15.w),
-                              GestureDetector(
-                                onTap: () {
-                                  debugPrint(
-                                    "Booking Specific Service: ${service.title}",
-                                  );
-                                },
-                                child: Container(
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: 24.w,
-                                    vertical: 14.h,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: midnightNavy,
-                                    borderRadius: BorderRadius.circular(100.r),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: midnightNavy.withOpacity(0.2),
-                                        blurRadius: 10,
-                                        offset: const Offset(0, 4),
-                                      ),
-                                    ],
-                                  ),
-                                  child: Text(
-                                    "Book",
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 14.sp,
-                                      fontWeight: FontWeight.bold,
-                                      letterSpacing: 0.5,
-                                    ),
-                                  ),
-                                ),
-                              ),
                             ],
                           ),
                         ),
