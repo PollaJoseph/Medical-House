@@ -25,6 +25,9 @@ class ApiService {
       dotenv.env['DERMATOLOGY_SERVICE-ENDPOINT'] ?? '';
   final String BookingEndpoint = dotenv.env['BOOKING_ENDPOINT'] ?? '';
 
+  final String BookingTimeEndpoint =
+      dotenv.env['UNAVAILABLE_SLOT_ENDPOINT'] ?? '';
+
   String? _authToken;
 
   ApiService();
@@ -266,6 +269,33 @@ class ApiService {
       return response;
     } on DioException catch (e) {
       throw Exception('Booking Failed: ${e.response?.data ?? e.message}');
+    } catch (e) {
+      throw Exception('An unexpected error occurred: $e');
+    }
+  }
+
+  Future<List<String>> getUnavailableSlots(String serviceId) async {
+    try {
+      Map<String, String> requestHeaders = getHeaders(includeAuth: false);
+
+      final response = await _dio.get(
+        '$baseUrl$BookingTimeEndpoint$serviceId/',
+        options: Options(headers: requestHeaders),
+      );
+
+      if (response.statusCode == 200) {
+        // The response is a JSON array of strings
+        List<dynamic> rawData = response.data;
+        return rawData.map((slot) => slot.toString()).toList();
+      } else {
+        throw Exception(
+          "Failed to load time slots. Status: ${response.statusCode}",
+        );
+      }
+    } on DioException catch (e) {
+      throw Exception(
+        'Failed fetching booking times: ${e.response?.data ?? e.message}',
+      );
     } catch (e) {
       throw Exception('An unexpected error occurred: $e');
     }

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -14,7 +15,7 @@ class ServiceDetailsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => ServiceDetailsViewModel(),
+      create: (_) => ServiceDetailsViewModel()..fetchAvailableSlots(service.id),
       child: Scaffold(
         backgroundColor: Colors.white,
         body: Consumer<ServiceDetailsViewModel>(
@@ -185,7 +186,6 @@ class ServiceDetailsView extends StatelessWidget {
                     borderRadius: BorderRadius.circular(18.r),
                   ),
                 ),
-                // Disable button and show spinner via the ViewModel
                 onPressed: model.isBooking
                     ? null
                     : () => model.bookNow(context: context, service: service),
@@ -218,77 +218,92 @@ class ServiceDetailsView extends StatelessWidget {
     BuildContext context,
     ServiceDetailsViewModel model,
   ) {
+    if (model.isLoadingSlots) {
+      return Container(
+        height: 150.h,
+        alignment: Alignment.center,
+        child: const CircularProgressIndicator(color: Constants.PrimaryColor),
+      );
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "Select Schedule",
+          "Schedule Appointment",
           style: GoogleFonts.lexend(
             fontSize: 18.sp,
             fontWeight: FontWeight.bold,
             color: Constants.MidnightNavy,
           ),
         ),
-        SizedBox(height: 12.h),
-        InkWell(
-          onTap: () async {
-            // 1. Pick Date
-            DateTime? date = await showDatePicker(
-              context: context,
-              initialDate: DateTime.now(),
-              firstDate: DateTime.now(),
-              lastDate: DateTime.now().add(const Duration(days: 30)),
-            );
+        SizedBox(height: 16.h),
 
-            if (date != null && context.mounted) {
-              TimeOfDay? time = await showTimePicker(
-                context: context,
-                initialTime: TimeOfDay.now(),
-              );
-
-              if (time != null) {
-                final finalDateTime = DateTime(
-                  date.year,
-                  date.month,
-                  date.day,
-                  time.hour,
-                  time.minute,
-                );
-                model.updateSelectedDate(finalDateTime);
-              }
-            }
-          },
+        // Modern Summary Card
+        GestureDetector(
+          // Triggers the Native Pickers
+          onTap: () => _showNativeDateTimePicker(context, model),
           child: Container(
-            padding: EdgeInsets.all(16.w),
+            padding: EdgeInsets.all(20.w),
             decoration: BoxDecoration(
-              color: const Color(0xFFF8FAFC),
-              borderRadius: BorderRadius.circular(20.r),
-              border: Border.all(color: Colors.blueGrey.shade50),
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(24.r),
+              boxShadow: [
+                BoxShadow(
+                  color: Constants.MidnightNavy.withOpacity(0.04),
+                  blurRadius: 20,
+                  offset: const Offset(0, 10),
+                ),
+              ],
+              border: Border.all(color: Colors.blueGrey.shade50, width: 1.5),
             ),
             child: Row(
               children: [
-                Icon(
-                  Icons.calendar_month_rounded,
-                  color: Constants.PrimaryColor,
-                ),
-                SizedBox(width: 12.w),
-                Text(
-                  model.selectedDateTime == null
-                      ? "Choose Date & Time"
-                      : "${model.selectedDateTime!.year}-${model.selectedDateTime!.month}-${model.selectedDateTime!.day} at ${model.selectedDateTime!.hour.toString().padLeft(2, '0')}:${model.selectedDateTime!.minute.toString().padLeft(2, '0')}",
-                  style: TextStyle(
-                    color: model.selectedDateTime == null
-                        ? Colors.blueGrey
-                        : Constants.MidnightNavy,
-                    fontWeight: FontWeight.w600,
-                    fontSize: 14.sp,
+                Container(
+                  padding: EdgeInsets.all(12.w),
+                  decoration: BoxDecoration(
+                    color: Constants.PrimaryColor.withOpacity(0.1),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(
+                    Icons.calendar_month_rounded,
+                    color: Constants.PrimaryColor,
+                    size: 24.sp,
                   ),
                 ),
-                const Spacer(),
+                SizedBox(width: 16.w),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        model.selectedDateTime == null
+                            ? "Select Date & Time"
+                            : _formatDate(model.selectedDateTime!),
+                        style: TextStyle(
+                          color: Constants.MidnightNavy,
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(height: 4.h),
+                      Text(
+                        model.selectedDateTime == null
+                            ? "Tap to schedule"
+                            : _formatTime(model.selectedDateTime!),
+                        style: TextStyle(
+                          color: Colors.blueGrey[400],
+                          fontSize: 13.sp,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
                 Icon(
-                  Icons.edit_calendar_rounded,
-                  color: Colors.blueGrey[200],
-                  size: 20.sp,
+                  Icons.arrow_forward_ios_rounded,
+                  color: Colors.blueGrey[300],
+                  size: 16.sp,
                 ),
               ],
             ),
@@ -296,5 +311,98 @@ class ServiceDetailsView extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  Future<void> _showNativeDateTimePicker(
+    BuildContext context,
+    ServiceDetailsViewModel model,
+  ) async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: model.selectedDateTime ?? DateTime.now(),
+      firstDate: DateTime.now(),
+      lastDate: DateTime.now().add(const Duration(days: 365)),
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: const ColorScheme.light(
+              primary: Constants.PrimaryColor,
+              onPrimary: Colors.white,
+              onSurface: Constants.MidnightNavy,
+            ),
+            textButtonTheme: TextButtonThemeData(
+              style: TextButton.styleFrom(
+                foregroundColor: Constants.PrimaryColor,
+              ),
+            ),
+          ),
+          child: child!,
+        );
+      },
+    );
+
+    if (pickedDate != null && context.mounted) {
+      final TimeOfDay? pickedTime = await showTimePicker(
+        context: context,
+        initialTime: model.selectedDateTime != null
+            ? TimeOfDay.fromDateTime(model.selectedDateTime!)
+            : TimeOfDay.now(),
+        builder: (context, child) {
+          return Theme(
+            data: Theme.of(context).copyWith(
+              colorScheme: const ColorScheme.light(
+                primary: Constants.PrimaryColor,
+                onPrimary: Colors.white,
+                onSurface: Constants.MidnightNavy,
+              ),
+              textButtonTheme: TextButtonThemeData(
+                style: TextButton.styleFrom(
+                  foregroundColor: Constants.PrimaryColor,
+                ),
+              ),
+            ),
+            child: child!,
+          );
+        },
+      );
+
+      if (pickedTime != null) {
+        final DateTime finalDateTime = DateTime(
+          pickedDate.year,
+          pickedDate.month,
+          pickedDate.day,
+          pickedTime.hour,
+          pickedTime.minute,
+        );
+
+        model.updateSelectedDate(finalDateTime);
+      }
+    }
+  }
+
+  String _formatDate(DateTime dt) {
+    const months = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ];
+    return "${dt.day} ${months[dt.month - 1]}, ${dt.year}";
+  }
+
+  String _formatTime(DateTime dt) {
+    String period = dt.hour >= 12 ? "PM" : "AM";
+    int hour12 = dt.hour % 12;
+    if (hour12 == 0) hour12 = 12;
+    String minute = dt.minute.toString().padLeft(2, '0');
+    return "$hour12:$minute $period";
   }
 }

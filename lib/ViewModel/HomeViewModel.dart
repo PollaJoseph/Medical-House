@@ -23,12 +23,12 @@ class HomeViewModel extends ChangeNotifier {
     HospitalSection(
       mainTitle: "Dermatology & Cosmetology",
       imageUrl: Constants.DermatologySectionImagePath,
-      subSections: [], // Now expects ServiceModel objects
+      subSections: [],
     ),
     HospitalSection(
       mainTitle: "Dental Department",
       imageUrl: Constants.DentalSectionImagePath,
-      subSections: [], // Now expects ServiceModel objects
+      subSections: [],
     ),
   ];
 
