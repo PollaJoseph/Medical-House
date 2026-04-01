@@ -22,10 +22,7 @@ class ArticleCard extends StatelessWidget {
             gradient: LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
-              colors: [
-                Constants.MidnightNavy,
-                const Color(0xFF1A2E4E), // Deep medical navy
-              ],
+              colors: [Constants.MidnightNavy, const Color(0xFF1A2E4E)],
             ),
             boxShadow: [
               BoxShadow(
@@ -39,7 +36,6 @@ class ArticleCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(32.r),
             child: Stack(
               children: [
-                // 1. Abstract Medical Icon Background
                 Positioned(
                   right: -20.w,
                   bottom: -20.h,
@@ -50,7 +46,6 @@ class ArticleCard extends StatelessWidget {
                   ),
                 ),
 
-                // 2. Main Content
                 Padding(
                   padding: EdgeInsets.all(24.w),
                   child: Row(
@@ -83,7 +78,6 @@ class ArticleCard extends StatelessWidget {
                         ),
                       ),
 
-                      // 3. Modern Glassmorphism Arrow
                       Container(
                         padding: EdgeInsets.all(12.w),
                         decoration: BoxDecoration(

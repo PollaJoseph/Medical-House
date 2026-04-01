@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:medical_house/Components/CustomNavigationBar.dart';
 import 'package:medical_house/Constants.dart';
-import 'package:medical_house/View/ArticleView.dart';
 import 'package:medical_house/View/HomeView.dart';
 import 'package:medical_house/View/OffersView.dart';
+import 'package:medical_house/View/PointServicesView.dart';
 import 'package:medical_house/View/SettingsView.dart';
 
 class MainWrapper extends StatefulWidget {
@@ -28,7 +28,7 @@ class _MainWrapperState extends State<MainWrapper> {
         Points: widget.Points,
       ),
       const OffersView(),
-      const ArticleView(),
+      const PointServicesView(),
       const SettingsView(),
     ];
   }

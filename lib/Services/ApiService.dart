@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:medical_house/Model/ArticleModel.dart';
 import 'package:medical_house/Model/BookingRequestModel.dart';
 import 'package:medical_house/Model/LoginAPIModel.dart';
 import 'package:medical_house/Model/OTPVerificationModel.dart';
@@ -24,9 +25,10 @@ class ApiService {
   final String DermatologyServiceEndPoint =
       dotenv.env['DERMATOLOGY_SERVICE-ENDPOINT'] ?? '';
   final String BookingEndpoint = dotenv.env['BOOKING_ENDPOINT'] ?? '';
-
   final String BookingTimeEndpoint =
       dotenv.env['UNAVAILABLE_SLOT_ENDPOINT'] ?? '';
+  final String ArticlesMetaEndpoint =
+      dotenv.env['ARICLES_ENDPOINT'] ?? 'Users/Articles/Meta/';
 
   String? _authToken;
 
@@ -295,6 +297,33 @@ class ApiService {
     } on DioException catch (e) {
       throw Exception(
         'Failed fetching booking times: ${e.response?.data ?? e.message}',
+      );
+    } catch (e) {
+      throw Exception('An unexpected error occurred: $e');
+    }
+  }
+
+  Future<List<ArticleModel>> getArticlesMeta() async {
+    try {
+      Map<String, String> requestHeaders = getHeaders(includeAuth: false);
+
+      final response = await _dio.get(
+        '$baseUrl$ArticlesMetaEndpoint',
+        options: Options(headers: requestHeaders),
+      );
+
+      if (response.statusCode == 200) {
+        List<dynamic> rawData = response.data;
+
+        return rawData.map((json) => ArticleModel.fromJson(json)).toList();
+      } else {
+        throw Exception(
+          "Failed to load articles. Status: ${response.statusCode}",
+        );
+      }
+    } on DioException catch (e) {
+      throw Exception(
+        'Failed fetching articles: ${e.response?.data ?? e.message}',
       );
     } catch (e) {
       throw Exception('An unexpected error occurred: $e');

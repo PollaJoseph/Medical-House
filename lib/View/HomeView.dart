@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:medical_house/Components/ArticleCard.dart';
 import 'package:medical_house/Constants.dart';
 import 'package:medical_house/Model/HomeModel.dart';
+import 'package:medical_house/View/ArticlesView.dart';
 import 'package:provider/provider.dart';
 import 'package:medical_house/ViewModel/HomeViewModel.dart';
 
@@ -47,7 +48,16 @@ class HomeView extends StatelessWidget {
                               Constants.SeconadryColor,
                             ),
                             SizedBox(height: 15.h),
-                            ArticleCard(onTap: () {}),
+                            ArticleCard(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ArticlesView(),
+                                  ),
+                                );
+                              },
+                            ),
                             SizedBox(height: 35.h),
                             // 3. Section Title
                             Padding(
