@@ -15,7 +15,8 @@ class ServiceDetailsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => ServiceDetailsViewModel()..fetchAvailableSlots(service.id),
+      create: (_) =>
+          ServiceDetailsViewModel()..fetchUnavailableSlots(service.id),
       child: Scaffold(
         backgroundColor: Colors.white,
         body: Consumer<ServiceDetailsViewModel>(
@@ -239,9 +240,7 @@ class ServiceDetailsView extends StatelessWidget {
         ),
         SizedBox(height: 16.h),
 
-        // Modern Summary Card
         GestureDetector(
-          // Triggers the Native Pickers
           onTap: () => _showNativeDateTimePicker(context, model),
           child: Container(
             padding: EdgeInsets.all(20.w),
@@ -322,6 +321,7 @@ class ServiceDetailsView extends StatelessWidget {
       initialDate: model.selectedDateTime ?? DateTime.now(),
       firstDate: DateTime.now(),
       lastDate: DateTime.now().add(const Duration(days: 365)),
+      selectableDayPredicate: (DateTime day) => !model.isDayFullyBooked(day),
       builder: (context, child) {
         return Theme(
           data: Theme.of(context).copyWith(
@@ -330,11 +330,6 @@ class ServiceDetailsView extends StatelessWidget {
               onPrimary: Colors.white,
               onSurface: Constants.MidnightNavy,
             ),
-            textButtonTheme: TextButtonThemeData(
-              style: TextButton.styleFrom(
-                foregroundColor: Constants.PrimaryColor,
-              ),
-            ),
           ),
           child: child!,
         );
@@ -342,42 +337,109 @@ class ServiceDetailsView extends StatelessWidget {
     );
 
     if (pickedDate != null && context.mounted) {
-      final TimeOfDay? pickedTime = await showTimePicker(
-        context: context,
-        initialTime: model.selectedDateTime != null
-            ? TimeOfDay.fromDateTime(model.selectedDateTime!)
-            : TimeOfDay.now(),
-        builder: (context, child) {
-          return Theme(
-            data: Theme.of(context).copyWith(
-              colorScheme: const ColorScheme.light(
-                primary: Constants.PrimaryColor,
-                onPrimary: Colors.white,
-                onSurface: Constants.MidnightNavy,
-              ),
-              textButtonTheme: TextButtonThemeData(
-                style: TextButton.styleFrom(
-                  foregroundColor: Constants.PrimaryColor,
+      _showTimeSlotBottomSheet(context, model, pickedDate);
+    }
+  }
+
+  void _showTimeSlotBottomSheet(
+    BuildContext context,
+    ServiceDetailsViewModel model,
+    DateTime pickedDate,
+  ) {
+    final slots = model.generateTimeSlotsForDate(pickedDate);
+
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.white,
+      isScrollControlled: true,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(32.r)),
+      ),
+      builder: (bottomSheetContext) {
+        return Container(
+          height: MediaQuery.of(context).size.height * 0.6,
+          padding: EdgeInsets.all(24.w),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Center(
+                child: Container(
+                  width: 40.w,
+                  height: 4.h,
+                  margin: EdgeInsets.only(bottom: 24.h),
+                  decoration: BoxDecoration(
+                    color: Colors.blueGrey[100],
+                    borderRadius: BorderRadius.circular(10.r),
+                  ),
                 ),
               ),
-            ),
-            child: child!,
-          );
-        },
-      );
+              Text(
+                "Select Time for ${_formatDate(pickedDate)}",
+                style: GoogleFonts.lexend(
+                  fontSize: 18.sp,
+                  fontWeight: FontWeight.bold,
+                  color: Constants.MidnightNavy,
+                ),
+              ),
+              SizedBox(height: 20.h),
 
-      if (pickedTime != null) {
-        final DateTime finalDateTime = DateTime(
-          pickedDate.year,
-          pickedDate.month,
-          pickedDate.day,
-          pickedTime.hour,
-          pickedTime.minute,
+              Expanded(
+                child: SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  child: Wrap(
+                    spacing: 12.w,
+                    runSpacing: 12.h,
+                    children: slots.map((slot) {
+                      final bool isAvailable = slot['isAvailable'];
+                      final DateTime slotTime = slot['dateTime'];
+                      final String timeString = slot['timeString'];
+
+                      return GestureDetector(
+                        onTap: isAvailable
+                            ? () {
+                                model.updateSelectedDate(slotTime);
+                                Navigator.pop(context);
+                              }
+                            : null,
+                        child: Container(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 16.w,
+                            vertical: 12.h,
+                          ),
+                          decoration: BoxDecoration(
+                            color: isAvailable
+                                ? Colors.white
+                                : Colors.grey.shade50,
+                            borderRadius: BorderRadius.circular(12.r),
+                            border: Border.all(
+                              color: isAvailable
+                                  ? Colors.blueGrey.shade200
+                                  : Colors.transparent,
+                            ),
+                          ),
+                          child: Text(
+                            timeString,
+                            style: TextStyle(
+                              color: isAvailable
+                                  ? Constants.MidnightNavy
+                                  : Colors.grey.shade400,
+                              decoration: isAvailable
+                                  ? TextDecoration.none
+                                  : TextDecoration.lineThrough,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                ),
+              ),
+            ],
+          ),
         );
-
-        model.updateSelectedDate(finalDateTime);
-      }
-    }
+      },
+    );
   }
 
   String _formatDate(DateTime dt) {

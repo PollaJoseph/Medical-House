@@ -13,125 +13,96 @@ class ServiceDetailsViewModel extends ChangeNotifier {
   bool _isLoadingSlots = true;
   bool get isLoadingSlots => _isLoadingSlots;
 
-  // Stores ALL available slots returned from API
-  List<DateTime> _availableSlotsFromApi = [];
-
-  // Selected state
-  DateTime _selectedDate = DateTime.now();
-  DateTime get selectedDate => _selectedDate;
-
-  String? _selectedTimeSlot;
-  String? get selectedTimeSlot => _selectedTimeSlot;
-
+  List<DateTime> _unavailableSlots = [];
   DateTime? selectedDateTime;
 
-  final int clinicOpenHour = 9;
-  final int clinicCloseHour = 21;
+  final int clinicOpenHour = 8;
+  final int clinicCloseHour = 24;
   final int slotDurationMinutes = 30;
 
-  // 2. NEW: Generate ALL slots for the selected date and check availability
-  List<Map<String, dynamic>> get allTimesForSelectedDate {
-    List<Map<String, dynamic>> slots = [];
-
-    // Start at opening time
-    DateTime currentSlot = DateTime(
-      _selectedDate.year,
-      _selectedDate.month,
-      _selectedDate.day,
-      clinicOpenHour,
-      0,
-    );
-
-    DateTime endSlot = DateTime(
-      _selectedDate.year,
-      _selectedDate.month,
-      _selectedDate.day,
-      clinicCloseHour,
-      0,
-    );
-
-    while (currentSlot.isBefore(endSlot)) {
-      bool isAvailable = _availableSlotsFromApi.any(
-        (apiDate) =>
-            apiDate.year == currentSlot.year &&
-            apiDate.month == currentSlot.month &&
-            apiDate.day == currentSlot.day &&
-            apiDate.hour == currentSlot.hour &&
-            apiDate.minute == currentSlot.minute,
-      );
-
-      // Don't show slots in the past if looking at today
-      if (currentSlot.isBefore(DateTime.now())) {
-        isAvailable = false;
-      }
-
-      String timeString =
-          "${currentSlot.hour.toString().padLeft(2, '0')}:${currentSlot.minute.toString().padLeft(2, '0')}";
-
-      slots.add({"time": timeString, "isAvailable": isAvailable});
-
-      // Move to next slot (e.g., add 30 mins)
-      currentSlot = currentSlot.add(Duration(minutes: slotDurationMinutes));
-    }
-
-    return slots;
-  }
-
-  Future<void> fetchAvailableSlots(String serviceId) async {
+  Future<void> fetchUnavailableSlots(String serviceId) async {
     _isLoadingSlots = true;
     notifyListeners();
 
     try {
       List<String> rawSlots = await _apiService.getUnavailableSlots(serviceId);
-      _availableSlotsFromApi = rawSlots
-          .map((iso) => DateTime.parse(iso))
+      // FIXED: Added .toLocal() to correctly handle the +02:00 API offset
+      _unavailableSlots = rawSlots
+          .map((iso) => DateTime.parse(iso).toLocal())
           .toList();
-
-      if (_availableSlotsFromApi.isNotEmpty) {
-        _selectedDate = _availableSlotsFromApi.first;
-      }
     } catch (e) {
-      debugPrint("Error fetching slots: $e");
+      debugPrint("Error fetching unavailable slots: $e");
     } finally {
       _isLoadingSlots = false;
       notifyListeners();
     }
   }
 
-  void selectDate(DateTime date) {
-    _selectedDate = date;
-    _selectedTimeSlot = null;
-    _combineDateTime();
-    notifyListeners();
-  }
+  List<Map<String, dynamic>> generateTimeSlotsForDate(DateTime date) {
+    List<Map<String, dynamic>> slots = [];
+    DateTime currentSlot = DateTime(
+      date.year,
+      date.month,
+      date.day,
+      clinicOpenHour,
+      0,
+    );
+    DateTime endSlot = DateTime(
+      date.year,
+      date.month,
+      date.day,
+      clinicCloseHour,
+      0,
+    );
 
-  void selectTime(String time) {
-    _selectedTimeSlot = time;
-    _combineDateTime();
-    notifyListeners();
-  }
+    while (currentSlot.isBefore(endSlot)) {
+      bool isAvailable = !isSlotUnavailable(currentSlot);
+      // Ensure past times today are also marked unavailable
+      if (currentSlot.isBefore(DateTime.now())) isAvailable = false;
 
-  void _combineDateTime() {
-    if (_selectedTimeSlot != null) {
-      final parts = _selectedTimeSlot!.split(':');
-      selectedDateTime = DateTime(
-        _selectedDate.year,
-        _selectedDate.month,
-        _selectedDate.day,
-        int.parse(parts[0]),
-        int.parse(parts[1]),
-      );
-    } else {
-      selectedDateTime = null;
+      // Format to 12-hour AM/PM string
+      int hour12 = currentSlot.hour % 12 == 0 ? 12 : currentSlot.hour % 12;
+      String period = currentSlot.hour >= 12 ? 'PM' : 'AM';
+      String timeString =
+          "$hour12:${currentSlot.minute.toString().padLeft(2, '0')} $period";
+
+      slots.add({
+        "timeString": timeString,
+        "dateTime": currentSlot,
+        "isAvailable": isAvailable,
+      });
+
+      currentSlot = currentSlot.add(Duration(minutes: slotDurationMinutes));
     }
+    return slots;
+  }
+
+  bool isDayFullyBooked(DateTime date) {
+    int bookedCount = _unavailableSlots
+        .where(
+          (dt) =>
+              dt.year == date.year &&
+              dt.month == date.month &&
+              dt.day == date.day,
+        )
+        .length;
+    // Assuming 32 slots a day (8 AM to 24 PM)
+    return bookedCount >= 32;
+  }
+
+  bool isSlotUnavailable(DateTime dateTime) {
+    return _unavailableSlots.any(
+      (dt) =>
+          dt.year == dateTime.year &&
+          dt.month == dateTime.month &&
+          dt.day == dateTime.day &&
+          dt.hour == dateTime.hour &&
+          dt.minute == dateTime.minute,
+    );
   }
 
   void updateSelectedDate(DateTime dt) {
     selectedDateTime = dt;
-    _selectedDate = dt;
-    _selectedTimeSlot =
-        "${dt.hour.toString().padLeft(2, '0')}:${dt.minute.toString().padLeft(2, '0')}";
-
     notifyListeners();
   }
 
@@ -152,7 +123,6 @@ class ServiceDetailsViewModel extends ChangeNotifier {
     notifyListeners();
 
     final clientId = await StorageService.getUserClientId();
-
     if (clientId == null) {
       _showSnackBar(
         context,
@@ -168,7 +138,8 @@ class ServiceDetailsViewModel extends ChangeNotifier {
       final bookingRequest = BookingRequestModel(
         serviceId: service.id,
         clientId: clientId,
-        bookingTime: selectedDateTime!.toIso8601String(),
+        bookingTime: selectedDateTime!
+            .toIso8601String(), // Converts local back to ISO for API
       );
 
       final response = await _apiService.bookService(bookingRequest);
