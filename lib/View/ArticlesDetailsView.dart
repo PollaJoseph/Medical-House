@@ -1,11 +1,13 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:medical_house/Constants.dart';
 import 'package:medical_house/ViewModel/ArticleDetailsViewModel.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
+import 'package:share_plus/share_plus.dart';
 
 class ArticlesDetailsView extends StatelessWidget {
   final String articleId;
@@ -26,7 +28,6 @@ class ArticlesDetailsView extends StatelessWidget {
               );
             }
 
-            // Error or Null State
             if (model.errorMessage != null || model.article == null) {
               return Center(
                 child: Text(
@@ -89,7 +90,6 @@ class ArticlesDetailsView extends StatelessWidget {
                         ),
                         SizedBox(height: 32.h),
 
-                        // 3. Modern Author Card
                         Container(
                           padding: EdgeInsets.all(16.w),
                           decoration: BoxDecoration(
@@ -136,23 +136,29 @@ class ArticlesDetailsView extends StatelessWidget {
                                   ],
                                 ),
                               ),
-                              Container(
-                                padding: EdgeInsets.all(10.w),
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  shape: BoxShape.circle,
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.black.withOpacity(0.03),
-                                      blurRadius: 10,
-                                      offset: const Offset(0, 4),
-                                    ),
-                                  ],
-                                ),
-                                child: Icon(
-                                  Icons.ios_share_rounded,
-                                  color: Constants.MidnightNavy,
-                                  size: 18.sp,
+                              GestureDetector(
+                                onTap: () => _showModernShareSheet(
+                                  context,
+                                  article,
+                                ), // UPDATED
+                                child: Container(
+                                  padding: EdgeInsets.all(10.w),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    shape: BoxShape.circle,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black.withOpacity(0.03),
+                                        blurRadius: 10,
+                                        offset: const Offset(0, 4),
+                                      ),
+                                    ],
+                                  ),
+                                  child: Icon(
+                                    Icons.ios_share_rounded,
+                                    color: Constants.MidnightNavy,
+                                    size: 18.sp,
+                                  ),
                                 ),
                               ),
                             ],
@@ -295,7 +301,6 @@ class ArticlesDetailsView extends StatelessWidget {
     );
   }
 
-  // Modern Glassmorphism App Bar
   Widget _buildModernAppBar(BuildContext context) {
     return SliverAppBar(
       expandedHeight: 80.h,
@@ -327,27 +332,6 @@ class ArticlesDetailsView extends StatelessWidget {
           ),
         ),
       ),
-      actions: [
-        Padding(
-          padding: EdgeInsets.only(right: 16.w),
-          child: GestureDetector(
-            onTap: () {},
-            child: Container(
-              padding: EdgeInsets.all(8.w),
-              decoration: BoxDecoration(
-                color: const Color(0xFFF8FAFC),
-                shape: BoxShape.circle,
-                border: Border.all(color: Colors.blueGrey.shade50),
-              ),
-              child: const Icon(
-                Icons.bookmark_outline_rounded,
-                color: Constants.MidnightNavy,
-                size: 22,
-              ),
-            ),
-          ),
-        ),
-      ],
     );
   }
 
@@ -372,5 +356,190 @@ class ArticlesDetailsView extends StatelessWidget {
     } catch (e) {
       return isoDate;
     }
+  }
+
+  void _showModernShareSheet(BuildContext context, dynamic article) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+      builder: (context) {
+        return Container(
+          padding: EdgeInsets.all(24.w),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(32.r)),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Drag Handle
+              Center(
+                child: Container(
+                  width: 40.w,
+                  height: 4.h,
+                  margin: EdgeInsets.only(bottom: 24.h),
+                  decoration: BoxDecoration(
+                    color: Colors.blueGrey.shade100,
+                    borderRadius: BorderRadius.circular(10.r),
+                  ),
+                ),
+              ),
+
+              Text(
+                "Share Article",
+                style: GoogleFonts.lexend(
+                  fontSize: 20.sp,
+                  fontWeight: FontWeight.w800,
+                  color: Constants.MidnightNavy,
+                ),
+              ),
+              SizedBox(height: 20.h),
+
+              // Article Preview Card
+              Container(
+                padding: EdgeInsets.all(16.w),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFF8FAFC),
+                  borderRadius: BorderRadius.circular(20.r),
+                  border: Border.all(color: Colors.blueGrey.shade50),
+                ),
+                child: Row(
+                  children: [
+                    Container(
+                      height: 50.h,
+                      width: 50.h,
+                      decoration: BoxDecoration(
+                        color: Constants.PrimaryColor.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(12.r),
+                      ),
+                      child: Icon(
+                        Icons.article_rounded,
+                        color: Constants.PrimaryColor,
+                      ),
+                    ),
+                    SizedBox(width: 16.w),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            article.name,
+                            style: GoogleFonts.lexend(
+                              fontSize: 15.sp,
+                              fontWeight: FontWeight.bold,
+                              color: Constants.MidnightNavy,
+                            ),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          SizedBox(height: 4.h),
+                          Text(
+                            "By ${article.authorUsername}",
+                            style: TextStyle(
+                              fontSize: 12.sp,
+                              color: Colors.blueGrey[400],
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 24.h),
+
+              // Action Buttons
+              Row(
+                children: [
+                  Expanded(
+                    child: ElevatedButton.icon(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Constants.PrimaryColor,
+                        padding: EdgeInsets.symmetric(vertical: 16.h),
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16.r),
+                        ),
+                      ),
+                      icon: const Icon(
+                        Icons.share_rounded,
+                        color: Colors.white,
+                      ),
+                      label: Text(
+                        "Share Now",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 15.sp,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      onPressed: () {
+                        Navigator.pop(context); // Close bottom sheet
+
+                        final String shareText =
+                            '''
+🩺 *${article.name}*
+
+💡 Category: ${article.category}
+✍️ By: ${article.authorUsername}
+
+Read this full medical article and discover more health insights on the Medical House App! 🚀
+''';
+                        Share.share(shareText, subject: article.name);
+                      },
+                    ),
+                  ),
+                  SizedBox(width: 16.w),
+
+                  // 2. Copy Link Button
+                  Expanded(
+                    child: ElevatedButton.icon(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Color(0xFFF8FAFC),
+                        foregroundColor: Constants.MidnightNavy,
+                        padding: EdgeInsets.symmetric(vertical: 16.h),
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16.r),
+                          side: BorderSide(color: Colors.blueGrey.shade100),
+                        ),
+                      ),
+                      icon: const Icon(Icons.copy_rounded),
+                      label: Text(
+                        "Copy Title",
+                        style: TextStyle(
+                          fontSize: 15.sp,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      onPressed: () {
+                        Clipboard.setData(ClipboardData(text: article.name));
+                        Navigator.pop(context);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: const Text(
+                              "Article title copied to clipboard!",
+                            ),
+                            backgroundColor: Constants.MidnightNavy,
+                            behavior: SnackBarBehavior.floating,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.r),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 24.h), // Bottom padding
+            ],
+          ),
+        );
+      },
+    );
   }
 }
