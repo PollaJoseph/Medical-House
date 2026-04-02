@@ -26,7 +26,7 @@ class ArticlesView extends StatelessWidget {
             return CustomScrollView(
               physics: const BouncingScrollPhysics(),
               slivers: [
-                _buildSliverAppBar(),
+                _buildSliverAppBar(context),
                 _buildCategoryList(model),
                 _buildArticleList(model),
               ],
@@ -37,7 +37,7 @@ class ArticlesView extends StatelessWidget {
     );
   }
 
-  Widget _buildSliverAppBar() {
+  Widget _buildSliverAppBar(BuildContext context) {
     return SliverAppBar(
       expandedHeight: 100.h,
       pinned: true,
@@ -52,7 +52,9 @@ class ArticlesView extends StatelessWidget {
               color: Constants.MidnightNavy,
               size: 18,
             ),
-            onPressed: () {}, // Add your Navigator.pop here
+            onPressed: () {
+              Navigator.pop(context);
+            },
           ),
         ),
       ),
