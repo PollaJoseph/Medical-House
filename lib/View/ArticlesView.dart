@@ -42,6 +42,20 @@ class ArticlesView extends StatelessWidget {
       expandedHeight: 100.h,
       pinned: true,
       backgroundColor: const Color(0xFFF8FAFC),
+      leading: Padding(
+        padding: EdgeInsets.all(8.w),
+        child: CircleAvatar(
+          backgroundColor: Colors.white,
+          child: IconButton(
+            icon: const Icon(
+              Icons.arrow_back_ios_new_rounded,
+              color: Constants.MidnightNavy,
+              size: 18,
+            ),
+            onPressed: () {}, // Add your Navigator.pop here
+          ),
+        ),
+      ),
       flexibleSpace: FlexibleSpaceBar(
         title: Text(
           "Medical Articles",
@@ -56,30 +70,46 @@ class ArticlesView extends StatelessWidget {
   }
 
   Widget _buildCategoryList(ArticlesViewModel model) {
-    final categories = [
-      "All",
-      "Dental",
-      "Dermatology &\n Cosmetology",
-      "General",
-    ];
+    final categories = model.availableCategories;
+
     return SliverToBoxAdapter(
       child: SizedBox(
         height: 50.h,
         child: ListView.builder(
           scrollDirection: Axis.horizontal,
+          physics: const BouncingScrollPhysics(),
           padding: EdgeInsets.symmetric(horizontal: 24.w),
           itemCount: categories.length,
-          itemBuilder: (context, index) => CategoryChip(
-            label: categories[index],
-            isSelected: model.selectedCategory == categories[index],
-            onTap: () => model.setCategory(categories[index]),
-          ),
+          itemBuilder: (context, index) {
+            final categoryName = categories[index];
+            return CategoryChip(
+              label: categoryName,
+              isSelected: model.selectedCategory == categoryName,
+              onTap: () => model.setCategory(
+                categoryName,
+              ), // Passes the exact API string
+            );
+          },
         ),
       ),
     );
   }
 
   Widget _buildArticleList(ArticlesViewModel model) {
+    if (model.filteredArticles.isEmpty) {
+      return SliverToBoxAdapter(
+        child: Padding(
+          padding: EdgeInsets.only(top: 100.h),
+          child: Center(
+            child: Text(
+              "No articles found for this category.",
+              style: TextStyle(color: Colors.blueGrey[300], fontSize: 16.sp),
+            ),
+          ),
+        ),
+      );
+    }
+
     return SliverPadding(
       padding: EdgeInsets.all(24.w),
       sliver: SliverList(

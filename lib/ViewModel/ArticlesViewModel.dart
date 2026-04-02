@@ -13,6 +13,23 @@ class ArticlesViewModel extends ChangeNotifier {
       ? _allArticles
       : _allArticles.where((a) => a.category == _selectedCategory).toList();
 
+  List<String> get availableCategories {
+    final Set<String> categories = {
+      "All",
+      "Dental",
+      "Dermatology & Cosmetology",
+      "General",
+    };
+
+    for (var article in _allArticles) {
+      if (article.category.isNotEmpty) {
+        categories.add(article.category);
+      }
+    }
+
+    return categories.toList();
+  }
+
   String get selectedCategory => _selectedCategory;
   bool get isLoading => _isLoading;
 

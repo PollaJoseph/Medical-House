@@ -12,7 +12,7 @@ import 'package:medical_house/Services/StorageService.dart';
 class ApiService {
   final Dio _dio = Dio();
 
-  final String baseUrl = "https://fa2d-156-196-147-112.ngrok-free.app/";
+  final String baseUrl = "https://4916-156-196-16-193.ngrok-free.app/";
   //dotenv.env['BASE_URL'] ?? '';
   final String apiKey = dotenv.env['API_KEY'] ?? '';
   final String SignUpEndpoint = dotenv.env['SIGN_UP_ENDPOINT'] ?? '';
