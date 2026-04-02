@@ -161,36 +161,28 @@ class ArticlesDetailsView extends StatelessWidget {
 
                         SizedBox(height: 36.h),
 
-                        // 4. ROBUST & STYLED HTML RENDERER
-                        // Wrap in SelectionArea to allow native text copying
                         SelectionArea(
-                          child: // 4. PREMIUM EDITORIAL HTML RENDERER
-                          HtmlWidget(
+                          child: HtmlWidget(
                             article.content,
                             textStyle: TextStyle(
                               fontSize: 16.sp,
-                              color: const Color(
-                                0xFF334155,
-                              ), // Slate 700 for high readability
-                              height:
-                                  1.85, // Extra breathing room for long-form reading
+                              color: const Color(0xFF334155),
+                              height: 1.85,
                               fontWeight: FontWeight.w400,
                             ),
                             customStylesBuilder: (element) {
-                              // Main Titles
                               if (element.localName == 'h1') {
                                 return {
                                   'font-family': 'Lexend',
                                   'font-weight': '900',
                                   'font-size': '26px',
-                                  'color': '#0A1325', // MidnightNavy
+                                  'color': '#0A1325',
                                   'margin-top': '36px',
                                   'margin-bottom': '16px',
                                   'line-height': '1.3',
                                   'letter-spacing': '-0.5px',
                                 };
                               }
-                              // Subtitles
                               if (element.localName == 'h2') {
                                 return {
                                   'font-family': 'Lexend',
@@ -202,36 +194,30 @@ class ArticlesDetailsView extends StatelessWidget {
                                   'letter-spacing': '-0.3px',
                                 };
                               }
-                              // Section Headers (using Primary Teal)
                               if (element.localName == 'h3') {
                                 return {
                                   'font-family': 'Lexend',
                                   'font-weight': '700',
                                   'font-size': '18px',
-                                  'color': '#0CACBB', // Primary Teal
+                                  'color': '#0CACBB',
                                   'margin-top': '24px',
                                   'margin-bottom': '10px',
                                 };
                               }
-                              // Paragraphs
                               if (element.localName == 'p') {
                                 return {'margin-bottom': '20px'};
                               }
-                              // Important Medical Terms / Bold Text
                               if (element.localName == 'strong' ||
                                   element.localName == 'b') {
                                 return {
                                   'font-weight': '700',
-                                  'color': '#0A1325', // High contrast navy
+                                  'color': '#0A1325',
                                 };
                               }
-                              // Medical Quotes or Callout Boxes
                               if (element.localName == 'blockquote') {
                                 return {
-                                  'border-left':
-                                      '4px solid #0CACBB', // Teal accent
-                                  'background-color':
-                                      '#F0FDF4', // Very light mint/teal background
+                                  'border-left': '4px solid #0CACBB',
+                                  'background-color': '#F0FDF4',
                                   'padding': '16px 20px',
                                   'margin': '28px 0',
                                   'border-radius': '0 12px 12px 0',
@@ -241,17 +227,14 @@ class ArticlesDetailsView extends StatelessWidget {
                                   'font-size': '17px',
                                 };
                               }
-                              // Links
                               if (element.localName == 'a') {
                                 return {
                                   'color': '#0CACBB',
                                   'text-decoration': 'none',
                                   'font-weight': '600',
-                                  'border-bottom':
-                                      '1px dotted #0CACBB', // Subtle link underline
+                                  'border-bottom': '1px dotted #0CACBB',
                                 };
                               }
-                              // Lists
                               if (element.localName == 'ul' ||
                                   element.localName == 'ol') {
                                 return {
@@ -265,7 +248,6 @@ class ArticlesDetailsView extends StatelessWidget {
                                   'color': '#334155',
                                 };
                               }
-                              // Images & Figures
                               if (element.localName == 'img') {
                                 return {
                                   'max-width': '100%',
@@ -277,22 +259,17 @@ class ArticlesDetailsView extends StatelessWidget {
                                 };
                               }
                               if (element.localName == 'figure') {
-                                return {
-                                  'margin':
-                                      '32px 0', // Big spacing around images
-                                };
+                                return {'margin': '32px 0'};
                               }
-                              // Image Captions
                               if (element.localName == 'figcaption') {
                                 return {
                                   'text-align': 'center',
                                   'font-size': '13px',
-                                  'color': '#94A3B8', // Muted Grey
+                                  'color': '#94A3B8',
                                   'font-style': 'italic',
                                   'margin-top': '8px',
                                 };
                               }
-                              // Dividers
                               if (element.localName == 'hr') {
                                 return {
                                   'border': 'none',
