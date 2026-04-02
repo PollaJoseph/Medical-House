@@ -396,7 +396,7 @@ class ContactUsView extends StatelessWidget {
                           ),
                           SizedBox(height: 4.h),
                           Text(
-                            "Riyadh, Saudi Arabia",
+                            "Jubail, Saudi Arabia",
                             style: TextStyle(
                               color: Colors.white70,
                               fontSize: 13.sp,
