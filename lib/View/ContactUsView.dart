@@ -151,10 +151,17 @@ class ContactUsView extends StatelessWidget {
                     ),
                     SliverToBoxAdapter(
                       child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 24.w),
+                        child: _buildWorkingHoursCard(),
+                      ),
+                    ),
+                    SliverToBoxAdapter(
+                      child: Padding(
                         padding: EdgeInsets.only(
                           left: 24.w,
                           right: 24.w,
                           top: 20.h,
+                          bottom: 10.h,
                         ),
                         child: _buildLocationCard(viewModel),
                       ),
@@ -163,18 +170,15 @@ class ContactUsView extends StatelessWidget {
                     // Toll Free Card
                     SliverToBoxAdapter(
                       child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 24.w),
+                        padding: EdgeInsets.only(
+                          right: 24.w,
+                          left: 24.w,
+                          bottom: 100.h,
+                        ),
                         child: _buildTollFreeCard(),
                       ),
                     ),
-
                     // Working Hours Card
-                    SliverToBoxAdapter(
-                      child: Padding(
-                        padding: EdgeInsets.fromLTRB(24.w, 30.h, 24.w, 120.h),
-                        child: _buildWorkingHoursCard(),
-                      ),
-                    ),
                   ],
                 ),
               ],
