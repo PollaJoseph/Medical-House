@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:medical_house/Components/ArticleMagazineCard.dart';
 import 'package:medical_house/Components/CategoryChip.dart';
 import 'package:medical_house/Constants.dart';
+import 'package:medical_house/View/ArticlesDetailsView.dart';
 import 'package:medical_house/ViewModel/ArticlesViewModel.dart';
 import 'package:provider/provider.dart';
 
@@ -119,7 +120,14 @@ class ArticlesView extends StatelessWidget {
           (context, index) => ArticleMagazineCard(
             article: model.filteredArticles[index],
             onTap: () {
-              // Navigate to full article content here
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ArticlesDetailsView(
+                    articleId: model.filteredArticles[index].articleId,
+                  ),
+                ),
+              );
             },
           ),
           childCount: model.filteredArticles.length,
