@@ -28,12 +28,12 @@ class OffersViewModel extends ChangeNotifier {
     }
   }
 
-  // Inside OfferViewModel.dart
   void onOfferTap(BuildContext context, ServiceModel offer) {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => ServiceDetailsView(service: offer),
+        builder: (context) =>
+            ServiceDetailsView(service: offer, isPointService: false),
       ),
     );
   }

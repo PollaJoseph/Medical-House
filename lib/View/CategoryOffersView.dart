@@ -56,8 +56,10 @@ class CategoryOffersView extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) =>
-                      ServiceDetailsView(service: offers[index]),
+                  builder: (context) => ServiceDetailsView(
+                    service: offers[index],
+                    isPointService: false,
+                  ),
                 ),
               );
             },

@@ -194,8 +194,10 @@ class SectionDetailView extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) =>
-                            ServiceDetailsView(service: service),
+                        builder: (context) => ServiceDetailsView(
+                          service: service,
+                          isPointService: false,
+                        ),
                       ),
                     );
                   },

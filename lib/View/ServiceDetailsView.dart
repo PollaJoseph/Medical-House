@@ -8,9 +8,14 @@ import 'package:medical_house/ViewModel/ServiceDetailsViewModel.dart';
 import 'package:provider/provider.dart';
 
 class ServiceDetailsView extends StatelessWidget {
+  final bool isPointService;
   final ServiceModel service;
 
-  const ServiceDetailsView({super.key, required this.service});
+  const ServiceDetailsView({
+    super.key,
+    required this.service,
+    required this.isPointService,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -161,16 +166,20 @@ class ServiceDetailsView extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Total Price",
+                  isPointService ? "Total Points" : "Total Price",
                   style: TextStyle(
                     color: Colors.blueGrey[300],
                     fontSize: 12.sp,
                   ),
                 ),
                 Text(
-                  "${service.price} SAR",
+                  isPointService
+                      ? "${service.price} Pts"
+                      : "${service.price} SAR",
                   style: TextStyle(
-                    color: Constants.PrimaryColor,
+                    color: isPointService
+                        ? const Color(0xFFFFB800)
+                        : Constants.PrimaryColor,
                     fontSize: 22.sp,
                     fontWeight: FontWeight.w900,
                   ),

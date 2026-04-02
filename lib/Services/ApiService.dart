@@ -5,6 +5,7 @@ import 'package:medical_house/Model/ArticleModel.dart';
 import 'package:medical_house/Model/BookingRequestModel.dart';
 import 'package:medical_house/Model/LoginAPIModel.dart';
 import 'package:medical_house/Model/OTPVerificationModel.dart';
+import 'package:medical_house/Model/PointServiceModel.dart';
 import 'package:medical_house/Model/ServiceModel.dart';
 import 'package:medical_house/Model/ResendOTP.dart';
 import 'package:medical_house/Model/SignUpAPIModel.dart';
@@ -31,6 +32,8 @@ class ApiService {
   final String ArticlesMetaEndpoint = dotenv.env['ARTICLES_ENDPOINT'] ?? '';
   final String ArticleDetailsEndpoint =
       dotenv.env['ARTICLES_DETAILS_ENDPOINT'] ?? '';
+  final String PointServicesEndpoint =
+      dotenv.env['POINT_SERVICES_ENDPOINT'] ?? '';
 
   String? _authToken;
 
@@ -350,6 +353,42 @@ class ApiService {
     } on DioException catch (e) {
       throw Exception(
         'Failed fetching article details: ${e.response?.data ?? e.message}',
+      );
+    } catch (e) {
+      throw Exception('An unexpected error occurred: $e');
+    }
+  }
+
+  Future<Map<String, List<PointServiceModel>>> getPointsServices() async {
+    try {
+      Map<String, String> requestHeaders = getHeaders(includeAuth: false);
+
+      final response = await _dio.get(
+        '$baseUrl$PointServicesEndpoint',
+        options: Options(headers: requestHeaders),
+      );
+
+      if (response.statusCode == 200) {
+        Map<String, dynamic> rawData = response.data;
+        Map<String, List<PointServiceModel>> parsedPointsServices = {};
+
+        rawData.forEach((categoryName, servicesList) {
+          if (servicesList is List) {
+            parsedPointsServices[categoryName] = servicesList
+                .map((serviceJson) => PointServiceModel.fromJson(serviceJson))
+                .toList();
+          }
+        });
+
+        return parsedPointsServices;
+      } else {
+        throw Exception(
+          "Failed to load points services. Status: ${response.statusCode}",
+        );
+      }
+    } on DioException catch (e) {
+      throw Exception(
+        'Failed fetching points services: ${e.response?.data ?? e.message}',
       );
     } catch (e) {
       throw Exception('An unexpected error occurred: $e');
