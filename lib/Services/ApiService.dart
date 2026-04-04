@@ -9,12 +9,13 @@ import 'package:medical_house/Model/PointServiceModel.dart';
 import 'package:medical_house/Model/ServiceModel.dart';
 import 'package:medical_house/Model/ResendOTP.dart';
 import 'package:medical_house/Model/SignUpAPIModel.dart';
+import 'package:medical_house/Model/UserProfileModel.dart';
 import 'package:medical_house/Services/StorageService.dart';
 
 class ApiService {
   final Dio _dio = Dio();
 
-  final String baseUrl = "https://4916-156-196-16-193.ngrok-free.app/";
+  final String baseUrl = "https://1a9f-156-196-149-18.ngrok-free.app/";
   //dotenv.env['BASE_URL'] ?? '';
   final String apiKey = dotenv.env['API_KEY'] ?? '';
   final String SignUpEndpoint = dotenv.env['SIGN_UP_ENDPOINT'] ?? '';
@@ -34,6 +35,8 @@ class ApiService {
       dotenv.env['ARTICLES_DETAILS_ENDPOINT'] ?? '';
   final String PointServicesEndpoint =
       dotenv.env['POINT_SERVICES_ENDPOINT'] ?? '';
+  final String GetUserEndpoint = dotenv.env['USER_ENDPOINT'] ?? '';
+  final String DeleteUserEndpoint = dotenv.env['DELETE_USER_ENDPOINT'] ?? '';
 
   String? _authToken;
 
@@ -389,6 +392,48 @@ class ApiService {
     } on DioException catch (e) {
       throw Exception(
         'Failed fetching points services: ${e.response?.data ?? e.message}',
+      );
+    } catch (e) {
+      throw Exception('An unexpected error occurred: $e');
+    }
+  }
+
+  Future<UserProfileModel> getUserProfile(String clientId) async {
+    try {
+      Map<String, String> requestHeaders = getHeaders(includeAuth: true);
+
+      final response = await _dio.get(
+        '$baseUrl$GetUserEndpoint$clientId/',
+        options: Options(headers: requestHeaders),
+      );
+
+      if (response.statusCode == 200) {
+        return UserProfileModel.fromJson(response.data);
+      } else {
+        throw Exception(
+          "Failed to load user profile. Status: ${response.statusCode}",
+        );
+      }
+    } on DioException catch (e) {
+      throw Exception(
+        'Failed fetching user profile: ${e.response?.data ?? e.message}',
+      );
+    } catch (e) {
+      throw Exception('An unexpected error occurred: $e');
+    }
+  }
+
+  Future<Response> deleteAccount(String clientId) async {
+    try {
+      Map<String, String> requestHeaders = getHeaders(includeAuth: true);
+      final response = await _dio.delete(
+        '$baseUrl$DeleteUserEndpoint$clientId/',
+        options: Options(headers: requestHeaders),
+      );
+      return response;
+    } on DioException catch (e) {
+      throw Exception(
+        'Delete Account Failed: ${e.response?.data ?? e.message}',
       );
     } catch (e) {
       throw Exception('An unexpected error occurred: $e');
