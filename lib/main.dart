@@ -45,8 +45,7 @@ class MyApp extends StatelessWidget {
           translations: LocaleStrings(),
           locale: Get.find<LocaleController>().currentLocale,
           fallbackLocale: const Locale('en', 'US'),
-
-          home: SignUpView(),
+          home: SplashView(),
           //const MainWrapper(),
         );
       },

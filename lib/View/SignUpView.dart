@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:medical_house/Components/CustomMapPicker.dart';
 import 'package:medical_house/Components/SocialButton.dart';
@@ -58,7 +59,7 @@ class SignUpView extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              "New to Medical House? ",
+                              "Have you visited us before? ".tr,
                               style: TextStyle(
                                 color: Colors.blueGrey[400],
                                 fontSize: 14.sp,
@@ -74,7 +75,7 @@ class SignUpView extends StatelessWidget {
                                 );
                               },
                               child: Text(
-                                "Create Account",
+                                "Login".tr,
                                 style: TextStyle(
                                   color: Constants.MidnightNavy,
                                   fontWeight: FontWeight.bold,
@@ -202,7 +203,7 @@ class SignUpView extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              "Profile Photo",
+              "Profile Photo".tr,
               style: TextStyle(
                 fontSize: 18.sp,
                 fontWeight: FontWeight.w900,
@@ -215,8 +216,8 @@ class SignUpView extends StatelessWidget {
                 backgroundColor: teal.withOpacity(0.1),
                 child: Icon(Icons.camera_alt_rounded, color: teal),
               ),
-              title: const Text(
-                "Take a Photo",
+              title: Text(
+                "Take a Photo".tr,
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
               onTap: () {
@@ -229,8 +230,8 @@ class SignUpView extends StatelessWidget {
                 backgroundColor: teal.withOpacity(0.1),
                 child: Icon(Icons.photo_library_rounded, color: teal),
               ),
-              title: const Text(
-                "Choose from Gallery",
+              title: Text(
+                "Choose from Gallery".tr,
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
               onTap: () {
@@ -249,8 +250,8 @@ class SignUpView extends StatelessWidget {
                     color: Colors.redAccent,
                   ),
                 ),
-                title: const Text(
-                  "Remove Photo",
+                title: Text(
+                  "Remove Photo".tr,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: Colors.redAccent,
@@ -278,16 +279,16 @@ class SignUpView extends StatelessWidget {
   ) {
     return Column(
       children: [
-        _buildInputGroup("Identity", [
+        _buildInputGroup("Identity".tr, [
           _buildGlassField(
-            "First Name",
+            "First Name".tr,
             keyboard: TextInputType.name,
             Icons.badge_outlined,
             model.firstNameController,
             teal,
           ),
           _buildGlassField(
-            "Last Name",
+            "Last Name".tr,
             keyboard: TextInputType.name,
             Icons.badge_outlined,
             model.lastNameController,
@@ -295,13 +296,13 @@ class SignUpView extends StatelessWidget {
           ),
         ]),
         SizedBox(height: 20.h),
-        _buildInputGroup("Patient Bio", [
+        _buildInputGroup("Patient Bio".tr, [
           _buildModernGenderToggle(model, teal),
           Row(
             children: [
               Expanded(
                 child: _buildGlassField(
-                  "Age",
+                  "Age".tr,
                   Icons.event_note_rounded,
                   model.ageController,
                   teal,
@@ -312,7 +313,7 @@ class SignUpView extends StatelessWidget {
               Expanded(
                 flex: 2,
                 child: _buildGlassField(
-                  "Phone",
+                  "Phone".tr,
                   Icons.phonelink_ring_rounded,
                   model.phoneController,
                   teal,
@@ -323,14 +324,14 @@ class SignUpView extends StatelessWidget {
           ),
         ]),
         SizedBox(height: 20.h),
-        _buildInputGroup("Security", [
+        _buildInputGroup("Security".tr, [
           _buildLocationPickerField(
             context,
             model,
             teal,
           ), // FIXED: Correctly passing context
           _buildGlassField(
-            "Email",
+            "Email".tr,
             keyboard: TextInputType.emailAddress,
             Icons.alternate_email_rounded,
             model.emailController,
@@ -412,8 +413,8 @@ class SignUpView extends StatelessWidget {
       ),
       child: Row(
         children: [
-          _genderOption("Male", Icons.male_rounded, model, teal),
-          _genderOption("Female", Icons.female_rounded, model, teal),
+          _genderOption("Male".tr, Icons.male_rounded, model, teal),
+          _genderOption("Female".tr, Icons.female_rounded, model, teal),
         ],
       ),
     );
@@ -475,7 +476,7 @@ class SignUpView extends StatelessWidget {
             fontSize: 14.sp,
             fontWeight: FontWeight.w600,
           ),
-          hintText: "Security Password",
+          hintText: "Security Password".tr,
           prefixIcon: Icon(Icons.lock_person_rounded, color: teal, size: 20.sp),
           suffixIcon: IconButton(
             icon: Icon(
@@ -535,7 +536,7 @@ class SignUpView extends StatelessWidget {
                 ),
               )
             : Text(
-                "Finalize Registration",
+                "Finalize Registration".tr,
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 16.sp,
@@ -581,7 +582,7 @@ class SignUpView extends StatelessWidget {
           color: model.isFetchingLocation ? teal : const Color(0xFF0D1B34),
         ),
         decoration: InputDecoration(
-          hintText: "Clinic/Residential Location",
+          hintText: "Clinic/Residential Location".tr,
           hintStyle: TextStyle(color: Colors.blueGrey[200], fontSize: 14.sp),
           prefixIcon: Icon(Icons.location_on_rounded, color: teal, size: 20.sp),
 
@@ -618,7 +619,7 @@ class SignUpView extends StatelessWidget {
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 15.w),
             child: Text(
-              "Or register with",
+              "Or register with".tr,
               style: TextStyle(
                 color: Colors.blueGrey[300],
                 fontSize: 13.sp,
@@ -688,7 +689,7 @@ class SignUpView extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              "Select Address",
+              "Select Address".tr,
               style: TextStyle(
                 fontSize: 18.sp,
                 fontWeight: FontWeight.w900,
@@ -701,8 +702,8 @@ class SignUpView extends StatelessWidget {
                 backgroundColor: teal.withOpacity(0.1),
                 child: Icon(Icons.my_location, color: teal),
               ),
-              title: const Text(
-                "Use Current GPS",
+              title: Text(
+                "Use Current GPS".tr,
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
               onTap: () {
@@ -715,8 +716,8 @@ class SignUpView extends StatelessWidget {
                 backgroundColor: teal.withOpacity(0.1),
                 child: Icon(Icons.map_outlined, color: teal),
               ),
-              title: const Text(
-                "Select on Map",
+              title: Text(
+                "Select on Map".tr,
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
               onTap: () {

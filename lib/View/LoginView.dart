@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:medical_house/Components/SocialButton.dart';
 import 'package:medical_house/Constants.dart';
 import 'package:provider/provider.dart';
@@ -41,7 +42,7 @@ class LoginView extends StatelessWidget {
 
                         // 3. Welcome Text
                         Text(
-                          "Welcome Back",
+                          "Welcome Back".tr,
                           style: TextStyle(
                             fontSize: 28.sp,
                             fontWeight: FontWeight.w900,
@@ -51,7 +52,7 @@ class LoginView extends StatelessWidget {
                         ),
                         SizedBox(height: 8.h),
                         Text(
-                          "Access your secure patient portal",
+                          "Access your secure patient portal".tr,
                           style: TextStyle(
                             fontSize: 15.sp,
                             color: Colors.blueGrey[300],
@@ -62,7 +63,7 @@ class LoginView extends StatelessWidget {
 
                         // 4. Login Form
                         _buildGlassField(
-                          "Email Address",
+                          "Email Address".tr,
                           Icons.alternate_email_rounded,
                           model.emailController,
                           Constants.SeconadryColor,
@@ -78,7 +79,7 @@ class LoginView extends StatelessWidget {
                           child: TextButton(
                             onPressed: () {},
                             child: Text(
-                              "Forgot Password?",
+                              "Forgot Password?".tr,
                               style: TextStyle(
                                 color: Constants.SeconadryColor,
                                 fontWeight: FontWeight.bold,
@@ -104,7 +105,7 @@ class LoginView extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              "New to Medical House? ",
+                              "New to Medical House? ".tr,
                               style: TextStyle(
                                 color: Colors.blueGrey[400],
                                 fontSize: 14.sp,
@@ -120,7 +121,7 @@ class LoginView extends StatelessWidget {
                                 );
                               },
                               child: Text(
-                                "Create Account",
+                                "Create Account".tr,
                                 style: TextStyle(
                                   color: Constants.MidnightNavy,
                                   fontWeight: FontWeight.bold,
@@ -246,7 +247,7 @@ class LoginView extends StatelessWidget {
             fontSize: 14.sp,
             fontWeight: FontWeight.w600,
           ),
-          hintText: "Security Password",
+          hintText: "Security Password".tr,
           prefixIcon: Icon(Icons.lock_person_rounded, color: teal, size: 20.sp),
           suffixIcon: IconButton(
             icon: Icon(
@@ -304,7 +305,7 @@ class LoginView extends StatelessWidget {
                 ),
               )
             : Text(
-                "Access Portal",
+                "Access Portal".tr,
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 16.sp,
@@ -325,7 +326,7 @@ class LoginView extends StatelessWidget {
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 15.w),
             child: Text(
-              "Or access with",
+              "Or access with".tr,
               style: TextStyle(
                 color: Colors.blueGrey[300],
                 fontSize: 13.sp,
