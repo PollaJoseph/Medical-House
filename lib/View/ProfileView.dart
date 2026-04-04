@@ -632,26 +632,19 @@ class ProfileView extends StatelessWidget {
                 context,
                 listen: false,
               );
-
               bool success = await model.deleteUserAccount();
 
               if (success) {
                 if (context.mounted) {
                   Navigator.of(context).pushAndRemoveUntil(
                     MaterialPageRoute(builder: (context) => const LoginView()),
-                    (Route<dynamic> route) => false,
+                    (route) => false,
                   );
                 }
-              } else {
+              } else if (model.blockingBooking != null) {
                 if (context.mounted) {
                   Navigator.pop(dialogContext);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text(
-                        "Failed to delete account. Please try again.",
-                      ),
-                    ),
-                  );
+                  _showBlockingBookingDialog(context, model.blockingBooking!);
                 }
               }
             },
@@ -659,6 +652,81 @@ class ProfileView extends StatelessWidget {
               "Delete",
               style: TextStyle(
                 color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showBlockingBookingDialog(
+    BuildContext context,
+    Map<String, dynamic> booking,
+  ) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(28.r),
+        ),
+        title: Row(
+          children: [
+            const Icon(Icons.warning_amber_rounded, color: Color(0xFFFFB800)),
+            SizedBox(width: 12.w),
+            const Text("Action Required"),
+          ],
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              "You cannot delete your account while you have active future bookings.",
+            ),
+            SizedBox(height: 20.h),
+            Container(
+              padding: EdgeInsets.all(16.w),
+              decoration: BoxDecoration(
+                color: const Color(0xFFF8FAFC),
+                borderRadius: BorderRadius.circular(16.r),
+                border: Border.all(color: Colors.blueGrey.shade50),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    booking['service'] ?? "Medical Service",
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Constants.MidnightNavy,
+                    ),
+                  ),
+                  SizedBox(height: 4.h),
+                  Text(
+                    "Scheduled for: ${booking['slot_time'].toString().split('T')[0]}",
+                    style: TextStyle(
+                      color: Colors.blueGrey[400],
+                      fontSize: 12.sp,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: 20.h),
+            const Text(
+              "Please cancel this booking first to proceed with account deletion.",
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text(
+              "I Understand",
+              style: TextStyle(
+                color: Constants.MidnightNavy,
                 fontWeight: FontWeight.bold,
               ),
             ),

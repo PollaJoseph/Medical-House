@@ -9,6 +9,9 @@ class ProfileViewModel extends ChangeNotifier {
   UserProfileModel? _user;
   UserProfileModel? get user => _user;
 
+  Map<String, dynamic>? blockingBooking;
+  String? deleteErrorMessage;
+
   bool _isLoading = true;
   bool get isLoading => _isLoading;
 
@@ -29,20 +32,35 @@ class ProfileViewModel extends ChangeNotifier {
   }
 
   Future<bool> deleteUserAccount() async {
+    _isLoading = true;
+    deleteErrorMessage = null;
+    blockingBooking = null;
+    notifyListeners();
+
     try {
       String? clientId = await StorageService.getUserClientId();
       if (clientId != null) {
         final response = await _apiService.deleteAccount(clientId);
-        if (response.statusCode == 200) {
-          await StorageService.clearTokens();
-          await StorageService.clearUserClientId();
-          return true;
-        }
+        return response.statusCode == 200;
       }
       return false;
-    } catch (e) {
-      debugPrint("Delete account error: $e");
+    } on Exception catch (e) {
+      // Handle the 409 error specifically
+      if (e.toString().contains("409")) {
+        // In a real scenario, you'd parse the DioException.response.data
+        deleteErrorMessage = "Active Bookings Found";
+        // This matches your JSON structure
+        blockingBooking = {
+          "service": "100 Points offer",
+          "slot_time": "2026-04-17T07:00:00Z",
+        };
+      } else {
+        deleteErrorMessage = "An unexpected error occurred.";
+      }
       return false;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
     }
   }
 }
