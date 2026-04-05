@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/utils.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:medical_house/Constants.dart';
 import 'package:medical_house/ViewModel/ContactUsViewModel.dart';
@@ -49,7 +50,7 @@ class ContactUsView extends StatelessWidget {
                       children: [
                         Expanded(
                           child: _buildDockButton(
-                            title: "WhatsApp",
+                            title: "WhatsApp".tr,
                             icon: Icons.chat_bubble_rounded,
                             color: whatsappGreen,
                             onTap: () => viewModel.launchWhatsApp(),
@@ -58,7 +59,7 @@ class ContactUsView extends StatelessWidget {
                         SizedBox(width: 8.w),
                         Expanded(
                           child: _buildDockButton(
-                            title: "Call Clinic",
+                            title: "Call Clinic".tr,
                             icon: Icons.phone_in_talk_rounded,
                             color: Constants.PrimaryColor,
                             onTap: () => viewModel.makePhoneCall(),
@@ -126,7 +127,7 @@ class ContactUsView extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "Get in\nTouch.",
+                              "Get in\nTouch.".tr,
                               style: TextStyle(
                                 color: Constants.MidnightNavy,
                                 fontSize: 48.sp,
@@ -137,7 +138,8 @@ class ContactUsView extends StatelessWidget {
                             ),
                             SizedBox(height: 16.h),
                             Text(
-                              "Whether it is a laser consultation or a cosmetic dental service, our medical experts are ready to assist you.",
+                              "Whether it is a laser consultation or a cosmetic dental service, our medical experts are ready to assist you."
+                                  .tr,
                               style: TextStyle(
                                 color: Colors.blueGrey[400],
                                 fontSize: 15.sp,
@@ -251,7 +253,7 @@ class ContactUsView extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "24/7 EMERGENCY",
+                  "24/7 EMERGENCY".tr,
                   style: TextStyle(
                     color: Colors.white70,
                     fontSize: 10.sp,
@@ -262,7 +264,7 @@ class ContactUsView extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Toll Free Line",
+                      "Toll Free Line".tr,
                       style: TextStyle(
                         color: Colors.blueGrey[300],
                         fontSize: 13.sp,
@@ -270,6 +272,7 @@ class ContactUsView extends StatelessWidget {
                     ),
                     Text(
                       "+966 9200 14897",
+                      textDirection: TextDirection.ltr,
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 30.sp,
@@ -296,9 +299,9 @@ class ContactUsView extends StatelessWidget {
       ),
       child: Column(
         children: [
-          _buildModernTimeRow("Sat - Thu", "01:00 PM - 09:00 PM", true),
+          _buildModernTimeRow("Sat - Thu".tr, "01:00 PM - 09:00 PM".tr, true),
           _buildDivider(),
-          _buildModernTimeRow("Friday", "Closed", false),
+          _buildModernTimeRow("Friday".tr, "Closed".tr, false),
         ],
       ),
     );
@@ -389,7 +392,7 @@ class ContactUsView extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "Medical House Hospital",
+                            "Medical House Hospital".tr,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: GoogleFonts.lexend(
@@ -400,7 +403,7 @@ class ContactUsView extends StatelessWidget {
                           ),
                           SizedBox(height: 4.h),
                           Text(
-                            "Jubail, Saudi Arabia",
+                            "Jubail, Saudi Arabia".tr,
                             style: TextStyle(
                               color: Colors.white70,
                               fontSize: 13.sp,
@@ -427,7 +430,7 @@ class ContactUsView extends StatelessWidget {
                       child: Row(
                         children: [
                           Text(
-                            "Open Maps",
+                            "Open Maps".tr,
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 11.sp,

@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:medical_house/Constants.dart';
 
@@ -76,7 +77,7 @@ class AboutView extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "Pioneers of\nHealthcare.",
+          "Pioneers of\nHealthcare.".tr,
           style: GoogleFonts.lexend(
             fontSize: 40.sp,
             fontWeight: FontWeight.w900,
@@ -87,7 +88,8 @@ class AboutView extends StatelessWidget {
         ),
         SizedBox(height: 16.h),
         Text(
-          "Medical House is Jubail's premier destination for advanced therapeutic and cosmetic care, driven by Saudi excellence.",
+          "Medical House is Jubail's premier destination for advanced therapeutic and cosmetic care, driven by Saudi excellence."
+              .tr,
           style: TextStyle(
             color: Colors.blueGrey[400],
             fontSize: 16.sp,
@@ -118,8 +120,9 @@ class AboutView extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildConceptRow(
-            "Our Mission",
-            "Providing comprehensive therapeutic and cosmetic services for all family members. We are committed to keeping up with the latest medical technologies to ensure your comfort and safety at every visit.",
+            "Our Mission".tr,
+            "Providing comprehensive therapeutic and cosmetic services for all family members. We are committed to keeping up with the latest medical technologies to ensure your comfort and safety at every visit."
+                .tr,
             Icons.auto_awesome_rounded,
           ),
           Padding(
@@ -127,8 +130,9 @@ class AboutView extends StatelessWidget {
             child: Divider(color: Colors.white.withOpacity(0.1), thickness: 1),
           ),
           _buildConceptRow(
-            "Our Vision",
-            "To be the leading and trusted destination in the region for dermatological and dental care. We aim for continuous expansion while maintaining our core values of ensuring complete privacy for all our patients.",
+            "Our Vision".tr,
+            "To be the leading and trusted destination in the region for dermatological and dental care. We aim for continuous expansion while maintaining our core values of ensuring complete privacy for all our patients."
+                .tr,
             Icons.visibility_rounded,
           ),
         ],

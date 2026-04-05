@@ -1,8 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_instance/src/extension_instance.dart';
+import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
+import 'package:get/get_utils/src/extensions/internacionalization.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:medical_house/Constants.dart';
+import 'package:medical_house/Localization/LocaleController.dart';
 import 'package:medical_house/Model/ServiceModel.dart';
 import 'package:medical_house/ViewModel/ServiceDetailsViewModel.dart';
 import 'package:provider/provider.dart';
@@ -124,7 +129,7 @@ class ServiceDetailsView extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "About Service",
+          "About Service".tr,
           style: GoogleFonts.lexend(
             fontSize: 18.sp,
             fontWeight: FontWeight.w700,
@@ -145,6 +150,7 @@ class ServiceDetailsView extends StatelessWidget {
   }
 
   Widget _buildBottomBar(BuildContext context, ServiceDetailsViewModel model) {
+    final localeController = Get.find<LocaleController>();
     return Align(
       alignment: Alignment.bottomCenter,
       child: Container(
@@ -166,23 +172,56 @@ class ServiceDetailsView extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  isPointService ? "Total Points" : "Total Price",
+                  isPointService ? "Total Points".tr : "Total Price".tr,
                   style: TextStyle(
                     color: Colors.blueGrey[300],
                     fontSize: 12.sp,
                   ),
                 ),
-                Text(
-                  isPointService
-                      ? "${service.price} Pts"
-                      : "${service.price} SAR",
-                  style: TextStyle(
-                    color: isPointService
-                        ? const Color(0xFFFFB800)
-                        : Constants.PrimaryColor,
-                    fontSize: 22.sp,
-                    fontWeight: FontWeight.w900,
-                  ),
+                // Move the Obx to only wrap the SAR logic
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.baseline,
+                  textBaseline: TextBaseline.alphabetic,
+                  children: [
+                    Text(
+                      "${service.price} ",
+                      style: TextStyle(
+                        color: isPointService
+                            ? const Color(0xFFFFB800)
+                            : Constants.PrimaryColor,
+                        fontSize: 22.sp,
+                        fontWeight: FontWeight.w900,
+                      ),
+                    ),
+                    if (isPointService)
+                      Text(
+                        "Pts".tr,
+                        style: TextStyle(
+                          color: const Color(0xFFFFB800),
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.w900,
+                        ),
+                      )
+                    else
+                      // Wrap ONLY the currency part in Obx
+                      Obx(
+                        () => localeController.isArabic.value
+                            ? Image.asset(
+                                "lib/Assets/Icons/SAR.png",
+                                height: 18.h,
+                                color: Constants.PrimaryColor,
+                              )
+                            : Text(
+                                "SAR",
+                                style: TextStyle(
+                                  color: Constants.PrimaryColor,
+                                  fontSize: 16.sp,
+                                  fontWeight: FontWeight.w900,
+                                ),
+                              ),
+                      ),
+                  ],
                 ),
               ],
             ),
@@ -209,7 +248,7 @@ class ServiceDetailsView extends StatelessWidget {
                         ),
                       )
                     : Text(
-                        "Book Now",
+                        "Book Now".tr,
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 16.sp,
@@ -240,7 +279,7 @@ class ServiceDetailsView extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "Schedule Appointment",
+          "Schedule Appointment".tr,
           style: GoogleFonts.lexend(
             fontSize: 18.sp,
             fontWeight: FontWeight.bold,
@@ -286,7 +325,7 @@ class ServiceDetailsView extends StatelessWidget {
                     children: [
                       Text(
                         model.selectedDateTime == null
-                            ? "Select Date & Time"
+                            ? "Select Date & Time".tr
                             : _formatDate(model.selectedDateTime!),
                         style: TextStyle(
                           color: Constants.MidnightNavy,
@@ -297,7 +336,7 @@ class ServiceDetailsView extends StatelessWidget {
                       SizedBox(height: 4.h),
                       Text(
                         model.selectedDateTime == null
-                            ? "Tap to schedule"
+                            ? "Tap to schedule".tr
                             : _formatTime(model.selectedDateTime!),
                         style: TextStyle(
                           color: Colors.blueGrey[400],
@@ -383,7 +422,7 @@ class ServiceDetailsView extends StatelessWidget {
                 ),
               ),
               Text(
-                "Select Time for ${_formatDate(pickedDate)}",
+                "${"Select Time for".tr} ${_formatDate(pickedDate)}",
                 style: GoogleFonts.lexend(
                   fontSize: 18.sp,
                   fontWeight: FontWeight.bold,
@@ -470,7 +509,7 @@ class ServiceDetailsView extends StatelessWidget {
   }
 
   String _formatTime(DateTime dt) {
-    String period = dt.hour >= 12 ? "PM" : "AM";
+    String period = dt.hour >= 12 ? "PM".tr : "AM".tr;
     int hour12 = dt.hour % 12;
     if (hour12 == 0) hour12 = 12;
     String minute = dt.minute.toString().padLeft(2, '0');

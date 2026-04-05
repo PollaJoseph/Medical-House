@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get_utils/src/extensions/internacionalization.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:medical_house/Constants.dart';
 import 'package:medical_house/ViewModel/PointServicesViewModel.dart';
@@ -27,7 +28,7 @@ class PointServicesView extends StatelessWidget {
             if (viewModel.errorMessage != null) {
               return Center(
                 child: Text(
-                  viewModel.errorMessage ?? "Failed to load rewards.",
+                  viewModel.errorMessage ?? "Failed to load rewards.".tr,
                   style: TextStyle(
                     color: Colors.blueGrey[300],
                     fontSize: 16.sp,
@@ -54,7 +55,7 @@ class PointServicesView extends StatelessWidget {
                           vertical: 16.h,
                         ),
                         title: Text(
-                          "Redeem Rewards",
+                          "Redeem Rewards".tr,
                           style: GoogleFonts.lexend(
                             color: Constants.MidnightNavy,
                             fontWeight: FontWeight.w800,

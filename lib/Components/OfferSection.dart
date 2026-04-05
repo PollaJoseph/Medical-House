@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get_utils/src/extensions/internacionalization.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:medical_house/Constants.dart';
 import 'package:medical_house/Model/ServiceModel.dart';
@@ -63,7 +64,7 @@ class OfferSection extends StatelessWidget {
                   );
                 },
                 child: Text(
-                  "See All",
+                  "See All".tr,
                   style: TextStyle(
                     color: Constants.PrimaryColor,
                     fontWeight: FontWeight.bold,

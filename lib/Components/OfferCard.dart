@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_instance/src/extension_instance.dart';
+import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:medical_house/Constants.dart';
+import 'package:medical_house/Localization/LocaleController.dart';
 import 'package:medical_house/Model/ServiceModel.dart';
 
 class OfferCard extends StatelessWidget {
@@ -12,6 +16,8 @@ class OfferCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final localeController = Get.find<LocaleController>();
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -85,6 +91,9 @@ class OfferCard extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
+                      // 1. First, find the LocaleController at the start of your build method
+
+                      // 2. Replace the price Container inside the Row
                       Container(
                         padding: EdgeInsets.symmetric(
                           horizontal: 14.w,
@@ -94,12 +103,37 @@ class OfferCard extends StatelessWidget {
                           color: Constants.PrimaryColor.withOpacity(0.08),
                           borderRadius: BorderRadius.circular(16.r),
                         ),
-                        child: Text(
-                          "${offer.price} SAR",
-                          style: TextStyle(
-                            color: Constants.PrimaryColor,
-                            fontWeight: FontWeight.w900,
-                            fontSize: 15.sp,
+                        child: Obx(
+                          () => Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              // The Price Text
+                              Text(
+                                "${offer.price} ",
+                                style: TextStyle(
+                                  color: Constants.PrimaryColor,
+                                  fontWeight: FontWeight.w900,
+                                  fontSize: 15.sp,
+                                ),
+                              ),
+
+                              // Conditional Logic for Currency
+                              localeController.isArabic.value
+                                  ? Image.asset(
+                                      "lib/Assets/Icons/SAR.png",
+                                      height: 14.h, // Scaled to match font size
+                                      color: Constants
+                                          .PrimaryColor, // Optional: tinted to match theme
+                                    )
+                                  : Text(
+                                      "SAR",
+                                      style: TextStyle(
+                                        color: Constants.PrimaryColor,
+                                        fontWeight: FontWeight.w900,
+                                        fontSize: 13.sp,
+                                      ),
+                                    ),
+                            ],
                           ),
                         ),
                       ),

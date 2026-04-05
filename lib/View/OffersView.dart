@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:medical_house/Components/OfferSection.dart';
 import 'package:medical_house/Constants.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -34,7 +35,7 @@ class OffersView extends StatelessWidget {
                             vertical: 16.h,
                           ),
                           title: Text(
-                            "Exclusive Offers",
+                            "Exclusive Offers".tr,
                             style: GoogleFonts.lexend(
                               color: Constants.MidnightNavy,
                               fontWeight: FontWeight.w800,

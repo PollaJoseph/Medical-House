@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get_utils/src/extensions/internacionalization.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:medical_house/Constants.dart';
 import 'package:medical_house/Model/PointServiceModel.dart';
@@ -110,7 +111,7 @@ class PointServiceCard extends StatelessWidget {
                             ),
                             SizedBox(width: 6.w),
                             Text(
-                              "${service.points} Pts",
+                              "${service.points} ${"Pts".tr}",
                               style: TextStyle(
                                 color: Constants.MidnightNavy,
                                 fontWeight: FontWeight.w900,

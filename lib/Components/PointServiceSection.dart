@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:medical_house/Constants.dart';
 import 'package:medical_house/Model/PointServiceModel.dart';
@@ -55,7 +56,7 @@ class PointServiceSection extends StatelessWidget {
                   );
                 },
                 child: Text(
-                  "See All",
+                  "See All".tr,
                   style: TextStyle(
                     color: Constants.PrimaryColor,
                     fontWeight: FontWeight.bold,
@@ -68,9 +69,8 @@ class PointServiceSection extends StatelessWidget {
         ),
         SizedBox(height: 16.h),
 
-        // Exact same height as your OfferSection
         SizedBox(
-          height: 320.h,
+          height: 322.h,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             physics: const BouncingScrollPhysics(),
