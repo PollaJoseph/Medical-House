@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:medical_house/Constants.dart';
 import 'package:medical_house/Model/HomeModel.dart';
 import 'package:medical_house/View/ServiceDetailsView.dart';
@@ -116,7 +117,7 @@ class SectionDetailView extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(8.r),
                                 ),
                                 child: Text(
-                                  "VIP CLINIC",
+                                  "VIP CLINIC".tr,
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 10.sp,
@@ -161,7 +162,7 @@ class SectionDetailView extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Text(
-                    "Our Services",
+                    "Our Services".tr,
                     style: TextStyle(
                       color: midnightNavy,
                       fontSize: 24.sp,
@@ -170,7 +171,7 @@ class SectionDetailView extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    "${section.subSections.length} Available",
+                    "${section.subSections.length} ${"Available".tr}",
                     style: TextStyle(
                       color: Colors.blueGrey[400],
                       fontSize: 14.sp,
@@ -273,7 +274,7 @@ class SectionDetailView extends StatelessWidget {
                                         ),
                                         SizedBox(width: 4.w),
                                         Text(
-                                          "Premium Care",
+                                          "Premium Care".tr,
                                           style: TextStyle(
                                             color: Colors.blueGrey[400],
                                             fontSize: 12.sp,

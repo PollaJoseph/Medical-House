@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get_utils/src/extensions/internacionalization.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:medical_house/Constants.dart';
 import 'package:medical_house/ViewModel/ArticleDetailsViewModel.dart';
@@ -31,7 +32,7 @@ class ArticlesDetailsView extends StatelessWidget {
             if (model.errorMessage != null || model.article == null) {
               return Center(
                 child: Text(
-                  model.errorMessage ?? "Failed to load article.",
+                  model.errorMessage ?? "Failed to load article.".tr,
                   style: TextStyle(
                     color: Colors.blueGrey[300],
                     fontSize: 16.sp,
@@ -388,7 +389,7 @@ class ArticlesDetailsView extends StatelessWidget {
               ),
 
               Text(
-                "Share Article",
+                "Share Article".tr,
                 style: GoogleFonts.lexend(
                   fontSize: 20.sp,
                   fontWeight: FontWeight.w800,
@@ -436,7 +437,7 @@ class ArticlesDetailsView extends StatelessWidget {
                           ),
                           SizedBox(height: 4.h),
                           Text(
-                            "By ${article.authorUsername}",
+                            "${"By".tr} ${article.authorUsername}",
                             style: TextStyle(
                               fontSize: 12.sp,
                               color: Colors.blueGrey[400],
@@ -469,7 +470,7 @@ class ArticlesDetailsView extends StatelessWidget {
                         color: Colors.white,
                       ),
                       label: Text(
-                        "Share Now",
+                        "Share Now".tr,
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 15.sp,
@@ -509,7 +510,7 @@ Read this full medical article and discover more health insights on the Medical 
                       ),
                       icon: const Icon(Icons.copy_rounded),
                       label: Text(
-                        "Copy Title",
+                        "Copy Title".tr,
                         style: TextStyle(
                           fontSize: 15.sp,
                           fontWeight: FontWeight.bold,
@@ -520,8 +521,8 @@ Read this full medical article and discover more health insights on the Medical 
                         Navigator.pop(context);
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
-                            content: const Text(
-                              "Article title copied to clipboard!",
+                            content: Text(
+                              "Article title copied to clipboard!".tr,
                             ),
                             backgroundColor: Constants.MidnightNavy,
                             behavior: SnackBarBehavior.floating,

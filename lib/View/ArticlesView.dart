@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:medical_house/Components/ArticleMagazineCard.dart';
 import 'package:medical_house/Components/CategoryChip.dart';
 import 'package:medical_house/Constants.dart';
@@ -61,7 +62,7 @@ class ArticlesView extends StatelessWidget {
       ),
       flexibleSpace: FlexibleSpaceBar(
         title: Text(
-          "Medical Articles",
+          "Medical Articles".tr,
           style: TextStyle(
             color: Constants.MidnightNavy,
             fontWeight: FontWeight.bold,
@@ -105,7 +106,7 @@ class ArticlesView extends StatelessWidget {
           padding: EdgeInsets.only(top: 100.h),
           child: Center(
             child: Text(
-              "No articles found for this category.",
+              "No articles found for this category.".tr,
               style: TextStyle(color: Colors.blueGrey[300], fontSize: 16.sp),
             ),
           ),

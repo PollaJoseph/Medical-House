@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:medical_house/Constants.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -56,7 +57,7 @@ class ArticleCard extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              "Health & Wellness",
+                              "Health & Wellness".tr,
                               style: GoogleFonts.lexend(
                                 color: Constants.PrimaryColor,
                                 fontSize: 12.sp,
@@ -66,7 +67,7 @@ class ArticleCard extends StatelessWidget {
                             ),
                             SizedBox(height: 8.h),
                             Text(
-                              "Discover Daily Tips &\nMedical Articles",
+                              "Discover Daily Tips &\nMedical Articles".tr,
                               style: GoogleFonts.lexend(
                                 color: Colors.white,
                                 fontSize: 18.sp,

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get_utils/src/extensions/internacionalization.dart';
+import 'package:medical_house/Components/CustomSnackBar.dart';
 import 'package:medical_house/Constants.dart';
 import 'package:medical_house/Model/HomeModel.dart';
 import 'package:medical_house/Model/ServiceModel.dart';
@@ -13,7 +15,7 @@ class HomeViewModel extends ChangeNotifier {
 
   HomeViewModel({String? name, String? imageUrl, int? points}) {
     currentUser = PatientProfile(
-      name: name ?? "Guest User",
+      name: name ?? "Guest User".tr,
       imageUrl: imageUrl ?? Constants.MaleAvatarImagePath,
       points: points ?? 0,
     );
@@ -21,12 +23,12 @@ class HomeViewModel extends ChangeNotifier {
 
   final List<HospitalSection> hospitalSections = [
     HospitalSection(
-      mainTitle: "Dermatology & Cosmetology",
+      mainTitle: "Dermatology & Cosmetology".tr,
       imageUrl: Constants.DermatologySectionImagePath,
       subSections: [],
     ),
     HospitalSection(
-      mainTitle: "Dental Department",
+      mainTitle: "Dental Department".tr,
       imageUrl: Constants.DentalSectionImagePath,
       subSections: [],
     ),
@@ -40,14 +42,9 @@ class HomeViewModel extends ChangeNotifier {
     notifyListeners();
 
     try {
-      // 1. Fetch the data
       List<ServiceModel> fetchedServices = await _apiService
           .getServicesByCategory(section.mainTitle);
-
-      // 2. Clear the old list
       section.subSections.clear();
-
-      // 3. FIXED: Just add the fetched services directly! No .map() needed.
       section.subSections.addAll(fetchedServices);
 
       if (context.mounted) {
@@ -61,13 +58,10 @@ class HomeViewModel extends ChangeNotifier {
     } catch (e) {
       debugPrint("API Error: $e");
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text(
-              "Failed to load services. Please check your connection.",
-            ),
-            backgroundColor: Color(0xFFFF4B4B),
-          ),
+        CustomSnackBar.showError(
+          context,
+          title: "Error".tr,
+          message: "Failed to load services. Please check your connection.".tr,
         );
       }
     } finally {

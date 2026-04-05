@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:medical_house/Components/ArticleCard.dart';
 import 'package:medical_house/Constants.dart';
 import 'package:medical_house/Model/HomeModel.dart';
@@ -27,7 +28,6 @@ class HomeView extends StatelessWidget {
         body: Consumer<HomeViewModel>(
           builder: (context, model, _) {
             return SafeArea(
-              // NEW: Wrapped in a Stack to support the Loading Overlay
               child: Stack(
                 children: [
                   CustomScrollView(
@@ -38,10 +38,8 @@ class HomeView extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             SizedBox(height: 20.h),
-                            // 1. Minimal Header
                             _buildMinimalHeader(model, Constants.MidnightNavy),
                             SizedBox(height: 30.h),
-                            // 2. VIP Points Wallet
                             _buildPointsWallet(
                               model,
                               Constants.MidnightNavy,
@@ -63,7 +61,7 @@ class HomeView extends StatelessWidget {
                             Padding(
                               padding: EdgeInsets.symmetric(horizontal: 12.w),
                               child: Text(
-                                "Our Premium Centers",
+                                "Our Premium Centers".tr,
                                 style: TextStyle(
                                   fontSize: 22.sp,
                                   fontWeight: FontWeight.w900,
@@ -160,7 +158,7 @@ class HomeView extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Welcome back,",
+                    "Welcome back,".tr,
                     style: TextStyle(
                       color: Colors.blueGrey[400],
                       fontSize: 13.sp,
@@ -217,7 +215,7 @@ class HomeView extends StatelessWidget {
                     Icon(Icons.spa_rounded, color: teal, size: 16.sp),
                     SizedBox(width: 6.w),
                     Text(
-                      "Wellness Care Points",
+                      "Wellness Care Points".tr,
                       style: TextStyle(
                         color: Colors.blueGrey[400],
                         fontSize: 12.sp,
@@ -244,7 +242,7 @@ class HomeView extends StatelessWidget {
                     ),
                     SizedBox(width: 6.w),
                     Text(
-                      "Pts",
+                      "Pts".tr,
                       style: TextStyle(
                         color: teal,
                         fontSize: 16.sp,
