@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:get/get_utils/src/extensions/internacionalization.dart';
+import 'package:medical_house/Components/CustomSnackBar.dart';
 import 'package:medical_house/Model/OTPVerificationModel.dart';
 import 'package:medical_house/Model/ResendOTP.dart';
 import 'package:medical_house/Services/ApiService.dart';
@@ -65,6 +67,11 @@ class OTPViewModel extends ChangeNotifier {
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         if (context.mounted) {
+          CustomSnackBar.showSuccess(
+            context,
+            title: "OTP Verified".tr,
+            message: "Your email has been verified.".tr,
+          );
           Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
@@ -80,11 +87,26 @@ class OTPViewModel extends ChangeNotifier {
       }
     } catch (e) {
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(e.toString().replaceAll('Exception: ', '')),
-            backgroundColor: Colors.red,
-          ),
+        debugPrint('Login error: $e');
+        String cleanMessage = 'An unexpected error occurred'.tr;
+        if (e.toString().contains('Invalid email or password')) {
+          cleanMessage = 'Invalid email or password'.tr;
+        } else if (e.toString().contains('401')) {
+          cleanMessage = 'Unauthorized: Please check your credentials'.tr;
+        } else {
+          cleanMessage = e
+              .toString()
+              .split(':')
+              .last
+              .replaceAll('{', '')
+              .replaceAll('}', '')
+              .trim();
+        }
+
+        CustomSnackBar.showError(
+          context,
+          title: 'Verification Failed'.tr,
+          message: cleanMessage,
         );
       }
     } finally {
@@ -106,18 +128,35 @@ class OTPViewModel extends ChangeNotifier {
       if (response.statusCode == 200 || response.statusCode == 201) {
         startTimer();
         if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text("New code sent!"),
-              backgroundColor: Color(0xFF1A73E8),
-            ),
+          CustomSnackBar.showSuccess(
+            context,
+            title: "OTP Resent".tr,
+            message: "New code sent!".tr,
           );
         }
       }
     } catch (e) {
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(e.toString()), backgroundColor: Colors.red),
+        debugPrint('Login error: $e');
+        String cleanMessage = 'An unexpected error occurred'.tr;
+        if (e.toString().contains('Invalid email or password')) {
+          cleanMessage = 'Invalid email or password'.tr;
+        } else if (e.toString().contains('401')) {
+          cleanMessage = 'Unauthorized: Please check your credentials'.tr;
+        } else {
+          cleanMessage = e
+              .toString()
+              .split(':')
+              .last
+              .replaceAll('{', '')
+              .replaceAll('}', '')
+              .trim();
+        }
+
+        CustomSnackBar.showError(
+          context,
+          title: 'Resend Code Failed'.tr,
+          message: cleanMessage,
         );
       }
     } finally {

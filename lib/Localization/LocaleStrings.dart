@@ -61,9 +61,51 @@ class LocaleStrings extends Translations {
       "Permission Denied": "Permission Denied",
       "Location Found": "Location Found",
       "Failed to get location": "Failed to get location",
+      "Verify Your Identity": "Verify Your Identity",
+      "A 6-digit code has been sent to\n": "A 6-digit code has been sent to\n",
+      "ENTER VERIFICATION CODE": "ENTER VERIFICATION CODE",
+      "Resend Code": "Resend Code",
+      "Didn't receive the code?": "Didn't receive the code?",
+      "Resend available soon": "Resend available soon",
+      "Verify & Continue": "Verify & Continue",
+      "Your medical data is protected. Never share this code with anyone.":
+          "Your medical data is protected. Never share this code with anyone.",
+      "OTP Failed": "OTP Failed",
+      "Please enter the complete 6-digit code":
+          "Please enter the complete 6-digit code",
+      "OTP Sent": "OTP Sent",
+      "A new code has been sent to your email":
+          "A new code has been sent to your email",
+      "OTP Verified": "OTP Verified",
+      "Your email has been verified.": "Your email has been verified.",
+      "OTP Resent": "OTP Resent",
+      "New code sent!": "New code sent!",
+      "Resend Code Failed": "Resend Code Failed",
+      "Verification Failed": "Verification Failed",
     },
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     'ar_EG': {
+      "Resend Code Failed": "فشل إعادة إرسال الرمز",
+      "Verification Failed": "فشل التحقق",
+      "OTP Failed": "فشل رمز التحقق",
+      "Please enter the complete 6-digit code":
+          "يرجى إدخال الرمز المكون من 6 أرقام كاملاً",
+      "OTP Sent": "تم إرسال الرمز",
+      "A new code has been sent to your email":
+          "تم إرسال رمز جديد إلى بريدك الإلكتروني",
+      "OTP Verified": "تم التحقق من الرمز",
+      "Your email has been verified.": "تم التحقق من بريدك الإلكتروني بنجاح.",
+      "OTP Resent": "تم إعادة إرسال الرمز",
+      "New code sent!": "تم إرسال رمز جديد!",
+      "Verify Your Identity": "تحقق من هويتك",
+      "A 6-digit code has been sent to\n": "تم إرسال رمز مكون من 6 أرقام إلى\n",
+      "ENTER VERIFICATION CODE": "أدخل رمز التحقق",
+      "Resend Code": "إعادة إرسال الرمز",
+      "Didn't receive the code?": "لم يصلك الرمز؟",
+      "Resend available soon": "إعادة الإرسال ستكون متاحة قريباً",
+      "Verify & Continue": "تحقق واستمر",
+      "Your medical data is protected. Never share this code with anyone.":
+          "بياناتك الطبية محمية. لا تشارك هذا الرمز مع أي شخص أبدًا.",
       "Sign Up Successful": "تم إنشاء الحساب بنجاح",
       "Welcome to Medical House! Your health journey starts here.":
           "مرحباً بك في ميديكال هاوس! رحلتك الصحية تبدأ من هنا.",

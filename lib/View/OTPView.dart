@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:medical_house/Components/CustomOTPForm.dart';
+import 'package:medical_house/Components/CustomSnackBar.dart';
 import 'package:medical_house/Constants.dart';
 import 'package:medical_house/ViewModel/OTPViewModel.dart';
 import 'package:provider/provider.dart';
@@ -85,16 +87,12 @@ class _OTPViewState extends State<OTPView> with SingleTickerProviderStateMixin {
 
   Future<void> _verifyOTP() async {
     if (_currentOTP.length < 6) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: const Text('Please enter the complete 6-digit code'),
-          backgroundColor: Colors.red.shade400,
-          behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-        ),
+      CustomSnackBar.showError(
+        context,
+        title: "OTP Failed".tr,
+        message: "Please enter the complete 6-digit code".tr,
       );
+
       return;
     }
     setState(() => _isLoading = true);
@@ -106,14 +104,10 @@ class _OTPViewState extends State<OTPView> with SingleTickerProviderStateMixin {
   void _resendOTP() {
     if (!_canResend) return;
     _startTimer();
-    // Trigger resend API call here
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: const Text('A new code has been sent to your email'),
-        backgroundColor: const Color(0xFF1A73E8),
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      ),
+    CustomSnackBar.showSuccess(
+      context,
+      title: "OTP Sent".tr,
+      message: "A new code has been sent to your email".tr,
     );
   }
 
@@ -176,23 +170,6 @@ class _OTPViewState extends State<OTPView> with SingleTickerProviderStateMixin {
                                 height: 150.h,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(20.r),
-                                  /* gradient: const LinearGradient(
-                                    colors: [
-                                      Color(0xFF1A73E8),
-                                      Color(0xFF0D47A1),
-                                    ],
-                                    begin: Alignment.topLeft,
-                                    end: Alignment.bottomRight,
-                                  ),*/
-                                  /*boxShadow: [
-                                    BoxShadow(
-                                      color: const Color(
-                                        0xFF1A73E8,
-                                      ).withOpacity(0.35),
-                                      blurRadius: 20,
-                                      offset: const Offset(0, 8),
-                                    ),
-                                  ],*/
                                 ),
                                 child: Image.asset(
                                   Constants.LogoImagePath,
@@ -204,8 +181,8 @@ class _OTPViewState extends State<OTPView> with SingleTickerProviderStateMixin {
                               const SizedBox(height: 28),
 
                               // Title
-                              const Text(
-                                'Verify Your Identity',
+                              Text(
+                                'Verify Your Identity'.tr,
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontFamily: 'Georgia',
@@ -229,8 +206,9 @@ class _OTPViewState extends State<OTPView> with SingleTickerProviderStateMixin {
                                     height: 1.6,
                                   ),
                                   children: [
-                                    const TextSpan(
-                                      text: 'A 6-digit code has been sent to\n',
+                                    TextSpan(
+                                      text: 'A 6-digit code has been sent to\n'
+                                          .tr,
                                     ),
                                     TextSpan(
                                       text: _maskEmail(widget.email),
@@ -247,7 +225,7 @@ class _OTPViewState extends State<OTPView> with SingleTickerProviderStateMixin {
 
                               // OTP label
                               Text(
-                                'ENTER VERIFICATION CODE',
+                                'ENTER VERIFICATION CODE'.tr,
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontSize: 11,
@@ -306,7 +284,7 @@ class _OTPViewState extends State<OTPView> with SingleTickerProviderStateMixin {
                                               ).withOpacity(0.3),
                                             ),
                                           ),
-                                          child: const Row(
+                                          child: Row(
                                             mainAxisSize: MainAxisSize.min,
                                             children: [
                                               Icon(
@@ -316,7 +294,7 @@ class _OTPViewState extends State<OTPView> with SingleTickerProviderStateMixin {
                                               ),
                                               SizedBox(width: 8),
                                               Text(
-                                                'Resend Code',
+                                                'Resend Code'.tr,
                                                 style: TextStyle(
                                                   fontSize: 15,
                                                   fontWeight: FontWeight.w700,
@@ -332,7 +310,7 @@ class _OTPViewState extends State<OTPView> with SingleTickerProviderStateMixin {
                                         key: const ValueKey('timer'),
                                         children: [
                                           Text(
-                                            "Didn't receive the code?",
+                                            "Didn't receive the code?".tr,
                                             textAlign: TextAlign.center,
                                             style: TextStyle(
                                               fontSize: 13.5,
@@ -371,7 +349,7 @@ class _OTPViewState extends State<OTPView> with SingleTickerProviderStateMixin {
                                           ),
                                           const SizedBox(height: 8),
                                           Text(
-                                            'Resend available soon',
+                                            'Resend available soon'.tr,
                                             textAlign: TextAlign.center,
                                             style: TextStyle(
                                               fontSize: 12,
@@ -443,7 +421,7 @@ class _OTPViewState extends State<OTPView> with SingleTickerProviderStateMixin {
                                                     ),
                                               )
                                             : Text(
-                                                'Verify & Continue',
+                                                'Verify & Continue'.tr,
                                                 style: TextStyle(
                                                   fontSize: 16,
                                                   fontWeight: FontWeight.w700,
@@ -492,7 +470,8 @@ class _OTPViewState extends State<OTPView> with SingleTickerProviderStateMixin {
                                     const SizedBox(width: 12),
                                     Expanded(
                                       child: Text(
-                                        'Your medical data is protected. Never share this code with anyone.',
+                                        'Your medical data is protected. Never share this code with anyone.'
+                                            .tr,
                                         style: TextStyle(
                                           fontSize: 12.5,
                                           color: Colors.green.shade800,
