@@ -1,9 +1,11 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:get/get_utils/src/extensions/internacionalization.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:location/location.dart' as loc;
 import 'package:geocoding/geocoding.dart';
+import 'package:medical_house/Components/CustomSnackBar.dart';
 import 'package:medical_house/Components/MainWrapper.dart';
 import 'package:medical_house/Model/SignUpAPIModel.dart';
 import 'package:medical_house/Services/ApiService.dart';
@@ -58,7 +60,7 @@ class SignUpViewModel extends ChangeNotifier {
 
   Future<void> getCurrentLocation() async {
     isFetchingLocation = true;
-    locationController.text = "Locating...";
+    locationController.text = "Locating...".tr;
     notifyListeners();
 
     loc.Location location = loc.Location();
@@ -71,7 +73,7 @@ class SignUpViewModel extends ChangeNotifier {
       if (!serviceEnabled) {
         serviceEnabled = await location.requestService();
         if (!serviceEnabled) {
-          locationController.text = "GPS Disabled";
+          locationController.text = "GPS Disabled".tr;
           return;
         }
       }
@@ -80,7 +82,7 @@ class SignUpViewModel extends ChangeNotifier {
       if (permissionGranted == loc.PermissionStatus.denied) {
         permissionGranted = await location.requestPermission();
         if (permissionGranted != loc.PermissionStatus.granted) {
-          locationController.text = "Permission Denied";
+          locationController.text = "Permission Denied".tr;
           return;
         }
       }
@@ -103,14 +105,14 @@ class SignUpViewModel extends ChangeNotifier {
         if (subLocality.isNotEmpty && adminArea.isNotEmpty) {
           locationController.text = "$subLocality, $adminArea";
         } else {
-          locationController.text = place.locality ?? "Location Found";
+          locationController.text = place.locality ?? "Location Found".tr;
         }
       } else {
         locationController.text = "$latitude, $longitude";
       }
     } catch (e) {
       debugPrint("Location Error: $e");
-      locationController.text = "Failed to get location";
+      locationController.text = "Failed to get location".tr;
     } finally {
       isFetchingLocation = false;
       notifyListeners();
@@ -132,11 +134,10 @@ class SignUpViewModel extends ChangeNotifier {
     if (firstNameController.text.isEmpty ||
         emailController.text.isEmpty ||
         passwordController.text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Please fill in all required fields"),
-          backgroundColor: Colors.redAccent,
-        ),
+      CustomSnackBar.showWarning(
+        context,
+        title: 'Sign Up Failed'.tr,
+        message: "Please fill in all required fields".tr,
       );
       return;
     }
@@ -164,12 +165,13 @@ class SignUpViewModel extends ChangeNotifier {
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text("Account Created Successfully!"),
-              backgroundColor: Colors.green,
-            ),
+          CustomSnackBar.showSuccess(
+            context,
+            title: 'Sign Up Successful'.tr,
+            message:
+                "Welcome to Medical House! Your health journey starts here.".tr,
           );
+
           StorageService.saveUserClientId(response.data['ClientID'].toString());
           Navigator.pushAndRemoveUntil(
             context,
@@ -184,14 +186,23 @@ class SignUpViewModel extends ChangeNotifier {
       }
     } catch (e) {
       debugPrint("Registration Error: $e");
+
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              "Registration Failed: ${e.toString().replaceAll('Exception: ', '')}",
-            ),
-            backgroundColor: Colors.redAccent,
-          ),
+        String errorMessage =
+            "Could not create account. Please check your information and try again."
+                .tr;
+
+        if (e.toString().contains("Email already registered")) {
+          errorMessage = "Email already registered".tr;
+        } else if (e.toString().contains("400")) {
+          errorMessage =
+              "Invalid registration data. Please verify your details.".tr;
+        }
+
+        CustomSnackBar.showError(
+          context,
+          title: 'Sign Up Failed'.tr,
+          message: errorMessage,
         );
       }
     } finally {

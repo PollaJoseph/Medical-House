@@ -50,9 +50,30 @@ class LocaleStrings extends Translations {
       "Please fill in all fields": "Please fill in all fields",
       "Welcome back to Medical House!": "Welcome back to Medical House!",
       "Login Successful": "Login Successful",
+      "Sign Up Successful": "Sign Up Successful",
+      "Welcome to Medical House! Your health journey starts here.":
+          "Welcome to Medical House! Your health journey starts here.",
+      "Please fill in all required fields":
+          "Please fill in all required fields",
+      "Sign Up Failed": "Sign Up Failed",
+      "Locating...": "Locating...",
+      "GPS Disabled": "GPS Disabled",
+      "Permission Denied": "Permission Denied",
+      "Location Found": "Location Found",
+      "Failed to get location": "Failed to get location",
     },
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     'ar_EG': {
+      "Sign Up Successful": "تم إنشاء الحساب بنجاح",
+      "Welcome to Medical House! Your health journey starts here.":
+          "مرحباً بك في ميديكال هاوس! رحلتك الصحية تبدأ من هنا.",
+      "Please fill in all required fields": "يرجى ملء جميع الحقول المطلوبة",
+      "Sign Up Failed": "فشل إنشاء الحساب",
+      "Locating...": "جاري تحديد الموقع...",
+      "GPS Disabled": "خدمة الـ GPS معطلة",
+      "Permission Denied": "تم رفض إذن الوصول للموقع",
+      "Location Found": "تم تحديد الموقع بنجاح",
+      "Failed to get location": "فشل في تحديد الموقع",
       "Welcome back to Medical House!": "مرحباً بك مجدداً في ميديكال هاوس!",
       "Login Successful": "تم تسجيل الدخول بنجاح",
       "Settings": "الإعدادات",
