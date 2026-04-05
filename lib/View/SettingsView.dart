@@ -217,7 +217,7 @@ class SettingsView extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    user?.username ?? "Medical User",
+                                    user?.username ?? "Medical User".tr,
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 20.sp,
@@ -249,9 +249,13 @@ class SettingsView extends StatelessWidget {
 
                 SizedBox(height: 20.h),
                 Padding(
-                  padding: EdgeInsets.only(left: 32.w, bottom: 8.h),
+                  padding: EdgeInsets.only(
+                    left: 32.w,
+                    bottom: 8.h,
+                    right: 32.w,
+                  ),
                   child: Text(
-                    "GENERAL",
+                    "GENERAL".tr,
                     style: TextStyle(
                       color: Colors.blueGrey[400],
                       fontSize: 12.sp,
@@ -293,7 +297,7 @@ class SettingsView extends StatelessWidget {
                 ),
 
                 SettingsButton(
-                  text: "Change Password",
+                  text: "Change Password".tr,
                   icon: Icons.password,
                   onClick: () {
                     Navigator.push(
@@ -307,7 +311,7 @@ class SettingsView extends StatelessWidget {
                   textColor: Constants.MidnightNavy,
                 ),
                 SettingsButton(
-                  text: "Terms and Conditions",
+                  text: "Terms and Conditions".tr,
                   icon: Icons.article_outlined,
                   onClick: () {
                     Navigator.push(
@@ -319,7 +323,7 @@ class SettingsView extends StatelessWidget {
                   textColor: Constants.MidnightNavy,
                 ),
                 SettingsButton(
-                  text: "Policy and Privacy",
+                  text: "Policy and Privacy".tr,
                   icon: Icons.privacy_tip_outlined,
                   onClick: () {
                     Navigator.push(
@@ -331,7 +335,7 @@ class SettingsView extends StatelessWidget {
                   textColor: Constants.MidnightNavy,
                 ),
                 SettingsButton(
-                  text: "Contact Us",
+                  text: "Contact Us".tr,
                   icon: Icons.contact_support_outlined,
                   onClick: () {
                     Navigator.push(
@@ -344,7 +348,7 @@ class SettingsView extends StatelessWidget {
                 ),
 
                 SettingsButton(
-                  text: "About Us",
+                  text: "About Us".tr,
                   icon: Icons.info_outline,
                   onClick: () {
                     Navigator.push(
@@ -362,7 +366,7 @@ class SettingsView extends StatelessWidget {
 
                 // 5. Destructive Action (Logout)
                 SettingsButton(
-                  text: "Log Out",
+                  text: "Log Out".tr,
                   icon: Icons.logout_rounded,
                   hideArrow: true, // Arrow hidden for actions
                   onClick: () async {

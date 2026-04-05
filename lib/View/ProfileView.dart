@@ -1,9 +1,11 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get_utils/src/extensions/internacionalization.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:medical_house/Constants.dart';
 import 'package:medical_house/View/LoginView.dart';
+import 'package:medical_house/View/PointServicesView.dart';
 import 'package:medical_house/ViewModel/ProfileViewModel.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -26,8 +28,7 @@ class ProfileView extends StatelessWidget {
             }
 
             final user = model.user; //
-            if (user == null)
-              return const Center(child: Text("User not found"));
+            if (user == null) return Center(child: Text("User not found".tr));
 
             return CustomScrollView(
               physics: const BouncingScrollPhysics(),
@@ -40,13 +41,13 @@ class ProfileView extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         SizedBox(height: 24.h),
-                        _buildPointsHighlight(user.points),
+                        _buildPointsHighlight(user.points, context),
                         SizedBox(height: 32.h),
-                        _buildSectionHeader("Account Details"),
+                        _buildSectionHeader("Account Details".tr),
                         SizedBox(height: 16.h),
                         _buildProfileGrid(user),
                         SizedBox(height: 32.h),
-                        _buildSectionHeader("Identification Pass"),
+                        _buildSectionHeader("Identification Pass".tr),
                         SizedBox(height: 16.h),
                         _buildPremiumQRCard(user.qrCode),
                         SizedBox(height: 60.h),
@@ -104,7 +105,7 @@ class ProfileView extends StatelessWidget {
                     color: Color(0xFFFF4B4B),
                     size: 20,
                   ),
-                  tooltip: "Delete Account",
+                  tooltip: "Delete Account".tr,
                   onPressed: () => _showDeleteConfirmation(context), //
                 ),
               ),
@@ -151,7 +152,7 @@ class ProfileView extends StatelessWidget {
                       ),
                     ),
                     child: Text(
-                      "VERIFIED ACCOUNT",
+                      "VERIFIED ACCOUNT".tr,
                       style: TextStyle(
                         color: Constants.PrimaryColor,
                         fontWeight: FontWeight.w900,
@@ -179,71 +180,79 @@ class ProfileView extends StatelessWidget {
     );
   }
 
-  Widget _buildPointsHighlight(int points) {
-    return Container(
-      width: double.infinity,
-      padding: EdgeInsets.all(24.w),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(32.r),
-        boxShadow: [
-          BoxShadow(
-            color: Constants.MidnightNavy.withOpacity(0.06),
-            blurRadius: 30,
-            offset: const Offset(0, 15),
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Point Balance",
-                  style: TextStyle(
-                    color: Colors.blueGrey[300],
-                    fontSize: 13.sp,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                SizedBox(height: 4.h),
-                Text(
-                  "$points Pts", //
-                  style: GoogleFonts.lexend(
-                    fontSize: 26.sp,
-                    fontWeight: FontWeight.w900,
-                    color: Constants.MidnightNavy,
-                  ),
-                ),
-              ],
+  Widget _buildPointsHighlight(int points, BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => PointServicesView()),
+        );
+      },
+      child: Container(
+        width: double.infinity,
+        padding: EdgeInsets.all(24.w),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(32.r),
+          boxShadow: [
+            BoxShadow(
+              color: Constants.MidnightNavy.withOpacity(0.06),
+              blurRadius: 30,
+              offset: const Offset(0, 15),
             ),
-          ),
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 12.h),
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [Constants.PrimaryColor, const Color(0xFF078D9A)],
-              ),
-              borderRadius: BorderRadius.circular(16.r),
-              boxShadow: [
-                BoxShadow(
-                  color: Constants.PrimaryColor.withOpacity(0.3),
-                  blurRadius: 15,
-                  offset: const Offset(0, 8),
-                ),
-              ],
-            ),
-            child: const Text(
-              "Redeem",
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
+          ],
+        ),
+        child: Row(
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Point Balance".tr,
+                    style: TextStyle(
+                      color: Colors.blueGrey[300],
+                      fontSize: 13.sp,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  SizedBox(height: 4.h),
+                  Text(
+                    "$points ${"Pts".tr}", //
+                    style: GoogleFonts.lexend(
+                      fontSize: 26.sp,
+                      fontWeight: FontWeight.w900,
+                      color: Constants.MidnightNavy,
+                    ),
+                  ),
+                ],
               ),
             ),
-          ),
-        ],
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 12.h),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [Constants.PrimaryColor, const Color(0xFF078D9A)],
+                ),
+                borderRadius: BorderRadius.circular(16.r),
+                boxShadow: [
+                  BoxShadow(
+                    color: Constants.PrimaryColor.withOpacity(0.3),
+                    blurRadius: 15,
+                    offset: const Offset(0, 8),
+                  ),
+                ],
+              ),
+              child: Text(
+                "Redeem".tr,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -255,7 +264,7 @@ class ProfileView extends StatelessWidget {
           children: [
             Expanded(
               child: _modernInfoCard(
-                "Phone",
+                "Phone".tr,
                 user.phoneNumber,
                 Icons.phone_android_rounded,
               ),
@@ -263,7 +272,7 @@ class ProfileView extends StatelessWidget {
             SizedBox(width: 12.w),
             Expanded(
               child: _modernInfoCard(
-                "Gender",
+                "Gender".tr,
                 user.gender,
                 Icons.face_retouching_natural_rounded,
               ),
@@ -276,15 +285,15 @@ class ProfileView extends StatelessWidget {
           children: [
             Expanded(
               child: _modernInfoCard(
-                "Age",
-                "${user.age} Years",
+                "Age".tr,
+                "${user.age} ${"Years".tr}",
                 Icons.cake_rounded,
               ),
             ),
             SizedBox(width: 12.w),
             Expanded(
               child: _modernInfoCard(
-                "Email Address",
+                "Email Address".tr,
                 user.email,
                 Icons.alternate_email_rounded,
               ),
@@ -335,7 +344,7 @@ class ProfileView extends StatelessWidget {
                 ),
                 SizedBox(width: 12.w),
                 Text(
-                  "Home Location",
+                  "Home Location".tr,
                   style: TextStyle(
                     color: Colors.blueGrey[300],
                     fontSize: 11.sp,
@@ -427,8 +436,8 @@ class ProfileView extends StatelessWidget {
                               size: 16,
                             ),
                             SizedBox(width: 8.w),
-                            const Text(
-                              "Open Navigation",
+                            Text(
+                              "Open Navigation".tr,
                               style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
@@ -538,7 +547,7 @@ class ProfileView extends StatelessWidget {
           ),
           SizedBox(height: 24.h),
           Text(
-            "LOYALTY REWARDS PASS",
+            "LOYALTY REWARDS PASS".tr,
             style: GoogleFonts.lexend(
               fontSize: 12.sp,
               fontWeight: FontWeight.w800,
@@ -548,7 +557,8 @@ class ProfileView extends StatelessWidget {
           ),
           SizedBox(height: 8.h),
           Text(
-            "Present this QR code to any medical staff member to add loyalty points to your account after your visit.",
+            "Present this QR code to any medical staff member to add loyalty points to your account after your visit."
+                .tr,
             textAlign: TextAlign.center,
             style: TextStyle(
               color: Colors.blueGrey[400],
@@ -573,30 +583,6 @@ class ProfileView extends StatelessWidget {
     );
   }
 
-  Widget _buildDeleteAccountButton(BuildContext context) {
-    return Center(
-      child: TextButton.icon(
-        onPressed: () => _showDeleteConfirmation(context),
-        style: TextButton.styleFrom(
-          foregroundColor: const Color(0xFFFF4B4B),
-          padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 12.h),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16.r),
-            side: const BorderSide(color: Color(0xFFFFE5E5)),
-          ),
-        ),
-        icon: const Icon(Icons.delete_outline_rounded, size: 20),
-        label: Text(
-          "Delete Account",
-          style: GoogleFonts.lexend(
-            fontWeight: FontWeight.w600,
-            fontSize: 14.sp,
-          ),
-        ),
-      ),
-    );
-  }
-
   void _showDeleteConfirmation(BuildContext context) {
     showDialog(
       context: context,
@@ -605,19 +591,17 @@ class ProfileView extends StatelessWidget {
           borderRadius: BorderRadius.circular(24.r),
         ),
         title: Text(
-          "Are you sure?",
+          "Are you sure?".tr,
           style: GoogleFonts.lexend(fontWeight: FontWeight.bold),
         ),
-        content: const Text(
-          "This will permanently deactivate your account and archive your data. This action cannot be undone.",
+        content: Text(
+          "This will permanently deactivate your account and archive your data. This action cannot be undone."
+              .tr,
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialogContext),
-            child: const Text(
-              "Cancel",
-              style: TextStyle(color: Colors.blueGrey),
-            ),
+            child: Text("Cancel".tr, style: TextStyle(color: Colors.blueGrey)),
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
@@ -648,8 +632,8 @@ class ProfileView extends StatelessWidget {
                 }
               }
             },
-            child: const Text(
-              "Delete",
+            child: Text(
+              "Delete".tr,
               style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
@@ -675,15 +659,16 @@ class ProfileView extends StatelessWidget {
           children: [
             const Icon(Icons.warning_amber_rounded, color: Color(0xFFFFB800)),
             SizedBox(width: 12.w),
-            const Text("Action Required"),
+            Text("Action Required".tr),
           ],
         ),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              "You cannot delete your account while you have active future bookings.",
+            Text(
+              "You cannot delete your account while you have active future bookings."
+                  .tr,
             ),
             SizedBox(height: 20.h),
             Container(
@@ -705,7 +690,7 @@ class ProfileView extends StatelessWidget {
                   ),
                   SizedBox(height: 4.h),
                   Text(
-                    "Scheduled for: ${booking['slot_time'].toString().split('T')[0]}",
+                    "${"Scheduled for:".tr} ${booking['slot_time'].toString().split('T')[0]}",
                     style: TextStyle(
                       color: Colors.blueGrey[400],
                       fontSize: 12.sp,
@@ -715,16 +700,17 @@ class ProfileView extends StatelessWidget {
               ),
             ),
             SizedBox(height: 20.h),
-            const Text(
-              "Please cancel this booking first to proceed with account deletion.",
+            Text(
+              "Please cancel this booking first to proceed with account deletion."
+                  .tr,
             ),
           ],
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text(
-              "I Understand",
+            child: Text(
+              "I Understand".tr,
               style: TextStyle(
                 color: Constants.MidnightNavy,
                 fontWeight: FontWeight.bold,
