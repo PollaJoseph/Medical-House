@@ -176,7 +176,8 @@ class SignUpViewModel extends ChangeNotifier {
           Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
-              builder: (context) => OTPView(email: emailController.text.trim()),
+              builder: (context) =>
+                  OTPView(email: emailController.text.trim(), Case: 'SignUp'),
             ),
             (route) => false,
           );

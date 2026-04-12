@@ -57,7 +57,6 @@ dev_dependencies:
     sdk: flutter
   flutter_lints: ^6.0.0
 
-# This section forces the older package to work with your newer lints
 dependency_overrides:
   flutter_lints: ^6.0.0
 

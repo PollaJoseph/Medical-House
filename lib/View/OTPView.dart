@@ -10,7 +10,8 @@ import 'package:provider/provider.dart';
 
 class OTPView extends StatefulWidget {
   final String email;
-  const OTPView({super.key, required this.email});
+  final String Case;
+  const OTPView({super.key, required this.email, required this.Case});
 
   @override
   State<OTPView> createState() => _OTPViewState();
@@ -98,7 +99,6 @@ class _OTPViewState extends State<OTPView> with SingleTickerProviderStateMixin {
     setState(() => _isLoading = true);
     await Future.delayed(const Duration(seconds: 2));
     setState(() => _isLoading = false);
-    // Navigate or handle success here
   }
 
   void _resendOTP() {
@@ -399,15 +399,23 @@ class _OTPViewState extends State<OTPView> with SingleTickerProviderStateMixin {
                                     color: Colors.transparent,
                                     child: InkWell(
                                       borderRadius: BorderRadius.circular(16),
-                                      // Inside your Verify Button onTap
                                       onTap: viewModel.isVerifying
                                           ? null
                                           : () {
-                                              viewModel.verifyEmail(
-                                                context,
-                                                widget.email,
-                                                _currentOTP,
-                                              );
+                                              if (widget.Case ==
+                                                  "Forget Password") {
+                                                viewModel.verifyResetCode(
+                                                  context,
+                                                  widget.email,
+                                                  _currentOTP,
+                                                );
+                                              } else {
+                                                viewModel.verifyEmail(
+                                                  context,
+                                                  widget.email,
+                                                  _currentOTP,
+                                                );
+                                              }
                                             },
                                       child: Center(
                                         child: _isLoading

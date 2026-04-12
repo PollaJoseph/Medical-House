@@ -15,7 +15,7 @@ import 'package:medical_house/Services/StorageService.dart';
 class ApiService {
   final Dio _dio = Dio();
 
-  final String baseUrl = "https://1a9f-156-196-149-18.ngrok-free.app/";
+  final String baseUrl = "https://0e6d-41-42-67-56.ngrok-free.app/";
   //dotenv.env['BASE_URL'] ?? '';
   final String apiKey = dotenv.env['API_KEY'] ?? '';
   final String SignUpEndpoint = dotenv.env['SIGN_UP_ENDPOINT'] ?? '';
@@ -37,6 +37,12 @@ class ApiService {
       dotenv.env['POINT_SERVICES_ENDPOINT'] ?? '';
   final String GetUserEndpoint = dotenv.env['USER_ENDPOINT'] ?? '';
   final String DeleteUserEndpoint = dotenv.env['DELETE_USER_ENDPOINT'] ?? '';
+  final String SendPasswordEndpoint =
+      dotenv.env['SEND_OTP_FORGET_PASSWORD_ENDPOINT'] ?? '';
+  final String ResetPasswordOTPEndpoint =
+      dotenv.env['VERIFY_FORGET_PASSWORD_OTP_ENDPOINT'] ?? '';
+  final String ResetPasswordEndpoint =
+      dotenv.env['RESET_PASSWORD_ENDPOINT'] ?? '';
 
   String? _authToken;
 
@@ -435,6 +441,57 @@ class ApiService {
       throw Exception(
         'Delete Account Failed: ${e.response?.data ?? e.message}',
       );
+    } catch (e) {
+      throw Exception('An unexpected error occurred: $e');
+    }
+  }
+
+  Future<Response> sendPassword(String email) async {
+    try {
+      Map<String, String> requestHeaders = getHeaders(includeAuth: false);
+
+      final response = await _dio.post(
+        '$baseUrl$SendPasswordEndpoint',
+        data: {"Email": email},
+        options: Options(headers: requestHeaders),
+      );
+      return response;
+    } on DioException catch (e) {
+      throw Exception('Request Failed: ${e.response?.data ?? e.message}');
+    } catch (e) {
+      throw Exception('An unexpected error occurred: $e');
+    }
+  }
+
+  Future<Response> verifyResetPasswordOTP(String email, String otp) async {
+    try {
+      Map<String, String> requestHeaders = getHeaders(includeAuth: false);
+
+      final response = await _dio.post(
+        '$baseUrl$ResetPasswordOTPEndpoint',
+        data: {"Email": email, "OTP": otp},
+        options: Options(headers: requestHeaders),
+      );
+      return response;
+    } on DioException catch (e) {
+      throw Exception('Verification Failed: ${e.response?.data ?? e.message}');
+    } catch (e) {
+      throw Exception('An unexpected error occurred: $e');
+    }
+  }
+
+  Future<Response> resetPassword(String email, String newPassword) async {
+    try {
+      Map<String, String> requestHeaders = getHeaders(includeAuth: false);
+
+      final response = await _dio.post(
+        '$baseUrl$ResetPasswordEndpoint',
+        data: {"Email": email, "NewPassword": newPassword},
+        options: Options(headers: requestHeaders),
+      );
+      return response;
+    } on DioException catch (e) {
+      throw Exception('Reset Failed: ${e.response?.data ?? e.message}');
     } catch (e) {
       throw Exception('An unexpected error occurred: $e');
     }

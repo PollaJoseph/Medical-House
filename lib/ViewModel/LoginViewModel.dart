@@ -5,6 +5,7 @@ import 'package:medical_house/Components/MainWrapper.dart';
 import 'package:medical_house/Model/LoginAPIModel.dart';
 import 'package:medical_house/Services/ApiService.dart';
 import 'package:medical_house/Services/StorageService.dart';
+import 'package:medical_house/View/OTPView.dart';
 
 class LoginViewModel extends ChangeNotifier {
   final emailController = TextEditingController();
@@ -14,6 +15,57 @@ class LoginViewModel extends ChangeNotifier {
   bool isLoading = false;
 
   final ApiService _apiService = ApiService();
+  bool isForgotPassLoading = false;
+
+  Future<void> forgotPassword(BuildContext context) async {
+    final email = emailController.text.trim();
+
+    if (email.isEmpty) {
+      CustomSnackBar.showWarning(
+        context,
+        title: 'Action Required'.tr,
+        message: 'Please enter your email address first'.tr,
+      );
+      return;
+    }
+
+    isForgotPassLoading = true;
+    notifyListeners();
+
+    try {
+      final response = await _apiService.sendPassword(email);
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        if (context.mounted) {
+          CustomSnackBar.showSuccess(
+            context,
+            title: 'Email Sent'.tr,
+            message: 'Password reset instructions have been sent.'.tr,
+          );
+
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  OTPView(email: email, Case: 'Forget Password'),
+            ),
+          );
+        }
+      }
+    } catch (e) {
+      if (context.mounted) {
+        CustomSnackBar.showError(
+          context,
+          title: 'Request Failed'.tr,
+          message: 'Could not process request. Please try again.'.tr,
+        );
+      }
+    } finally {
+      // Reset the new variable
+      isForgotPassLoading = false;
+      notifyListeners();
+    }
+  }
 
   void togglePasswordVisibility() {
     isPasswordVisible = !isPasswordVisible;

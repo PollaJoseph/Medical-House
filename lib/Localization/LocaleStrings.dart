@@ -189,9 +189,101 @@ class LocaleStrings extends Translations {
       "Please cancel this booking first to proceed with account deletion.":
           "Please cancel this booking first to proceed with account deletion.",
       "I Understand": "I Understand",
+      "Email Sent": "Email Sent",
+      "Password reset instructions have been sent to your inbox.":
+          "Password reset instructions have been sent to your inbox.",
+      "Action Required": "Action Required",
+      "Please enter your email address first":
+          "Please enter your email address first",
+      "Request Failed": "Request Failed",
+      "This email is not registered in our system":
+          "This email is not registered in our system",
+      "Could not process request. Please try again later.":
+          "Could not process request. Please try again later.",
+      "Code Verified": "Code Verified",
+      "You can now set your new password.":
+          "You can now set your new password.",
+      "The code you entered is incorrect": "The code you entered is incorrect",
+      "Verification failed. Please try again.":
+          "Verification failed. Please try again.",
+      "Verification Failed": "Verification Failed",
+      "Validation Error": "Validation Error",
+      "Passwords do not match": "Passwords do not match",
+      "Weak Password": "Weak Password",
+      "Password must be at least 8 characters long":
+          "Password must be at least 8 characters long",
+      "Password Updated": "Password Updated",
+      "Your password has been changed successfully. Please login.":
+          "Your password has been changed successfully. Please login.",
+      "Could not reset password. Try again.":
+          "Could not reset password. Try again.",
+      "Reset Failed": "Reset Failed",
+      "Reset Password": "Reset Password",
+      "Create a strong new password for your account.":
+          "Create a strong new password for your account.",
+      "New Password": "New Password",
+      "Confirm Password": "Confirm Password",
+      "Change Password": "Change Password",
+      "Validation Error": "Validation Error",
+      "Passwords do not match": "Passwords do not match",
+      "Weak Password": "Weak Password",
+      "Password must be at least 8 characters long":
+          "Password must be at least 8 characters long",
+      "Password Updated": "Password Updated",
+      "Your password has been changed successfully. Please login.":
+          "Your password has been changed successfully. Please login.",
+      "Could not reset password. Try again.":
+          "Could not reset password. Try again.",
+      "Reset Failed": "Reset Failed",
     },
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     'ar_EG': {
+      "Reset Password": "إعادة تعيين كلمة المرور",
+      "Create a strong new password for your account.":
+          "أنشئ كلمة مرور جديدة قوية لحسابك.",
+      "New Password": "كلمة المرور الجديدة",
+      "Confirm Password": "تأكيد كلمة المرور",
+      "Change Password": "تغيير كلمة المرور",
+      "Validation Error": "خطأ في التحقق",
+      "Passwords do not match": "كلمات المرور غير متطابقة",
+      "Weak Password": "كلمة مرور ضعيفة",
+      "Password must be at least 8 characters long":
+          "يجب أن تتكون كلمة المرور من 8 أحرف على الأقل",
+      "Password Updated": "تم تحديث كلمة المرور",
+      "Your password has been changed successfully. Please login.":
+          "تم تغيير كلمة المرور بنجاح. يرجى تسجيل الدخول.",
+      "Could not reset password. Try again.":
+          "تعذر إعادة تعيين كلمة المرور. حاول مرة أخرى.",
+      "Reset Failed": "فشل إعادة التعيين",
+      "Validation Error": "خطأ في التحقق",
+      "Passwords do not match": "كلمات المرور غير متطابقة",
+      "Weak Password": "كلمة مرور ضعيفة",
+      "Password must be at least 8 characters long":
+          "يجب أن تتكون كلمة المرور من 8 أحرف على الأقل",
+      "Password Updated": "تم تحديث كلمة المرور",
+      "Your password has been changed successfully. Please login.":
+          "تم تغيير كلمة المرور بنجاح. يرجى تسجيل الدخول.",
+      "Could not reset password. Try again.":
+          "تعذر إعادة تعيين كلمة المرور. حاول مرة أخرى.",
+      "Reset Failed": "فشل إعادة التعيين",
+      "Code Verified": "تم التحقق من الرمز",
+      "You can now set your new password.":
+          "يمكنك الآن تعيين كلمة المرور الجديدة الخاصة بك.",
+      "The code you entered is incorrect": "الرمز الذي أدخلته غير صحيح",
+      "Verification failed. Please try again.":
+          "فشل التحقق. يرجى المحاولة مرة أخرى.",
+      "Verification Failed": "فشل التحقق",
+      "Action Required": "إجراء مطلوب",
+      "Please enter your email address first":
+          "يرجى إدخال بريدك الإلكتروني أولاً",
+      "Request Failed": "فشل الطلب",
+      "This email is not registered in our system":
+          "هذا البريد الإلكتروني غير مسجل في نظامنا",
+      "Could not process request. Please try again later.":
+          "تعذر معالجة الطلب. يرجى المحاولة مرة أخرى لاحقاً.",
+      "Email Sent": "تم إرسال البريد الإلكتروني",
+      "Password reset instructions have been sent to your inbox.":
+          "تم إرسال تعليمات إعادة تعيين كلمة المرور إلى صندوق الوارد الخاص بك.",
       "User not found": "المستخدم غير موجود",
       "Account Details": "تفاصيل الحساب",
       "Identification Pass": "بطاقة التعريف",

@@ -7,6 +7,7 @@ import 'package:medical_house/Model/ResendOTP.dart';
 import 'package:medical_house/Services/ApiService.dart';
 import 'package:medical_house/Components/MainWrapper.dart';
 import 'package:medical_house/Services/StorageService.dart';
+import 'package:medical_house/View/ChangePasswordView.dart';
 
 class OTPViewModel extends ChangeNotifier {
   final ApiService _apiService = ApiService();
@@ -161,6 +162,53 @@ class OTPViewModel extends ChangeNotifier {
       }
     } finally {
       isResending = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> verifyResetCode(
+    BuildContext context,
+    String email,
+    String otpCode,
+  ) async {
+    if (otpCode.length < 6) return;
+
+    isVerifying = true;
+    notifyListeners();
+
+    try {
+      final response = await _apiService.verifyResetPasswordOTP(email, otpCode);
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        if (context.mounted) {
+          CustomSnackBar.showSuccess(
+            context,
+            title: "Code Verified".tr,
+            message: "You can now set your new password.".tr,
+          );
+
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ChangePasswordView(email: email),
+            ),
+          );
+        }
+      }
+    } catch (e) {
+      if (context.mounted) {
+        String cleanMessage = e.toString().contains('Invalid code')
+            ? "The code you entered is incorrect".tr
+            : "Verification failed. Please try again.".tr;
+
+        CustomSnackBar.showError(
+          context,
+          title: 'Verification Failed'.tr,
+          message: cleanMessage,
+        );
+      }
+    } finally {
+      isVerifying = false;
       notifyListeners();
     }
   }

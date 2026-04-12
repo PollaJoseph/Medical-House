@@ -73,20 +73,29 @@ class LoginView extends StatelessWidget {
                           Constants.SeconadryColor,
                         ),
 
-                        // Forgot Password Link
                         Align(
                           alignment: Alignment.centerRight,
-                          child: TextButton(
-                            onPressed: () {},
-                            child: Text(
-                              "Forgot Password?".tr,
-                              style: TextStyle(
-                                color: Constants.SeconadryColor,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 13.sp,
-                              ),
-                            ),
-                          ),
+                          child: model.isForgotPassLoading
+                              ? SizedBox(
+                                  height: 15.h,
+                                  width: 15.h,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    color: Constants.SeconadryColor,
+                                  ),
+                                )
+                              : TextButton(
+                                  onPressed: () =>
+                                      model.forgotPassword(context),
+                                  child: Text(
+                                    "Forgot Password?".tr,
+                                    style: TextStyle(
+                                      color: Constants.SeconadryColor,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 13.sp,
+                                    ),
+                                  ),
+                                ),
                         ),
                         SizedBox(height: 20.h),
 

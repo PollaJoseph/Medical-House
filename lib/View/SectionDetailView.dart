@@ -189,7 +189,6 @@ class SectionDetailView extends StatelessWidget {
             sliver: SliverList(
               delegate: SliverChildBuilderDelegate((context, index) {
                 final service = section.subSections[index];
-
                 return GestureDetector(
                   onTap: () {
                     Navigator.push(

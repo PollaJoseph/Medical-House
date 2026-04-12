@@ -295,21 +295,6 @@ class SettingsView extends StatelessWidget {
                     textColor: Constants.MidnightNavy,
                   ),
                 ),
-
-                SettingsButton(
-                  text: "Change Password".tr,
-                  icon: Icons.password,
-                  onClick: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ChangePasswordView(),
-                      ),
-                    );
-                  },
-                  iconColor: Constants.SeconadryColor,
-                  textColor: Constants.MidnightNavy,
-                ),
                 SettingsButton(
                   text: "Terms and Conditions".tr,
                   icon: Icons.article_outlined,

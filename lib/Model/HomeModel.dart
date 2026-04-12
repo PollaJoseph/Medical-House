@@ -17,7 +17,6 @@ class PatientProfile {
 class HospitalSection {
   final String mainTitle;
   final String imageUrl;
-  // 1. FIXED: Now strictly holds the full ServiceModel from the API
   final List<ServiceModel> subSections;
 
   HospitalSection({
