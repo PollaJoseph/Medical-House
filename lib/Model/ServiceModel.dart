@@ -17,12 +17,12 @@ class ServiceModel {
 
   factory ServiceModel.fromJson(Map<String, dynamic> json) {
     return ServiceModel(
-      id: json['service_id']?.toString() ?? '',
-      title: json['name'] ?? 'Unnamed Service',
-      description: json['description'] ?? '',
-      price: json['price']?.toString() ?? '0.00',
-      discountTag: json['tag'] ?? 'Standard',
-      imageUrl: json['image'] ?? '',
+      id: json['ServiceID']?.toString() ?? '',
+      title: json['Name'] ?? 'Unnamed Service',
+      description: json['Description'] ?? '',
+      price: json['Price']?.toString() ?? '0.00',
+      discountTag: json['Tag'] ?? 'Standard',
+      imageUrl: json['Image'] ?? '',
     );
   }
 }

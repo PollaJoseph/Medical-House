@@ -41,7 +41,7 @@ class PointServiceCard extends StatelessWidget {
             ClipRRect(
               borderRadius: BorderRadius.vertical(top: Radius.circular(32.r)),
               child: SizedBox(
-                height: 160.h,
+                height: 157.h,
                 width: double.infinity,
                 child: Stack(
                   fit: StackFit.expand,

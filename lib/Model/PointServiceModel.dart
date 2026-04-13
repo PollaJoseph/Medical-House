@@ -17,12 +17,12 @@ class PointServiceModel {
 
   factory PointServiceModel.fromJson(Map<String, dynamic> json) {
     return PointServiceModel(
-      serviceId: json['service_id'] ?? '',
-      name: json['name'] ?? '',
-      description: json['description'] ?? '',
-      points: json['points']?.toString() ?? '0',
-      image: json['image'] ?? '',
-      tag: json['tag'] ?? '',
+      serviceId: json['ServiceID'] ?? '',
+      name: json['Name'] ?? '',
+      description: json['Description'] ?? '',
+      points: json['Points']?.toString() ?? '0',
+      image: json['Image'] ?? '',
+      tag: json['Tag'] ?? '',
     );
   }
 }

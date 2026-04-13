@@ -210,12 +210,12 @@ class ApiService {
     }
   }
 
-  Future<Map<String, List<ServiceModel>>> getOffers() async {
+  Future<Map<String, List<ServiceModel>>> getOffers(String Lang) async {
     try {
       Map<String, String> requestHeaders = getHeaders(includeAuth: false);
 
       final response = await _dio.get(
-        '$baseUrl$OfferEndpoint',
+        '$baseUrl$OfferEndpoint$Lang',
         options: Options(headers: requestHeaders),
       );
 
@@ -368,12 +368,14 @@ class ApiService {
     }
   }
 
-  Future<Map<String, List<PointServiceModel>>> getPointsServices() async {
+  Future<Map<String, List<PointServiceModel>>> getPointsServices(
+    String Lang,
+  ) async {
     try {
       Map<String, String> requestHeaders = getHeaders(includeAuth: false);
 
       final response = await _dio.get(
-        '$baseUrl$PointServicesEndpoint',
+        '$baseUrl$PointServicesEndpoint$Lang',
         options: Options(headers: requestHeaders),
       );
 

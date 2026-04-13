@@ -38,14 +38,13 @@ class OfferCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            // 1. Image Header - Wrapped in a sized container
             ClipRRect(
               borderRadius: BorderRadius.vertical(top: Radius.circular(32.r)),
               child: SizedBox(
-                height: 160.h, // Fixed height to prevent overflow
+                height: 157.h,
                 width: double.infinity,
                 child: Stack(
-                  fit: StackFit.expand, // Ensures children fill the SizedBox
+                  fit: StackFit.expand,
                   children: [
                     _buildImage(),
                     Positioned(

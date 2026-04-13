@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_instance/src/extension_instance.dart';
+import 'package:medical_house/Localization/LocaleController.dart';
 import 'package:medical_house/Model/ServiceModel.dart';
 import 'package:medical_house/Services/ApiService.dart';
 import 'package:medical_house/View/ServiceDetailsView.dart';
 
 class OffersViewModel extends ChangeNotifier {
   final ApiService _apiService = ApiService();
-
+  final LocaleController _localeController = Get.find<LocaleController>();
   bool isLoading = false;
 
   Map<String, List<ServiceModel>> groupedOffers = {};
@@ -19,7 +22,8 @@ class OffersViewModel extends ChangeNotifier {
     notifyListeners();
 
     try {
-      groupedOffers = await _apiService.getOffers();
+      String langPrefix = _localeController.isArabic.value ? "ar/" : "en/";
+      groupedOffers = await _apiService.getOffers(langPrefix);
     } catch (e) {
       debugPrint("Error fetching offers: $e");
     } finally {

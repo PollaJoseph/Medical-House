@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_instance/src/extension_instance.dart';
+import 'package:medical_house/Localization/LocaleController.dart';
 import 'package:medical_house/Model/PointServiceModel.dart';
 import 'package:medical_house/Model/ServiceModel.dart'; // 1. ADD THIS IMPORT
 import 'package:medical_house/Services/ApiService.dart';
@@ -6,6 +9,7 @@ import 'package:medical_house/View/ServiceDetailsView.dart';
 
 class PointServicesViewModel extends ChangeNotifier {
   final ApiService _apiService = ApiService();
+  final LocaleController _localeController = Get.find<LocaleController>();
 
   bool _isLoading = true;
   bool get isLoading => _isLoading;
@@ -21,7 +25,8 @@ class PointServicesViewModel extends ChangeNotifier {
     notifyListeners();
 
     try {
-      _groupedServices = await _apiService.getPointsServices();
+      String langPrefix = _localeController.isArabic.value ? "ar/" : "en/";
+      _groupedServices = await _apiService.getPointsServices(langPrefix);
     } catch (e) {
       errorMessage = e.toString().replaceAll("Exception:", "");
       debugPrint("Error fetching point services: $e");
