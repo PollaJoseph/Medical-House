@@ -20,18 +20,20 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
-      - name: Force iOS 15.5 Target & Fix Bundle ID
+      - name: Force iOS 15.5 Target & Fix Dependencies
         run: |
-          # 1. Force the Xcode project targets to 15.5 (Matches any version number)
+          # 1. Force the Xcode project targets to 15.5
           sed -i '' 's/IPHONEOS_DEPLOYMENT_TARGET = [0-9.]*;/IPHONEOS_DEPLOYMENT_TARGET = 15.5;/g' ios/Runner.xcodeproj/project.pbxproj
           
           # 2. Force the Podfile platform to 15.5
-          # This replaces any line starting with "platform :ios" or "# platform :ios" regardless of existing version
           sed -i '' "s/.*platform :ios.*/platform :ios, '15.5'/g" ios/Podfile
 
-          # 3. FIX BUNDLE ID: Replaces com.example with your actual registered ID
-          # IMPORTANT: Replace 'com.medicalhouse.app' with your actual Apple Bundle ID
+          # 3. FIX BUNDLE ID: Replace 'com.medicalhouse.app' with your actual registered ID
           sed -i '' 's/com.example.medicalHouse/com.medicalhouse.app/g' ios/Runner.xcodeproj/project.pbxproj
+
+          # 4. FIX SwiftTryCatch Authentication: Force use of a public mirror
+          # This prevents the 'fatal: could not read Username' error
+          sed -i '' 's|https://github.com/cfr/SwiftTryCatch.git|https://github.com/michaeltyson/SwiftTryCatch.git|g' ios/Podfile || true
 
       - name: Clean CocoaPods
         run: |
