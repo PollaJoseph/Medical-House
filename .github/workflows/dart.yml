@@ -31,10 +31,10 @@ jobs:
           # 3. FIX BUNDLE ID: Replace 'com.medicalhouse.app' with your actual registered ID
           sed -i '' 's/com.example.medicalHouse/com.medicalhouse.app/g' ios/Runner.xcodeproj/project.pbxproj
 
-          # 4. FIX SwiftTryCatch Authentication: Force use of a public mirror
-          # This prevents the 'fatal: could not read Username' error
-          sed -i '' 's|https://github.com/cfr/SwiftTryCatch.git|https://github.com/michaeltyson/SwiftTryCatch.git|g' ios/Podfile || true
-
+          # 4. SLEDGEHAMMER FIX for SwiftTryCatch:
+          # This replaces the URL in EVERY file in the ios directory to ensure it uses the public mirror.
+          find ios -type f -name "Podfile*" -exec sed -i '' 's|github.com/cfr/SwiftTryCatch.git|github.com/michaeltyson/SwiftTryCatch.git|g' {} +
+          
       - name: Clean CocoaPods
         run: |
           rm -rf Pods
