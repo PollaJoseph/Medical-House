@@ -1,4 +1,4 @@
-name: iOS Ad-Hoc Build dd
+name: iOS Ad-Hoc Build (Diawi)
 
 on:
   workflow_dispatch:
@@ -22,19 +22,15 @@ jobs:
 
       - name: Force iOS 15.5 Target & Fix Bundle ID
         run: |
-          # 1. Force the Xcode project to 15.5
-          sed -i '' 's/IPHONEOS_DEPLOYMENT_TARGET = 11.0;/IPHONEOS_DEPLOYMENT_TARGET = 15.5;/g' ios/Runner.xcodeproj/project.pbxproj
-          sed -i '' 's/IPHONEOS_DEPLOYMENT_TARGET = 12.0;/IPHONEOS_DEPLOYMENT_TARGET = 15.5;/g' ios/Runner.xcodeproj/project.pbxproj
-          sed -i '' 's/IPHONEOS_DEPLOYMENT_TARGET = 13.0;/IPHONEOS_DEPLOYMENT_TARGET = 15.5;/g' ios/Runner.xcodeproj/project.pbxproj
+          # 1. Force the Xcode project targets to 15.5 (Matches any version number)
+          sed -i '' 's/IPHONEOS_DEPLOYMENT_TARGET = [0-9.]*;/IPHONEOS_DEPLOYMENT_TARGET = 15.5;/g' ios/Runner.xcodeproj/project.pbxproj
           
-          # 2. Force the Podfile target to 15.5 and ensure it is uncommented
-          sed -i '' 's/# platform :ios/platform :ios/g' ios/Podfile
-          sed -i '' "s/platform :ios, '11.0'/platform :ios, '15.5'/g" ios/Podfile
-          sed -i '' "s/platform :ios, '12.0'/platform :ios, '15.5'/g" ios/Podfile
-          sed -i '' "s/platform :ios, '13.0'/platform :ios, '15.5'/g" ios/Podfile
+          # 2. Force the Podfile platform to 15.5
+          # This replaces any line starting with "platform :ios" or "# platform :ios" regardless of existing version
+          sed -i '' "s/.*platform :ios.*/platform :ios, '15.5'/g" ios/Podfile
 
           # 3. FIX BUNDLE ID: Replaces com.example with your actual registered ID
-          # REPLACE 'com.medicalhouse.app' BELOW WITH YOUR ACTUAL APPLE BUNDLE ID
+          # IMPORTANT: Replace 'com.medicalhouse.app' with your actual Apple Bundle ID
           sed -i '' 's/com.example.medicalHouse/com.medicalhouse.app/g' ios/Runner.xcodeproj/project.pbxproj
 
       - name: Clean CocoaPods
