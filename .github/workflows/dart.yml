@@ -31,11 +31,12 @@ jobs:
           # 3. FIX BUNDLE ID: Replace 'com.medicalhouse.app' with your actual registered ID
           sed -i '' 's/com.example.medicalHouse/com.medicalhouse.app/g' ios/Runner.xcodeproj/project.pbxproj
 
-          # 4. SLEDGEHAMMER FIX for SwiftTryCatch:
-          # This replaces the broken URL in the Podfile, Podfile.lock, AND any generated podspecs 
-          # to ensure it uses a verified public mirror that doesn't require a login.
-          grep -rl 'github.com/cfr/SwiftTryCatch.git' ios | xargs sed -i '' 's|github.com/cfr/SwiftTryCatch.git|github.com/michaeltyson/SwiftTryCatch.git|g' || true
-          
+          # 4. INJECT WORKING MIRROR:
+          # This inserts a direct pointer to the public SwiftTryCatch mirror into your Podfile.
+          # This bypasses the broken official spec entirely.
+          sed -i '' "/target 'Runner' do/a\\
+            pod 'SwiftTryCatch', :git => 'https://github.com/michaeltyson/SwiftTryCatch.git', :tag => '0.0.1'" ios/Podfile
+            
       - name: Clean CocoaPods
         run: |
           rm -rf Pods
