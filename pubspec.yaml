@@ -27,7 +27,6 @@ dependencies:
   geocoding: ^2.1.1
   permission_handler: ^11.3.0
   photo_view: ^0.15.0
-  web_socket_channel: ^3.0.3
   dots_indicator: ^3.0.0
   get: ^4.6.6
   flutter_dotenv: ^5.1.0
@@ -40,8 +39,6 @@ dependencies:
   app_tracking_transparency: ^2.0.4
   flutter_dynamic_icon_plus: ^1.4.0
   upgrader: ^12.5.0
-  firebase_core: ^4.4.0
-  firebase_messaging: ^16.1.1
   http: ^1.1.2 
   video_player: ^2.8.2
   location: ^5.0.3
