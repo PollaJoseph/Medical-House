@@ -20,6 +20,13 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
+      - name: Force iOS 15.5 Target
+        run: |
+          # This forcefully rewrites the old targets to 15.5 directly on the Mac server
+          sed -i '' 's/IPHONEOS_DEPLOYMENT_TARGET = 13.0;/IPHONEOS_DEPLOYMENT_TARGET = 15.5;/g' ios/Runner.xcodeproj/project.pbxproj
+          sed -i '' 's/IPHONEOS_DEPLOYMENT_TARGET = 12.0;/IPHONEOS_DEPLOYMENT_TARGET = 15.5;/g' ios/Runner.xcodeproj/project.pbxproj
+          sed -i '' 's/IPHONEOS_DEPLOYMENT_TARGET = 11.0;/IPHONEOS_DEPLOYMENT_TARGET = 15.5;/g' ios/Runner.xcodeproj/project.pbxproj
+
       - name: Clean CocoaPods
         run: |
           rm -rf Pods
