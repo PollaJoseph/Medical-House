@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get_utils/src/extensions/internacionalization.dart';
+import 'package:medical_house/Components/CustomSnackBar.dart';
 import 'package:medical_house/Model/BookingRequestModel.dart';
 import 'package:medical_house/Model/ServiceModel.dart';
 import 'package:medical_house/Services/ApiService.dart';
@@ -26,7 +28,6 @@ class ServiceDetailsViewModel extends ChangeNotifier {
 
     try {
       List<String> rawSlots = await _apiService.getUnavailableSlots(serviceId);
-      // FIXED: Added .toLocal() to correctly handle the +02:00 API offset
       _unavailableSlots = rawSlots
           .map((iso) => DateTime.parse(iso).toLocal())
           .toList();
@@ -111,10 +112,10 @@ class ServiceDetailsViewModel extends ChangeNotifier {
     required ServiceModel service,
   }) async {
     if (selectedDateTime == null) {
-      _showSnackBar(
+      CustomSnackBar.showError(
         context,
-        "Please select a booking date and time",
-        const Color(0xFFFF4B4B),
+        title: 'You did not choose a date'.tr,
+        message: 'Please select a booking date and time'.tr,
       );
       return;
     }
@@ -124,11 +125,12 @@ class ServiceDetailsViewModel extends ChangeNotifier {
 
     final clientId = await StorageService.getUserClientId();
     if (clientId == null) {
-      _showSnackBar(
+      CustomSnackBar.showError(
         context,
-        "Authentication error. Please log in again.",
-        const Color(0xFFFF4B4B),
+        title: 'Authentication error'.tr,
+        message: 'Please log in again.'.tr,
       );
+
       _isBooking = false;
       notifyListeners();
       return;
@@ -145,30 +147,22 @@ class ServiceDetailsViewModel extends ChangeNotifier {
       final response = await _apiService.bookService(bookingRequest);
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        _showSnackBar(context, "Booking successful!", Colors.green);
+        CustomSnackBar.showSuccess(
+          context,
+          title: 'Booking successful'.tr,
+          message: 'Your booking has been confirmed.'.tr,
+        );
         if (context.mounted) Navigator.pop(context);
       }
     } catch (e) {
-      _showSnackBar(
+      CustomSnackBar.showError(
         context,
-        e.toString().replaceAll("Exception:", ""),
-        const Color(0xFFFF4B4B),
+        title: 'Booking failed'.tr,
+        message: 'An error occurred while booking. Please try again.'.tr,
       );
     } finally {
       _isBooking = false;
       notifyListeners();
-    }
-  }
-
-  void _showSnackBar(BuildContext context, String message, Color color) {
-    if (context.mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(message),
-          backgroundColor: color,
-          behavior: SnackBarBehavior.floating,
-        ),
-      );
     }
   }
 }

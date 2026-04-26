@@ -251,9 +251,28 @@ class LocaleStrings extends Translations {
       "You can stop all data collection by uninstalling the app. For data deletion, contact info@medicalhouse.net.":
           "You can stop all data collection by uninstalling the app. For data deletion, contact info@medicalhouse.net.",
       "Effective Date: 2026-04-26": "Effective Date: 2026-04-26",
+      "You did not choose a date": "You did not choose a date",
+      "Please select a booking date and time":
+          "Please select a booking date and time",
+      "Authentication error": "Authentication error",
+      "Please log in again.": "Please log in again.",
+      "Booking successful": "Booking successful",
+      "Your booking has been confirmed.": "Your booking has been confirmed.",
+      "Booking failed": "Booking failed",
+      "An error occurred while booking. Please try again.":
+          "An error occurred while booking. Please try again.",
     },
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     'ar_EG': {
+      "You did not choose a date": "لم تقم باختيار تاريخ",
+      "Please select a booking date and time": "يرجى اختيار تاريخ ووقت الحجز",
+      "Authentication error": "خطأ في المصادقة",
+      "Please log in again.": "يرجى تسجيل الدخول مرة أخرى.",
+      "Booking successful": "تم الحجز بنجاح",
+      "Your booking has been confirmed.": "تم تأكيد حجزك بنجاح.",
+      "Booking failed": "فشل الحجز",
+      "An error occurred while booking. Please try again.":
+          "حدث خطأ أثناء الحجز. يرجى المحاولة مرة أخرى.",
       "Policy and Privacy": "سياسة الخصوصية",
       "LEGAL": "قانوني",
       "Privacy Statement": "بيان الخصوصية",
