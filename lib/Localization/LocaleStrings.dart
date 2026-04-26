@@ -261,9 +261,45 @@ class LocaleStrings extends Translations {
       "Booking failed": "Booking failed",
       "An error occurred while booking. Please try again.":
           "An error occurred while booking. Please try again.",
+      "Terms and Conditions": "Terms and Conditions",
+      "Usage Agreement": "Usage Agreement",
+      "1. Acceptance": "1. Acceptance",
+      "By downloading or using the Medical House app, you agree to be bound by these Terms and Conditions.":
+          "By downloading or using the Medical House app, you agree to be bound by these Terms and Conditions.",
+      "2. Medical Disclaimer": "2. Medical Disclaimer",
+      "App content is for informational purposes only and is not a substitute for professional medical advice.":
+          "App content is for informational purposes only and is not a substitute for professional medical advice.",
+      "3. Appointments": "3. Appointments",
+      "Bookings are subject to availability. Please notify us 24 hours in advance for cancellations.":
+          "Bookings are subject to availability. Please notify us 24 hours in advance for cancellations.",
+      "4. Privacy": "4. Privacy",
+      "All personal and medical data is handled in accordance with local regulations in Saudi Arabia.":
+          "All personal and medical data is handled in accordance with local regulations in Saudi Arabia.",
+      "5. Pricing": "5. Pricing",
+      "Pricing displayed in the app is an estimate until confirmed during your consultation at the center.":
+          "Pricing displayed in the app is an estimate until confirmed during your consultation at the center.",
+      "Last Updated: 2026-04-26": "Last Updated: 2026-04-26",
     },
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     'ar_EG': {
+      "Terms and Conditions": "الشروط والأحكام",
+      "Usage Agreement": "اتفاقية الاستخدام",
+      "1. Acceptance": "1. القبول",
+      "By downloading or using the Medical House app, you agree to be bound by these Terms and Conditions.":
+          "بتحميل أو استخدام تطبيق ميديكال هاوس، فإنك توافق على الالتزام بهذه الشروط والأحكام.",
+      "2. Medical Disclaimer": "2. إخلاء المسؤولية الطبي",
+      "App content is for informational purposes only and is not a substitute for professional medical advice.":
+          "محتوى التطبيق لأغراض معلوماتية فقط وليس بديلاً عن الاستشارة الطبية المهنية.",
+      "3. Appointments": "3. المواعيد",
+      "Bookings are subject to availability. Please notify us 24 hours in advance for cancellations.":
+          "الحجوزات تخضع للتوافر. يرجى إخطارنا قبل 24 ساعة في حال الإلغاء.",
+      "4. Privacy": "4. الخصوصية",
+      "All personal and medical data is handled in accordance with local regulations in Saudi Arabia.":
+          "يتم التعامل مع جميع البيانات الشخصية والطبية وفقاً للأنظمة المحلية في المملكة العربية السعودية.",
+      "5. Pricing": "5. التسعير",
+      "Pricing displayed in the app is an estimate until confirmed during your consultation at the center.":
+          "الأسعار المعروضة في التطبيق هي أسعار تقديرية حتى يتم تأكيدها أثناء استشارتك في المركز.",
+      "Last Updated: 2026-04-26": "آخر تحديث: 26-04-2026",
       "You did not choose a date": "لم تقم باختيار تاريخ",
       "Please select a booking date and time": "يرجى اختيار تاريخ ووقت الحجز",
       "Authentication error": "خطأ في المصادقة",

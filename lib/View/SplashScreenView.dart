@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:medical_house/Components/MainWrapper.dart';
 import 'package:medical_house/Constants.dart';
 import 'package:medical_house/Model/SplashScreenModel.dart';
 import 'package:medical_house/View/OnboardingView.dart';
@@ -45,14 +46,19 @@ class _SplashViewState extends State<SplashView> {
     }
   }
 
-  // Inside _SplashViewState class
   void _navigateToHome() {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Widget nextScreen = _viewModel.showOnboarding
-          ? const OnboardingView()
-          : const SignUpView();
+      Widget nextScreen;
+
+      if (_viewModel.isLoggedIn) {
+        nextScreen = const MainWrapper();
+      } else if (_viewModel.showOnboarding) {
+        nextScreen = const OnboardingView();
+      } else {
+        nextScreen = const SignUpView();
+      }
 
       Navigator.of(context).pushReplacement(
         PageRouteBuilder(

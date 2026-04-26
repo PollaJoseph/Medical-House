@@ -22,7 +22,6 @@ class _OnboardingViewState extends State<OnboardingView> {
   void initState() {
     super.initState();
     _viewModel = OnboardingViewModel();
-    // Listen for changes in the ViewModel to refresh the UI
     _viewModel.addListener(() => setState(() {}));
   }
 
