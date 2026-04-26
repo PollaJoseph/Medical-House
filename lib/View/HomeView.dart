@@ -19,7 +19,6 @@ class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const Color backgroundGrey = Color(0xFFF8FAFC);
-
     return ChangeNotifierProvider(
       create: (_) =>
           HomeViewModel(name: Username, imageUrl: UserImage, points: Points),

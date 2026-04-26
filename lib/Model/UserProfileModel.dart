@@ -6,7 +6,7 @@ class UserProfileModel {
   final int age;
   final String gender;
   final String location;
-  final int points;
+  final String points;
   final bool authenticated;
   final String image;
   final String qrCode;
@@ -61,7 +61,7 @@ class UserProfileModel {
       age: json['Age'] ?? 0,
       gender: json['Gender'] ?? '',
       location: json['Location'] ?? '',
-      points: json['Points'] ?? 0,
+      points: json['Points'] ?? "0",
       authenticated: json['Authenticated'] ?? false,
       image: json['Image'] ?? '',
       qrCode: json['QrCode'] ?? '',

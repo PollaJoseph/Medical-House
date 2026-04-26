@@ -180,7 +180,7 @@ class ProfileView extends StatelessWidget {
     );
   }
 
-  Widget _buildPointsHighlight(int points, BuildContext context) {
+  Widget _buildPointsHighlight(String points, BuildContext context) {
     return GestureDetector(
       onTap: () {
         Navigator.push(
