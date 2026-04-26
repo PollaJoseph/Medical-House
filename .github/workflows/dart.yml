@@ -22,7 +22,7 @@ jobs:
 
       - name: Force iOS 15.5 Target & Fix Dependencies
         run: |
-          # 1. Force the Xcode project targets to 15.5 (Matches any version number)
+          # 1. Force the Xcode project targets to 15.5
           sed -i '' 's/IPHONEOS_DEPLOYMENT_TARGET = [0-9.]*;/IPHONEOS_DEPLOYMENT_TARGET = 15.5;/g' ios/Runner.xcodeproj/project.pbxproj
           
           # 2. Force the Podfile platform to 15.5
@@ -31,11 +31,11 @@ jobs:
           # 3. FIX BUNDLE ID: Replace 'com.medicalhouse.app' with your actual registered ID
           sed -i '' 's/com.example.medicalHouse/com.medicalhouse.app/g' ios/Runner.xcodeproj/project.pbxproj
 
-          # 4. SLEDGEHAMMER FIX for SwiftTryCatch:
-          # This replaces the broken URL in the Podfile, Podfile.lock, AND any generated podspecs 
-          # to ensure it uses a verified public mirror that doesn't require a login.
-          grep -rl 'github.com/cfr/SwiftTryCatch.git' ios | xargs sed -i '' 's|github.com/cfr/SwiftTryCatch.git|github.com/michaeltyson/SwiftTryCatch.git|g' || true
-          
+          # 4. FIX SwiftTryCatch Syntax: 
+          # This replaces the specific target line with TWO lines to ensure proper spacing
+          sed -i '' "s/target 'Runner' do/target 'Runner' do\\
+            pod 'SwiftTryCatch', :git => 'https://github.com/michaeltyson\/SwiftTryCatch.git', :tag => '0.0.1'/g" ios/Podfile
+            
       - name: Clean CocoaPods
         run: |
           rm -rf Pods
