@@ -16,13 +16,13 @@ class OnboardingView extends StatefulWidget {
 class _OnboardingViewState extends State<OnboardingView> {
   late OnboardingViewModel _viewModel;
   final PageController _pageController = PageController();
-
   final Color surfaceWhite = const Color(0xFFFDFDFD);
 
   @override
   void initState() {
     super.initState();
     _viewModel = OnboardingViewModel();
+    // Listen for changes in the ViewModel to refresh the UI
     _viewModel.addListener(() => setState(() {}));
   }
 
@@ -53,12 +53,14 @@ class _OnboardingViewState extends State<OnboardingView> {
   @override
   Widget build(BuildContext context) {
     final currentPage = _viewModel.pages[_viewModel.currentIndex];
+    final bool isLastPage =
+        _viewModel.currentIndex == _viewModel.pages.length - 1;
 
     return Scaffold(
       backgroundColor: surfaceWhite,
       body: Stack(
         children: [
-          // 1. Background UI Accent (Decorative Circle)
+          // 1. Background Accent (Lowest layer)
           Positioned(
             top: -100.h,
             right: -100.w,
@@ -72,38 +74,7 @@ class _OnboardingViewState extends State<OnboardingView> {
             ),
           ),
 
-          // 2. FIXED SKIP BUTTON (Top Right Position)
-          Positioned(
-            top: 50.h,
-            right: 20.w,
-            child: AnimatedOpacity(
-              // Fades out on the last page to keep the UI clean
-              opacity: _viewModel.currentIndex == _viewModel.pages.length - 1
-                  ? 0.0
-                  : 1.0,
-              duration: const Duration(milliseconds: 300),
-              child: IgnorePointer(
-                ignoring:
-                    _viewModel.currentIndex == _viewModel.pages.length - 1,
-                child: TextButton(
-                  onPressed: _jumpToLastPage,
-                  style: TextButton.styleFrom(
-                    foregroundColor: Constants.MidnightNavy.withOpacity(0.5),
-                  ),
-                  child: Text(
-                    "Skip".tr,
-                    style: TextStyle(
-                      fontSize: 14.sp,
-                      fontWeight: FontWeight.w600,
-                      letterSpacing: 0.5,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
-
-          // 3. Main Content Layer
+          // 2. Main Content Layer (Middle layer)
           Column(
             children: [
               Expanded(
@@ -132,8 +103,6 @@ class _OnboardingViewState extends State<OnboardingView> {
                   },
                 ),
               ),
-
-              // Bottom Section: Navy Content Portal
               Expanded(
                 flex: 9,
                 child: Container(
@@ -182,6 +151,33 @@ class _OnboardingViewState extends State<OnboardingView> {
               ),
             ],
           ),
+
+          // 3. Skip Button (TOP LAYER - Critical Fix)
+          Positioned(
+            top: 50.h,
+            right: 20.w,
+            child: AnimatedOpacity(
+              opacity: isLastPage ? 0.0 : 1.0,
+              duration: const Duration(milliseconds: 300),
+              child: IgnorePointer(
+                ignoring: isLastPage, // Disables clicking when hidden
+                child: TextButton(
+                  onPressed: _jumpToLastPage,
+                  style: TextButton.styleFrom(
+                    foregroundColor: Constants.MidnightNavy.withOpacity(0.5),
+                  ),
+                  child: Text(
+                    "Skip".tr,
+                    style: TextStyle(
+                      fontSize: 14.sp,
+                      fontWeight: FontWeight.w600,
+                      letterSpacing: 0.5,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -213,7 +209,7 @@ class _OnboardingViewState extends State<OnboardingView> {
           ),
         ),
 
-        // Concierge Action Button (Next/Check)
+        // Action Button
         GestureDetector(
           onTap: () {
             if (isLastPage) {

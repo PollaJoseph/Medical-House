@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:medical_house/Constants.dart';
 import 'package:medical_house/Model/SplashScreenModel.dart';
 import 'package:medical_house/View/OnboardingView.dart';
+import 'package:medical_house/View/SignUpView.dart';
 import 'package:medical_house/ViewModel/SplashScreenViewModel.dart';
 
 class SplashView extends StatefulWidget {
@@ -44,15 +45,19 @@ class _SplashViewState extends State<SplashView> {
     }
   }
 
+  // Inside _SplashViewState class
   void _navigateToHome() {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      Widget nextScreen = _viewModel.showOnboarding
+          ? const OnboardingView()
+          : const SignUpView();
+
       Navigator.of(context).pushReplacement(
         PageRouteBuilder(
           transitionDuration: const Duration(milliseconds: 800),
-          pageBuilder: (context, animation, secondaryAnimation) =>
-              const OnboardingView(),
+          pageBuilder: (context, animation, secondaryAnimation) => nextScreen,
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             return FadeTransition(opacity: animation, child: child);
           },
