@@ -235,9 +235,41 @@ class LocaleStrings extends Translations {
       "Could not reset password. Try again.":
           "Could not reset password. Try again.",
       "Reset Failed": "Reset Failed",
+      "Policy and Privacy": "Policy and Privacy",
+      "LEGAL": "LEGAL",
+      "Privacy Statement": "Privacy Statement",
+      "Information Collection": "Information Collection",
+      "The Application collects data when you download and use it, including IP addresses and usage patterns.":
+          "The Application collects data when you download and use it, including IP addresses and usage patterns.",
+      "Location Services": "Location Services",
+      "We use geolocation to provide personalized healthcare recommendations and improve our medical services.":
+          "We use geolocation to provide personalized healthcare recommendations and improve our medical services.",
+      "Data Security": "Data Security",
+      "Medical House provides physical, electronic, and procedural safeguards to protect patient confidentiality.":
+          "Medical House provides physical, electronic, and procedural safeguards to protect patient confidentiality.",
+      "User Rights": "User Rights",
+      "You can stop all data collection by uninstalling the app. For data deletion, contact info@medicalhouse.net.":
+          "You can stop all data collection by uninstalling the app. For data deletion, contact info@medicalhouse.net.",
+      "Effective Date: 2026-04-26": "Effective Date: 2026-04-26",
     },
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     'ar_EG': {
+      "Policy and Privacy": "سياسة الخصوصية",
+      "LEGAL": "قانوني",
+      "Privacy Statement": "بيان الخصوصية",
+      "Information Collection": "جمع المعلومات",
+      "The Application collects data when you download and use it, including IP addresses and usage patterns.":
+          "يقوم التطبيق بجمع البيانات عند تحميله واستخدامه، بما في ذلك عناوين الـ IP وأنماط الاستخدام.",
+      "Location Services": "خدمات الموقع",
+      "We use geolocation to provide personalized healthcare recommendations and improve our medical services.":
+          "نحن نستخدم الموقع الجغرافي لتقديم توصيات صحية مخصصة وتحسين خدماتنا الطبية.",
+      "Data Security": "أمن البيانات",
+      "Medical House provides physical, electronic, and procedural safeguards to protect patient confidentiality.":
+          "يوفر ميديكال هاوس ضمانات مادية وإلكترونية وإجرائية لحماية سرية المرضى.",
+      "User Rights": "حقوق المستخدم",
+      "You can stop all data collection by uninstalling the app. For data deletion, contact info@medicalhouse.net.":
+          "يمكنك إيقاف جميع عمليات جمع البيانات عن طريق إلغاء تثبيت التطبيق. لطلب حذف البيانات، تواصل مع info@medicalhouse.net.",
+      "Effective Date: 2026-04-26": "تاريخ السريان: 26-04-2026",
       "Reset Password": "إعادة تعيين كلمة المرور",
       "Create a strong new password for your account.":
           "أنشئ كلمة مرور جديدة قوية لحسابك.",
