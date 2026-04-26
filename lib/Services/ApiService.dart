@@ -317,12 +317,12 @@ class ApiService {
     }
   }
 
-  Future<List<ArticleModel>> getArticlesMeta() async {
+  Future<List<ArticleModel>> getArticlesMeta(String Lang) async {
     try {
       Map<String, String> requestHeaders = getHeaders(includeAuth: false);
 
       final response = await _dio.get(
-        '$baseUrl$ArticlesMetaEndpoint',
+        '$baseUrl$ArticlesMetaEndpoint$Lang',
         options: Options(headers: requestHeaders),
       );
 

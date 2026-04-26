@@ -13,7 +13,7 @@ import 'package:medical_house/ViewModel/HomeViewModel.dart';
 class HomeView extends StatelessWidget {
   final String? Username;
   final String? UserImage;
-  final int? Points;
+  final String? Points;
   const HomeView({super.key, this.Username, this.UserImage, this.Points});
 
   @override

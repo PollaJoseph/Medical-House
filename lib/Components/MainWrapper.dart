@@ -10,7 +10,7 @@ import 'package:medical_house/View/SettingsView.dart';
 class MainWrapper extends StatefulWidget {
   final String? Username;
   final String? UserImage;
-  final int? Points;
+  final String? Points;
   const MainWrapper({super.key, this.Username, this.UserImage, this.Points});
 
   @override

@@ -13,11 +13,11 @@ class HomeViewModel extends ChangeNotifier {
 
   bool isLoading = false;
 
-  HomeViewModel({String? name, String? imageUrl, int? points}) {
+  HomeViewModel({String? name, String? imageUrl, String? points}) {
     currentUser = PatientProfile(
       name: name ?? "Guest User".tr,
       imageUrl: imageUrl ?? Constants.MaleAvatarImagePath,
-      points: points ?? 0,
+      points: points ?? "0",
     );
   }
 

@@ -68,6 +68,12 @@ class OTPViewModel extends ChangeNotifier {
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         if (context.mounted) {
+          await StorageService.saveUserData(
+            clientId: response.data['ClientID'].toString(),
+            username: response.data['Username'],
+            imageUrl: response.data['Image'],
+            points: response.data['Points'],
+          );
           CustomSnackBar.showSuccess(
             context,
             title: "OTP Verified".tr,

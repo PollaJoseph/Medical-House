@@ -279,9 +279,17 @@ class LocaleStrings extends Translations {
       "Pricing displayed in the app is an estimate until confirmed during your consultation at the center.":
           "Pricing displayed in the app is an estimate until confirmed during your consultation at the center.",
       "Last Updated: 2026-04-26": "Last Updated: 2026-04-26",
+      "All": "All",
+      "Dental": "Dental",
+      "Dermatology & Cosmetology": "Dermatology & Cosmetology",
+      "General": "General",
     },
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     'ar_EG': {
+      "All": "الكل",
+      "Dental": "الأسنان",
+      "Dermatology & Cosmetology": "الجلدية والتجميل",
+      "General": "عام",
       "Terms and Conditions": "الشروط والأحكام",
       "Usage Agreement": "اتفاقية الاستخدام",
       "1. Acceptance": "1. القبول",

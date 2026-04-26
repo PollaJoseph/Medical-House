@@ -3,7 +3,7 @@ import 'package:medical_house/Model/ServiceModel.dart'; // MUST IMPORT THIS
 class PatientProfile {
   final String name;
   final String imageUrl;
-  final int points;
+  final String points;
 
   PatientProfile({
     required this.name,

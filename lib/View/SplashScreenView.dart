@@ -53,7 +53,11 @@ class _SplashViewState extends State<SplashView> {
       Widget nextScreen;
 
       if (_viewModel.isLoggedIn) {
-        nextScreen = const MainWrapper();
+        nextScreen = MainWrapper(
+          UserImage: _viewModel.userImage,
+          Username: _viewModel.username ?? "User",
+          Points: _viewModel.points ?? "0",
+        );
       } else if (_viewModel.showOnboarding) {
         nextScreen = const OnboardingView();
       } else {

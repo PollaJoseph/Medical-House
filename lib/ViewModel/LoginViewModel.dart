@@ -95,6 +95,12 @@ class LoginViewModel extends ChangeNotifier {
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         StorageService.saveUserClientId(response.data['ClientID']);
+        await StorageService.saveUserData(
+          clientId: response.data['ClientID'].toString(),
+          username: response.data['Username'],
+          imageUrl: response.data['Image'],
+          points: response.data['Points'],
+        );
         CustomSnackBar.showSuccess(
           context,
           title: 'Login Successful'.tr,
