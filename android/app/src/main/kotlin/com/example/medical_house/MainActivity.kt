@@ -1,4 +1,4 @@
-package com.example.medical_house
+package com.polla.medical_house
 
 import io.flutter.embedding.android.FlutterActivity
 
