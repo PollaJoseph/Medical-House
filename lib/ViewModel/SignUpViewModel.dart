@@ -221,6 +221,7 @@ class SignUpViewModel extends ChangeNotifier {
         serverClientId:
             "501409575553-lcqkolshqackgc1cpb70sbc8436sbbr1.apps.googleusercontent.com",
       );
+
       final GoogleSignInAccount? googleUser = await _googleSignIn.authenticate(
         scopeHint: ['email', 'profile'],
       );
@@ -234,6 +235,7 @@ class SignUpViewModel extends ChangeNotifier {
       final GoogleSignInAuthentication googleAuth = googleUser.authentication;
       final String? idToken = googleAuth.idToken;
       String? accessToken;
+
       try {
         final authorization = await googleUser.authorizationClient
             .authorizeScopes(['email', 'profile']);
@@ -248,23 +250,44 @@ class SignUpViewModel extends ChangeNotifier {
         throw Exception("Could not retrieve tokens from Google.");
       }
 
+      // 1. Call your API service for Google Login
       final response = await _apiService.googleLogin(tokenToSend);
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        final String djangoToken = response.data['key'];
-        debugPrint('Success! Django Token: $djangoToken');
+        // 1. Extract data from response
+        final String username = response.data['Username'];
+        final String? userImage = response.data['Image'];
+        final dynamic points = response.data['Points'];
+
+        // 2. PRINT COLLECTED DATA
+        debugPrint('--- Google Login Data Collected ---');
+        debugPrint('Username: $username');
+        debugPrint('Profile Image URL: ${userImage ?? "No Image Found"}');
+        debugPrint('Loyalty Points: $points');
+        debugPrint('-----------------------------------');
+        await StorageService.saveUserData(
+          clientId: response.data['ClientID'].toString(),
+          username: response.data['Username'],
+          imageUrl: response.data['Image'],
+          points: response.data['Points'],
+        );
 
         if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text("Google Login Successful!"),
-              backgroundColor: Colors.green,
-            ),
+          CustomSnackBar.showSuccess(
+            context,
+            title: 'Login Successful'.tr,
+            message: "Welcome to Medical House!".tr,
           );
 
           Navigator.pushAndRemoveUntil(
             context,
-            MaterialPageRoute(builder: (context) => const MainWrapper()),
+            MaterialPageRoute(
+              builder: (context) => MainWrapper(
+                UserImage: response.data['Image'],
+                Username: response.data['Username'],
+                Points: response.data['Points'],
+              ),
+            ),
             (route) => false,
           );
         }
@@ -274,13 +297,11 @@ class SignUpViewModel extends ChangeNotifier {
     } catch (e) {
       debugPrint("Google Auth Error: $e");
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              "Google Login Failed: ${e.toString().replaceAll('Exception: ', '')}",
-            ),
-            backgroundColor: Colors.redAccent,
-          ),
+        // 5. Use your custom Error SnackBar
+        CustomSnackBar.showError(
+          context,
+          title: 'Google Login Failed'.tr,
+          message: e.toString().replaceAll('Exception: ', '').tr,
         );
       }
       await _googleSignIn.signOut();

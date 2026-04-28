@@ -51,9 +51,9 @@ class SignUpView extends StatelessWidget {
                           Constants.MidnightNavy,
                           context,
                         ),
-                        _buildSocialDivider(),
-                        _buildSocialLogins(model, context),
 
+                        // _buildSocialDivider(),
+                        //_buildSocialLogins(model, context),
                         SizedBox(height: 40.h),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,

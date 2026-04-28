@@ -105,9 +105,8 @@ class LoginView extends StatelessWidget {
                           context,
                         ),
 
-                        _buildSocialDivider(),
-                        _buildSocialLogins(model),
-
+                        // _buildSocialDivider(),
+                        // _buildSocialLogins(model),
                         SizedBox(height: 40.h),
 
                         Row(
