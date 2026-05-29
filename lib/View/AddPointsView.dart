@@ -1,9 +1,11 @@
+import 'dart:convert';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:medical_house/Components/ScannerOverlayPainter.dart';
+import 'package:medical_house/Services/ApiService.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:medical_house/Constants.dart';
@@ -18,7 +20,6 @@ class AddPointsView extends StatefulWidget {
 
 class _AddPointsViewState extends State<AddPointsView>
     with SingleTickerProviderStateMixin {
-  // FIXED: Explicitly set autoStart to false and force the main back camera facet
   final MobileScannerController _scannerController = MobileScannerController(
     detectionSpeed: DetectionSpeed.noDuplicates,
     autoStart: false,
@@ -96,15 +97,38 @@ class _AddPointsViewState extends State<AddPointsView>
     final List<Barcode> barcodes = capture.barcodes;
 
     if (barcodes.isNotEmpty && barcodes.first.rawValue != null) {
-      final String code = barcodes.first.rawValue!;
+      final String rawCode = barcodes.first.rawValue!;
+      String? extractedId;
 
-      debugPrint('====================================');
-      debugPrint('✅ SCANNED QR RESULT: $code');
-      debugPrint('====================================');
+      try {
+        final Map<String, dynamic> qrData = jsonDecode(rawCode);
+        extractedId =
+            (qrData['UserID'] ??
+                    qrData['user_id'] ??
+                    qrData['id'] ??
+                    qrData['clientId'])
+                ?.toString();
+      } catch (e) {
+        extractedId = rawCode;
+      }
 
-      setState(() {
-        _scannedPatientId = code;
-      });
+      if (extractedId != null &&
+          extractedId.toLowerCase() != "null" &&
+          extractedId.isNotEmpty) {
+        setState(() {
+          _scannedPatientId = extractedId;
+        });
+      } else {
+        Future.delayed(const Duration(milliseconds: 500), () {
+          if (mounted) {
+            CustomSnackBar.showError(
+              context,
+              title: "Invalid QR Code".tr,
+              message: "Could not find a valid Patient ID.".tr,
+            );
+          }
+        });
+      }
     }
   }
 
@@ -130,13 +154,27 @@ class _AddPointsViewState extends State<AddPointsView>
     setState(() => _isProcessing = true);
 
     try {
+      final String patientId = _scannedPatientId!;
+
+      final int? pointsToCredit = int.tryParse(_pointsController.text.trim());
+
+      if (pointsToCredit == null) {
+        CustomSnackBar.showError(
+          context,
+          title: "Invalid Points".tr,
+          message: "Please enter a valid number for points.".tr,
+        );
+        setState(() => _isProcessing = false);
+        return;
+      }
+
+      await ApiService().addPoints(patientId, pointsToCredit);
+
       if (mounted) {
         CustomSnackBar.showSuccess(
           context,
           title: "Points Awarded".tr,
-          message:
-              "Successfully added ${_pointsController.text} wellness points!"
-                  .tr,
+          message: "Successfully added points!".tr,
         );
         Navigator.pop(context);
       }
@@ -144,12 +182,12 @@ class _AddPointsViewState extends State<AddPointsView>
       if (mounted) {
         CustomSnackBar.showError(
           context,
-          title: "Transaction Failed".tr,
-          message: "Could not update patient record.".tr,
+          title: "Error",
+          message: e.toString().replaceAll("Exception: ", ""),
         );
       }
     } finally {
-      setState(() => _isProcessing = false);
+      if (mounted) setState(() => _isProcessing = false);
     }
   }
 
@@ -353,7 +391,7 @@ class _AddPointsViewState extends State<AddPointsView>
             SizedBox(height: 4.h),
             Text(
               _scannedPatientId != null
-                  ? "Verified: ${_scannedPatientId!.substring(0, _scannedPatientId!.length > 14 ? 14 : _scannedPatientId!.length)}..."
+                  ? "Verified".tr
                   : "Awaiting QR Scan...".tr,
               style: GoogleFonts.lexend(
                 color: Colors.white,

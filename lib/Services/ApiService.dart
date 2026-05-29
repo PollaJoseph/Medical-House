@@ -10,6 +10,7 @@ import 'package:medical_house/Model/ServiceModel.dart';
 import 'package:medical_house/Model/ResendOTP.dart';
 import 'package:medical_house/Model/SignUpAPIModel.dart';
 import 'package:medical_house/Model/UserProfileModel.dart';
+import 'package:medical_house/Services/StorageService.dart';
 
 class ApiService {
   final Dio _dio = Dio();
@@ -42,9 +43,9 @@ class ApiService {
       dotenv.env['VERIFY_FORGET_PASSWORD_OTP_ENDPOINT'] ?? '';
   final String ResetPasswordEndpoint =
       dotenv.env['RESET_PASSWORD_ENDPOINT'] ?? '';
-
   final String FacebookLoginEndpoint =
       dotenv.env['FACEBOOK_LOGIN_ENDPOINT'] ?? '';
+  final String AppPointEndpoint = dotenv.env['APP_POINT_ENDPOINT'] ?? '';
 
   String? _authToken;
 
@@ -509,6 +510,27 @@ class ApiService {
       );
     } catch (e) {
       rethrow;
+    }
+  }
+
+  Future<Response> addPoints(String userId, int points) async {
+    try {
+      Map<String, String> requestHeaders = getHeaders(includeAuth: true);
+
+      final response = await _dio.post(
+        '$baseUrl$AppPointEndpoint',
+        data: {
+          "UserID": userId, // Now passes the string exactly as scanned
+          "Points": points,
+        },
+        options: Options(headers: requestHeaders),
+      );
+
+      return response;
+    } on DioException catch (e) {
+      throw Exception('Failed to add points: ${e.response?.data ?? e.message}');
+    } catch (e) {
+      throw Exception('An unexpected error occurred: $e');
     }
   }
 }
