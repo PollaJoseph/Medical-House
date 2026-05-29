@@ -9,6 +9,7 @@ class SplashViewModel extends ChangeNotifier {
   String? _username;
   String? _userImage;
   String? _points;
+  String? _userRole;
 
   bool get isReadyToNavigate => _isReadyToNavigate;
   bool get showOnboarding => _showOnboarding;
@@ -16,6 +17,7 @@ class SplashViewModel extends ChangeNotifier {
   String? get username => _username;
   String? get userImage => _userImage;
   String? get points => _points;
+  String? get userRole => _userRole;
 
   Future<void> loadAppDependencies() async {
     try {
@@ -30,6 +32,7 @@ class SplashViewModel extends ChangeNotifier {
         _userImage = userData['image'];
         _points = userData['points'];
       }
+      _userRole = await StorageService.getUserRole();
 
       await Future.wait([
         Future.delayed(const Duration(milliseconds: 3000)),

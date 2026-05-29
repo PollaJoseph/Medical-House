@@ -95,6 +95,7 @@ class LoginViewModel extends ChangeNotifier {
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         StorageService.saveUserClientId(response.data['ClientID']);
+        StorageService.saveUserRole(response.data['Role']);
         await StorageService.saveUserData(
           clientId: response.data['ClientID'].toString(),
           username: response.data['Username'],
@@ -111,6 +112,7 @@ class LoginViewModel extends ChangeNotifier {
             context,
             MaterialPageRoute(
               builder: (context) => MainWrapper(
+                userType: response.data['Role'],
                 UserImage: response.data['Image'],
                 Username: response.data['Username'],
                 Points: response.data['Points'],

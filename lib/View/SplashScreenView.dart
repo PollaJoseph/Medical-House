@@ -57,6 +57,7 @@ class _SplashViewState extends State<SplashView> {
           UserImage: _viewModel.userImage,
           Username: _viewModel.username ?? "User",
           Points: _viewModel.points ?? "0",
+          userType: _viewModel.userRole ?? "user",
         );
       } else if (_viewModel.showOnboarding) {
         nextScreen = const OnboardingView();

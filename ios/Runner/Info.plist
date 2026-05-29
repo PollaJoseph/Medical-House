@@ -60,6 +60,23 @@
     </array>
 
 
+	<key>FacebookAppID</key>
+<string>1986248508667985</string>
+<key>FacebookClientToken</key>
+<string>PASTE_YOUR_CLIENT_TOKEN_HERE</string>
+<key>FacebookDisplayName</key>
+<string>Medical House</string>
+<key>CFBundleURLTypes</key>
+<array>
+  <dict>
+    <key>CFBundleURLSchemes</key>
+    <array>
+      <string>fb1986248508667985</string>
+    </array>
+  </dict>
+</array>
+
+
 	<key>LSApplicationQueriesSchemes</key>
      <array>
       <string>googlechromes</string>

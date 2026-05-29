@@ -11,6 +11,7 @@ import 'package:medical_house/Model/SignUpAPIModel.dart';
 import 'package:medical_house/Services/ApiService.dart';
 import 'package:medical_house/Services/StorageService.dart';
 import 'package:medical_house/View/OTPView.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 
 class SignUpViewModel extends ChangeNotifier {
   final firstNameController = TextEditingController();
@@ -24,6 +25,8 @@ class SignUpViewModel extends ChangeNotifier {
   String selectedGender = "Male";
   File? profileImage;
   bool isPasswordVisible = false;
+
+  bool isFacebookLoading = false;
 
   bool isFetchingLocation = false;
   bool isLoading = false;
@@ -212,7 +215,7 @@ class SignUpViewModel extends ChangeNotifier {
     }
   }
 
-  Future<void> signInWithGoogle(BuildContext context) async {
+  /* Future<void> signInWithGoogle(BuildContext context) async {
     isGoogleLoading = true;
     notifyListeners();
 
@@ -311,6 +314,92 @@ class SignUpViewModel extends ChangeNotifier {
     }
   }
 
+ Future<void> signInWithFacebook(BuildContext context) async {
+    isFacebookLoading = true;
+    notifyListeners();
+
+    try {
+      final LoginResult result = await FacebookAuth.instance.login(
+        permissions: [
+          'public_profile',
+          'email',
+          'user_gender',
+          'user_age_range',
+          'user_location',
+        ],
+      );
+
+      if (result.status == LoginStatus.success) {
+        final userData = await FacebookAuth.instance.getUserData(
+          fields: "name,email,gender,age_range,location,picture.width(800)",
+        );
+
+        final response = await _apiService.facebookLogin(
+          result.accessToken!.token,
+        );
+
+        if (response.statusCode == 200 || response.statusCode == 201) {
+          final String username =
+              response.data['Username'] ?? userData['name'] ?? "User".tr;
+          final String? userImage =
+              response.data['Image'] ?? userData['picture']?['data']?['url'];
+          final dynamic points = response.data['Points'] ?? 0;
+
+          await StorageService.saveUserData(
+            clientId: response.data['ClientID'].toString(),
+            username: username,
+            imageUrl: userImage,
+            points: points,
+          );
+
+          if (context.mounted) {
+            CustomSnackBar.showSuccess(
+              context,
+              title: 'Login Successful'.tr,
+              message: "Welcome to Medical House!".tr,
+            );
+
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                builder: (context) => MainWrapper(
+                  UserImage: userImage,
+                  Username: username,
+                  Points: points,
+                ),
+              ),
+              (route) => false,
+            );
+          }
+        } else {
+          throw Exception("Server rejected Facebook authentication".tr);
+        }
+      } else if (result.status == LoginStatus.cancelled) {
+        debugPrint("Facebook Login: User cancelled the process.");
+      } else {
+        if (context.mounted) {
+          CustomSnackBar.showError(
+            context,
+            title: 'Facebook Login Failed'.tr,
+            message: result.message ?? "Connection error".tr,
+          );
+        }
+      }
+    } catch (e) {
+      debugPrint("Facebook Auth Error: $e");
+      if (context.mounted) {
+        CustomSnackBar.showError(
+          context,
+          title: 'Error'.tr,
+          message: "An unexpected error occurred. Please try again.".tr,
+        );
+      }
+    } finally {
+      isFacebookLoading = false;
+      notifyListeners();
+    }
+  }
+*/
   @override
   void dispose() {
     firstNameController.dispose();

@@ -63,4 +63,17 @@ class StorageService {
     await _secureStorage.delete(key: 'user_image');
     await _secureStorage.delete(key: 'user_points');
   }
+
+  //////////////////////////////////////////////////////////////////
+  static Future<void> saveUserRole(String role) async {
+    await _secureStorage.write(key: 'user_role', value: role);
+  }
+
+  static Future<String?> getUserRole() async {
+    return await _secureStorage.read(key: 'user_role');
+  }
+
+  static Future<void> clearUserRole() async {
+    await _secureStorage.delete(key: 'user_role');
+  }
 }

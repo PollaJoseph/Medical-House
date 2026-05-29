@@ -10,13 +10,12 @@ import 'package:medical_house/Model/ServiceModel.dart';
 import 'package:medical_house/Model/ResendOTP.dart';
 import 'package:medical_house/Model/SignUpAPIModel.dart';
 import 'package:medical_house/Model/UserProfileModel.dart';
-import 'package:medical_house/Services/StorageService.dart';
 
 class ApiService {
   final Dio _dio = Dio();
 
-  final String baseUrl = //"https://8792-156-196-69-247.ngrok-free.app/";
-      dotenv.env['BASE_URL'] ?? '';
+  final String baseUrl = "https://89e1-41-40-61-233.ngrok-free.app/";
+  //dotenv.env['BASE_URL'] ?? '';
   final String apiKey = dotenv.env['API_KEY'] ?? '';
   final String SignUpEndpoint = dotenv.env['SIGN_UP_ENDPOINT'] ?? '';
   final String GoogleSignUpEndpoint =
@@ -43,6 +42,9 @@ class ApiService {
       dotenv.env['VERIFY_FORGET_PASSWORD_OTP_ENDPOINT'] ?? '';
   final String ResetPasswordEndpoint =
       dotenv.env['RESET_PASSWORD_ENDPOINT'] ?? '';
+
+  final String FacebookLoginEndpoint =
+      dotenv.env['FACEBOOK_LOGIN_ENDPOINT'] ?? '';
 
   String? _authToken;
 
@@ -496,6 +498,17 @@ class ApiService {
       throw Exception('Reset Failed: ${e.response?.data ?? e.message}');
     } catch (e) {
       throw Exception('An unexpected error occurred: $e');
+    }
+  }
+
+  Future<Response> facebookLogin(String accessToken) async {
+    try {
+      return await _dio.post(
+        '$baseUrl$FacebookLoginEndpoint',
+        data: {'access_token': accessToken},
+      );
+    } catch (e) {
+      rethrow;
     }
   }
 }

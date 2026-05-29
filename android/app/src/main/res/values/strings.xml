@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Medical House</string>
+
+    <string name="facebook_app_id">1986248508667985</string>
+    <string name="fb_login_protocol_scheme">fb1986248508667985</string>
+    
+    <string name="facebook_client_token">PASTE_YOUR_FACEBOOK_CLIENT_TOKEN_HERE</string>
+</resources>

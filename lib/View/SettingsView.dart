@@ -7,6 +7,7 @@ import 'package:medical_house/Constants.dart';
 import 'package:medical_house/Localization/LocaleController.dart';
 import 'package:medical_house/Services/StorageService.dart';
 import 'package:medical_house/View/AboutView.dart';
+import 'package:medical_house/View/AddPointsView.dart';
 import 'package:medical_house/View/ChangePasswordView.dart';
 import 'package:medical_house/View/ContactUsView.dart';
 import 'package:medical_house/View/LoginView.dart';
@@ -17,7 +18,8 @@ import 'package:medical_house/ViewModel/SettingsViewModel.dart';
 import 'package:provider/provider.dart';
 
 class SettingsView extends StatelessWidget {
-  const SettingsView({super.key});
+  final String userType;
+  const SettingsView({super.key, required this.userType});
 
   void _showLanguageBottomSheet(
     BuildContext context,
@@ -295,6 +297,21 @@ class SettingsView extends StatelessWidget {
                     textColor: Constants.MidnightNavy,
                   ),
                 ),
+                if (userType != "user")
+                  SettingsButton(
+                    text: "Add Points".tr,
+                    icon: Icons.qr_code_scanner_outlined,
+                    onClick: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AddPointsView(),
+                        ),
+                      );
+                    },
+                    iconColor: Constants.SeconadryColor,
+                    textColor: Constants.MidnightNavy,
+                  ),
                 SettingsButton(
                   text: "Terms and Conditions".tr,
                   icon: Icons.article_outlined,

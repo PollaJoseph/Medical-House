@@ -11,7 +11,14 @@ class MainWrapper extends StatefulWidget {
   final String? Username;
   final String? UserImage;
   final String? Points;
-  const MainWrapper({super.key, this.Username, this.UserImage, this.Points});
+  final String userType;
+  const MainWrapper({
+    super.key,
+    this.Username,
+    this.UserImage,
+    this.Points,
+    required this.userType,
+  });
 
   @override
   State<MainWrapper> createState() => _MainWrapperState();
@@ -29,7 +36,7 @@ class _MainWrapperState extends State<MainWrapper> {
       ),
       const OffersView(),
       const PointServicesView(),
-      const SettingsView(),
+      SettingsView(userType: widget.userType),
     ];
   }
 
@@ -47,7 +54,6 @@ class _MainWrapperState extends State<MainWrapper> {
       extendBody: true,
       body: Stack(
         children: [
-          // Use the dynamic pages list
           pages[_SelectedTab.values.indexOf(_selectedTab)],
 
           Align(

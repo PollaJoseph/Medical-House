@@ -52,7 +52,7 @@ class SignUpView extends StatelessWidget {
                           context,
                         ),
 
-                        // _buildSocialDivider(),
+                        //_buildSocialDivider(),
                         //_buildSocialLogins(model, context),
                         SizedBox(height: 40.h),
                         Row(
@@ -646,7 +646,7 @@ class SignUpView extends StatelessWidget {
                   width: 26.w,
                   height: 26.h,
                 ),
-                onTap: () => model.signInWithGoogle(context),
+                onTap: () {}, // model.signInWithGoogle(context),
               ),
 
         SizedBox(width: 30.w),
@@ -659,15 +659,22 @@ class SignUpView extends StatelessWidget {
 
         SizedBox(width: 30.w),
 
-        // FACEBOOK BUTTON
-        SocialButton(
-          icon: Image.asset(
-            Constants.FacebookIconPath,
-            width: 26.w,
-            height: 26.h,
-          ),
-          onTap: () => debugPrint("Facebook Login Tapped"),
-        ),
+        model.isFacebookLoading
+            ? SizedBox(
+                width: 26.w,
+                height: 26.h,
+                child: const CircularProgressIndicator(
+                  color: Color(0xFF1877F2),
+                ),
+              )
+            : SocialButton(
+                icon: Image.asset(
+                  Constants.FacebookIconPath,
+                  width: 26.w,
+                  height: 26.h,
+                ),
+                onTap: () {}, // model.signInWithFacebook(context), //
+              ),
       ],
     );
   }
